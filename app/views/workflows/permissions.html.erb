@@ -27,6 +27,8 @@
 
   <%= hidden_field_tag 'used_statuses_only', '0', :id => nil %>
   <label><%= check_box_tag 'used_statuses_only', '1', @used_statuses_only %> <%= l(:label_display_used_statuses_only) %></label>
+  <%= hidden_field_tag 'used_role_statuses_only', '0', :id => nil %>
+  <label><%= check_box_tag 'used_role_statuses_only', '1', @used_role_statuses_only %> <%= l(:label_display_used_role_statuses_only) %></label>
 </p>
 <% end %>
 
@@ -51,6 +53,8 @@
     <%= @trackers.map {|tracker| hidden_field_tag 'tracker_id[]', tracker.id, :id => nil}.join.html_safe %>
     <%= @roles.map {|role| hidden_field_tag 'role_id[]', role.id, :id => nil}.join.html_safe %>
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
+    <%= hidden_field_tag 'used_role_statuses_only', params[:used_role_statuses_only], :id => nil %>
+
     <div class="autoscroll">
       <fieldset class="collapsible" style="padding: 0; margin-top: 2em; margin-bottom: 1em;">
         <legend style="padding-left: 0; background: none;">

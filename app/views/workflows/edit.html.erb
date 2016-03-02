@@ -28,6 +28,9 @@
   <%= hidden_field_tag 'used_statuses_only', '0', :id => nil %>
   <label><%= check_box_tag 'used_statuses_only', '1', @used_statuses_only %> <%= l(:label_display_used_statuses_only) %></label>
 
+  <%= hidden_field_tag 'used_role_statuses_only', '0', :id => nil %>
+  <label><%= check_box_tag 'used_role_statuses_only', '1', @used_role_statuses_only %> <%= l(:label_display_used_role_statuses_only) %></label>
+
 </p>
 <% end %>
 
@@ -61,7 +64,7 @@
         <legend onclick="toggleFieldset(this);toggleDivToFieldset('workflow_author',this.parentNode.className);">
           <%= l(:label_additional_workflow_transitions_for_author) %>
         </legend>
-     </fieldset>
+      </fieldset>
       <div id="workflow_author" style="visibility: hidden; position: fixed; top: 0px; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
         <%= render :partial => 'form', :locals => {:name => 'author', :workflows => @workflows['author']} %>
       </div>
@@ -71,11 +74,11 @@
         <legend onclick="toggleFieldset(this);toggleDivToFieldset('workflow_assignee',this.parentNode.className);">
           <%= l(:label_additional_workflow_transitions_for_assignee) %>
         </legend>
-       </fieldset>
+      </fieldset>
       <div id="workflow_assignee" style="visibility: hidden; position: fixed; top: 0px; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
         <%= render :partial => 'form', :locals => {:name => 'assignee', :workflows => @workflows['assignee']} %>
       </div>
-       <%= javascript_tag "hideFieldset($('#assignee_workflows'))" unless @workflows['assignee'].present? %>
+      <%= javascript_tag "hideFieldset($('#assignee_workflows'))" unless @workflows['assignee'].present? %>
 
       <script> g_adjust('g_bl_always', 'g_fr_always', 'g_fl_always', 'g_bd_always'); </script>
       <script> g_adjust('g_bl_author', 'g_fr_author', 'g_fl_author', 'g_bd_author'); </script>
