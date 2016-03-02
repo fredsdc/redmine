@@ -1202,6 +1202,9 @@ pt-BR:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  field_hide_rolled_back_issue_notes: "Esconder mudanças desfeitas"
+  permission_rollback_issue_notes: Desfazer mudanças nas tarefas
+  button_rollback: Desfazer
   label_default_values_for_new_users: Default values for new users
   setting_sys_api_key: Chave de API
   setting_lost_password: Perdi minha senha

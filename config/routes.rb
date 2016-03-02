@@ -49,6 +49,7 @@ Rails.application.routes.draw do
   match '/issues/changes', :to => 'journals#index', :as => 'issue_changes', :via => :get
   match '/issues/:id/quoted', :to => 'journals#new', :id => /\d+/, :via => :post, :as => 'quoted_issue'
 
+  match '/journals/rollback/:id', :to => 'journals#rollback', :id => /\d+/, :via => :post
   resources :journals, :only => [:edit, :update] do
     member do
       get 'diff'
