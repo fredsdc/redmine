@@ -12,9 +12,9 @@ es-PA:
     # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
     format:
       # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
-      separator: ","
+      separator: "."
       # Delimets thousands (e.g. 1,000,000 is a million) (always in groups of three)
-      delimiter: "."
+      delimiter: ","
       # Number of decimals, behind the separator (1 with a precision of 2 gives: 1.00)
       precision: 3
 
@@ -255,6 +255,7 @@ es-PA:
   error_scm_annotate_big_text_file: "La entrada no puede anotarse, al superar el tamaño máximo para archivos de texto."
   error_scm_command_failed: "Se produjo un error al acceder al repositorio: %{value}"
   error_scm_not_found: "La entrada y/o la revisión no existe en el repositorio."
+  error_ldap_bind_credentials: "Cuenta/Contraseña LDAP incorrecta"
   field_account: Cuenta
   field_activity: Actividad
   field_admin: Administrador
@@ -343,6 +344,7 @@ es-PA:
   general_csv_encoding: ISO-8859-15
   general_csv_separator: ','
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '1'
   general_lang_name: 'Spanish/Panama (Español/Panamá)'
   general_text_No: 'No'
@@ -661,7 +663,7 @@ es-PA:
   mail_subject_register: "Activación de la cuenta del %{value}"
   mail_subject_reminder: "%{count} incidencia(s) finalizan en los próximos %{days} días"
   notice_account_activated: Su cuenta ha sido activada. Ya puede conectarse.
-  notice_account_invalid_creditentials: Usuario o contraseña inválido.
+  notice_account_invalid_credentials: Usuario o contraseña inválido.
   notice_account_lost_email_sent: Se le ha enviado un correo con instrucciones para elegir una nueva contraseña.
   notice_account_password_updated: Contraseña modificada correctamente.
   notice_account_pending: "Su cuenta ha sido creada y está pendiende de la aprobación por parte del administrador."
@@ -931,7 +933,7 @@ es-PA:
   label_subtask_plural: Subtareas
   label_project_copy_notifications: Enviar notificaciones por correo electrónico durante la copia del proyecto
   error_can_not_delete_custom_field: Fue imposible eliminar el campo personalizado
-  error_unable_to_connect: Fue imposible conectar con (%{value})
+  error_unable_to_connect: Fue imposible conectarse (%{value})
   error_can_not_remove_role: Este rol está en uso y no puede ser eliminado.
   error_can_not_delete_tracker: Este tipo contiene incidencias y no puede ser eliminado.
   field_principal: Principal
@@ -1194,7 +1196,7 @@ es-PA:
   label_fields_separator: Separador de Campos
   label_fields_wrapper: Envoltorio de Campo
   label_encoding: Codificación
-  label_comma_char: Comma
+  label_comma_char: Coma
   label_semi_colon_char: Punto y Coma
   label_quote_char: Comilla Simple
   label_double_quote_char: Comilla Doble
@@ -1204,13 +1206,27 @@ es-PA:
   button_import: Importar
   field_total_estimated_hours: Total de Tiempo Estimado
   label_api: API
-  label_total_plural: Totals
-  label_assigned_issues: Assigned issues
-  label_field_format_enumeration: Key/value list
+  label_total_plural: Totales
+  label_assigned_issues: Incidencias Asignadas
+  label_field_format_enumeration: Lista Llave/valor
   label_f_hour_short: '%{value} h'
-  field_default_version: Default version
-  error_attachment_extension_not_allowed: Attachment extension %{extension} is not allowed
-  setting_attachment_extensions_allowed: Allowed extensions
-  setting_attachment_extensions_denied: Disallowed extensions
-  label_any_open_issues: any open issues
-  label_no_open_issues: no open issues
+  field_default_version: Version Predeterminada
+  error_attachment_extension_not_allowed: Extensión adjuntada %{extension} no es permitida
+  setting_attachment_extensions_allowed: Extensiones Permitidas
+  setting_attachment_extensions_denied: Extensiones Prohibidas
+  label_any_open_issues: cualquier incidencias abierta
+  label_no_open_issues: incidencias cerradas
+  label_default_values_for_new_users: Valor predeterminado para nuevos usuarios
+  setting_sys_api_key: Clave de la API
+  setting_lost_password: ¿Olvidaste la contraseña?
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

@@ -156,10 +156,11 @@ tr:
   general_csv_separator: ','
   general_csv_encoding: ISO-8859-9
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '7'
 
   notice_account_updated: Hesap başarıyla güncelleştirildi.
-  notice_account_invalid_creditentials: Geçersiz kullanıcı ya da parola
+  notice_account_invalid_credentials: Geçersiz kullanıcı ya da parola
   notice_account_password_updated: Parola başarıyla güncellendi.
   notice_account_wrong_password: Yanlış parola
   notice_account_register_done: Hesap başarıyla oluşturuldu. Hesabınızı etkinleştirmek için, size gönderilen e-postadaki bağlantıya tıklayın.
@@ -208,7 +209,7 @@ tr:
   field_filename: Dosya
   field_filesize: Boyut
   field_downloads: İndirilenler
-  field_author: Yazar
+  field_author: Oluşturan
   field_created_on: Oluşturulma
   field_updated_on: Güncellenme
   field_field_format: Biçim
@@ -537,8 +538,8 @@ tr:
   label_time_tracking: Zaman Takibi
   label_change_plural: Değişiklikler
   label_statistics: İstatistikler
-  label_commits_per_month: Aylık teslim
-  label_commits_per_author: Yazar başına teslim
+  label_commits_per_month: Aylık commit
+  label_commits_per_author: Oluşturan başına commit
   label_view_diff: Farkları izle
   label_diff_inline: satır içi
   label_diff_side_by_side: Yan yana
@@ -679,7 +680,7 @@ tr:
   text_issue_category_destroy_question: "Bazı işler (%{count}) bu kategoriye atandı. Ne yapmak istersiniz?"
   text_issue_category_destroy_assignments: Kategori atamalarını kaldır
   text_issue_category_reassign_to: İşleri bu kategoriye tekrar ata
-  text_user_mail_option: "Seçili olmayan projeler için, sadece dahil olduğunuz ya da izlediğiniz öğeler hakkında uyarılar alacaksınız (örneğin,yazarı veya atandığınız işler)."
+  text_user_mail_option: "Seçili olmayan projeler için, sadece dahil olduğunuz (oluşturan veya atanan) ya da izlediğiniz öğeler hakkında uyarılar alacaksınız."
   text_no_configuration_data: "Roller, iş tipleri, iş durumları ve işakışı henüz yapılandırılmadı.\nVarsayılan yapılandırılmanın yüklenmesi şiddetle tavsiye edilir. Bir kez yüklendiğinde yapılandırmayı değiştirebileceksiniz."
   text_load_default_configuration: Varsayılan yapılandırmayı yükle
   text_status_changed_by_changeset: "Değişiklik listesi %{value} içinde uygulandı."
@@ -942,7 +943,7 @@ tr:
   button_expand_all: Tümünü genişlet
   button_collapse_all: Tümünü daralt
   label_additional_workflow_transitions_for_assignee: Kullanıcı atanan olduğu zaman tanınacak ek yetkiler
-  label_additional_workflow_transitions_for_author: Kullanıcı yazar olduğu zaman tanınacak ek yetkiler
+  label_additional_workflow_transitions_for_author: Kullanıcı oluşturan olduğu zaman tanınacak ek yetkiler
   label_bulk_edit_selected_time_entries: Seçilen zaman kayıtlarını toplu olarak düzenle
   text_time_entries_destroy_confirmation: Seçilen zaman kaydını/kayıtlarını silmek istediğinize emin misiniz?
   label_role_anonymous: Anonim
@@ -1052,7 +1053,7 @@ tr:
   text_repository_identifier_info: Yalnızca küçük harfler (a-z), sayılar, tire ve alt tire kullanılabilir.<br />Kaydedilen tanımlayıcı daha sonra değiştirilemez.
   field_board_parent: Üst forum
   label_attribute_of_project: Proje %{name}
-  label_attribute_of_author: Yazar %{name}
+  label_attribute_of_author: Oluşturan %{name}
   label_attribute_of_assigned_to: Atanan %{name}
   label_attribute_of_fixed_version: Hedef sürüm %{name}
   label_copy_subtasks: Alt görevi kopyala
@@ -1156,36 +1157,49 @@ tr:
   label_member_management_selected_roles_only: Sadece bu roller
   label_password_required: Devam etmek için şifrenizi doğrulayın
   label_total_spent_time: Toplam harcanan zaman
-  notice_import_finished: All %{count} items have been imported.
-  notice_import_finished_with_errors: ! '%{count} out of %{total} items could not be
-    imported.'
-  error_invalid_file_encoding: The file is not a valid %{encoding} encoded file
-  error_invalid_csv_file_or_settings: The file is not a CSV file or does not match the
-    settings below
-  error_can_not_read_import_file: An error occurred while reading the file to import
-  permission_import_issues: Import issues
-  label_import_issues: Import issues
-  label_select_file_to_import: Select the file to import
-  label_fields_separator: Field separator
-  label_fields_wrapper: Field wrapper
-  label_encoding: Encoding
-  label_comma_char: Comma
-  label_semi_colon_char: Semi colon
-  label_quote_char: Quote
-  label_double_quote_char: Double quote
-  label_fields_mapping: Fields mapping
-  label_file_content_preview: File content preview
-  label_create_missing_values: Create missing values
-  button_import: Import
-  field_total_estimated_hours: Total estimated time
+  notice_import_finished: "%{count} kayıt içeri aktarıldı."
+  notice_import_finished_with_errors: ! '%{total} kayıttan %{count} tanesi aktarılamadı.'
+  error_invalid_file_encoding: Dosyanın karakter kodlaması geçerli bir %{encoding} kodlaması değil.
+  error_invalid_csv_file_or_settings: Dosya CSV dosyası değil veya aşağıdaki ayarlara uymuyor
+  error_can_not_read_import_file: İçeri aktarılacak dosyayı okurken bir hata oluştu
+  permission_import_issues: İşleri içeri aktarma
+  label_import_issues: İşleri içeri aktar
+  label_select_file_to_import: İçeri aktarılacak dosyayı seçiniz
+  label_fields_separator: Alan ayracı
+  label_fields_wrapper: Alan kılıfı
+  label_encoding: Karakter kodlaması
+  label_comma_char: Virgül
+  label_semi_colon_char: Noktalı virgül
+  label_quote_char: Tek tırnak işareti
+  label_double_quote_char: Çift tırnak işareti
+  label_fields_mapping: Alan eşleştirme
+  label_file_content_preview: Dosya içeriği önizlemesi
+  label_create_missing_values: Eşleşlmeyen alanları oluştur
+  button_import: İçeri aktar
+  field_total_estimated_hours: Toplam tahmini zaman
   label_api: API
-  label_total_plural: Totals
-  label_assigned_issues: Assigned issues
-  label_field_format_enumeration: Key/value list
-  label_f_hour_short: '%{value} h'
-  field_default_version: Default version
-  error_attachment_extension_not_allowed: Attachment extension %{extension} is not allowed
-  setting_attachment_extensions_allowed: Allowed extensions
-  setting_attachment_extensions_denied: Disallowed extensions
-  label_any_open_issues: any open issues
-  label_no_open_issues: no open issues
+  label_total_plural: Toplamlar
+  label_assigned_issues: Atanan işler
+  label_field_format_enumeration: Anahtar/Değer listesi
+  label_f_hour_short: '%{value} s'
+  field_default_version: Ön tanımlı versiyon
+  error_attachment_extension_not_allowed: Dosya uzantısına izin verilmiyor; %{extension}
+  setting_attachment_extensions_allowed: İzin verilen dosya uzantıları
+  setting_attachment_extensions_denied: Yasaklı dosya uzantıları
+  label_any_open_issues: herhangi bir açık iş
+  label_no_open_issues: hiçbir açık iş
+  label_default_values_for_new_users: Default values for new users
+  error_ldap_bind_credentials: Invalid LDAP Account/Password
+  setting_sys_api_key: API anahtarı
+  setting_lost_password: Parolamı unuttum
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

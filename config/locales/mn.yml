@@ -142,10 +142,11 @@ mn:
   general_csv_decimal_separator: '.'
   general_csv_encoding: UTF-8
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '7'
 
   notice_account_updated: Дансыг амжилттай өөрчиллөө.
-  notice_account_invalid_creditentials: Хэрэглэгчийн нэр эсвэл нууц үг буруу байна
+  notice_account_invalid_credentials: Хэрэглэгчийн нэр эсвэл нууц үг буруу байна
   notice_account_password_updated: Нууц үгийг амжилттай өөрчиллөө.
   notice_account_wrong_password: Буруу нууц үг
   notice_account_register_done: Шинэ хэрэглэгч амжилттай үүсгэлээ. Идэвхжүүлэхийн тулд, бидний тань луу илгээсэн мэйл дотор байгаа холбоос дээр дараарай.
@@ -1181,3 +1182,18 @@ mn:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  label_default_values_for_new_users: Default values for new users
+  error_ldap_bind_credentials: Invalid LDAP Account/Password
+  setting_sys_api_key: API түлхүүр
+  setting_lost_password: Нууц үгээ алдсан
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

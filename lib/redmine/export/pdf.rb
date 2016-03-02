@@ -35,13 +35,14 @@ module Redmine
           set_rtl(l(:direction) == 'rtl')
 
           @font_for_content = l(:general_pdf_fontname)
+          @monospaced_font_for_content = l(:general_pdf_monospaced_fontname)
           @font_for_footer  = l(:general_pdf_fontname)
           set_creator(Redmine::Info.app_name)
           set_font(@font_for_content)
 
           set_header_font([@font_for_content, '', 10])
           set_footer_font([@font_for_content, '', 8])
-          set_default_monospaced_font(@font_for_content)
+          set_default_monospaced_font(@monospaced_font_for_content)
           set_display_mode('default', 'OneColumn')
         end
 
@@ -51,9 +52,11 @@ module Redmine
 
         def SetFont(family, style='', size=0, fontfile='')
           # FreeSerif Bold Thai font has problem.
-          style.delete!('B') if l(:general_pdf_fontname) == 'freeserif'
+          style.delete!('B') if family.to_s.casecmp('freeserif') == 0
           # DejaVuSans Italic Arabic and Persian font has problem.
-          style.delete!('I') if l(:general_pdf_fontname) == 'DejaVuSans' && current_language.to_s.casecmp("vi") != 0
+          style.delete!('I') if family.to_s.casecmp('dejavusans') == 0 && current_language.to_s.casecmp("vi") != 0
+          # DejaVuSansMono Italic Arabic font has problem
+          style.delete!('I') if family.to_s.casecmp('dejavusansmono') == 0
           super(family, style, size, fontfile)
         end
         alias_method :set_font, :SetFont

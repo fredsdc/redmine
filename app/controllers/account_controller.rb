@@ -73,6 +73,12 @@ class AccountController < ApplicationController
         @user.password, @user.password_confirmation = params[:new_password], params[:new_password_confirmation]
         if @user.save
           @token.destroy
+          Mailer.security_notification(@user,
+            message: :mail_body_security_notification_change,
+            field: :field_password,
+            title: :button_change_password,
+            url: {controller: 'my', action: 'password'}
+          ).deliver
           flash[:notice] = l(:notice_account_password_updated)
           redirect_to signin_path
           return
@@ -122,6 +128,7 @@ class AccountController < ApplicationController
       user_params = params[:user] || {}
       @user = User.new
       @user.safe_attributes = user_params
+      @user.pref.attributes = params[:pref] if params[:pref]
       @user.admin = false
       @user.register
       if session[:auth_source_registration]
@@ -288,7 +295,7 @@ class AccountController < ApplicationController
 
   def invalid_credentials
     logger.warn "Failed login for '#{params[:username]}' from #{request.remote_ip} at #{Time.now.utc}"
-    flash.now[:error] = l(:notice_account_invalid_creditentials)
+    flash.now[:error] = l(:notice_account_invalid_credentials)
   end
 
   # Register a user for email activation.

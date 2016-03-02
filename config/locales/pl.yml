@@ -309,6 +309,7 @@ pl:
   general_csv_encoding: UTF-8
   general_csv_separator: ';'
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '1'
   general_lang_name: 'Polish (Polski)'
   general_text_No: 'Nie'
@@ -638,7 +639,7 @@ pl:
   mail_subject_register: "Aktywacja konta w %{value}"
   mail_subject_reminder: "Zagadnienia (%{count}) do obsłużenia w ciągu następnych %{days} dni"
   notice_account_activated: Twoje konto zostało aktywowane. Możesz się zalogować.
-  notice_account_invalid_creditentials: Zły użytkownik lub hasło
+  notice_account_invalid_credentials: Zły użytkownik lub hasło
   notice_account_lost_email_sent: E-mail z instrukcjami zmiany hasła został wysłany do Ciebie.
   notice_account_password_updated: Hasło prawidłowo zmienione.
   notice_account_pending: "Twoje konto zostało utworzone i oczekuje na zatwierdzenie administratora."
@@ -1195,3 +1196,18 @@ pl:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  label_default_values_for_new_users: Default values for new users
+  error_ldap_bind_credentials: Invalid LDAP Account/Password
+  setting_sys_api_key: Klucz API
+  setting_lost_password: Zapomniane hasło
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

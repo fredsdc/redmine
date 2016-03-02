@@ -317,6 +317,7 @@ gl:
   general_csv_encoding: ISO-8859-15
   general_csv_separator: ';'
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '1'
   general_lang_name: 'Galician (Galego)'
   general_text_No: 'Non'
@@ -635,7 +636,7 @@ gl:
   mail_subject_register: "Activación da conta de %{value}"
   mail_subject_reminder: "%{count} petición(s) rematarán nos próximos %{days} días"
   notice_account_activated: A súa conta foi activada. Xa pode conectarse.
-  notice_account_invalid_creditentials: "O usuario ou contrasinal non é correcto."
+  notice_account_invalid_credentials: "O usuario ou contrasinal non é correcto."
   notice_account_lost_email_sent: Enviouse un correo con instrucións para elixir un novo contrasinal.
   notice_account_password_updated: Contrasinal modificado correctamente.
   notice_account_pending: "A súa conta creouse e está pendente da aprobación por parte do administrador."
@@ -1188,3 +1189,18 @@ gl:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  label_default_values_for_new_users: Default values for new users
+  error_ldap_bind_credentials: Invalid LDAP Account/Password
+  setting_sys_api_key: Clave da API
+  setting_lost_password: "Esqueceu o contrasinal?"
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

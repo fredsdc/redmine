@@ -80,7 +80,7 @@ class QueryCustomFieldColumn < QueryColumn
     self.name = "cf_#{custom_field.id}".to_sym
     self.sortable = custom_field.order_statement || false
     self.groupable = custom_field.group_statement || false
-    self.totalable = ['int', 'float'].include?(custom_field.field_format)
+    self.totalable = custom_field.totalable?
     @inline = true
     @cf = custom_field
   end
@@ -567,22 +567,24 @@ class Query < ActiveRecord::Base
   def project_statement
     project_clauses = []
     if project && !project.descendants.active.empty?
-      ids = [project.id]
       if has_filter?("subproject_id")
         case operator_for("subproject_id")
         when '='
           # include the selected subprojects
-          ids += values_for("subproject_id").each(&:to_i)
+          ids = [project.id] + values_for("subproject_id").each(&:to_i)
+          project_clauses << "#{Project.table_name}.id IN (%s)" % ids.join(',')
         when '!*'
           # main project only
+          project_clauses << "#{Project.table_name}.id = %d" % project.id
         else
           # all subprojects
-          ids += project.descendants.collect(&:id)
+          project_clauses << "#{Project.table_name}.lft >= #{project.lft} AND #{Project.table_name}.rgt <= #{project.rgt}"
         end
       elsif Setting.display_subprojects_issues?
-        ids += project.descendants.collect(&:id)
+        project_clauses << "#{Project.table_name}.lft >= #{project.lft} AND #{Project.table_name}.rgt <= #{project.rgt}"
+      else
+        project_clauses << "#{Project.table_name}.id = %d" % project.id
       end
-      project_clauses << "#{Project.table_name}.id IN (%s)" % ids.join(',')
     elsif project
       project_clauses << "#{Project.table_name}.id = %d" % project.id
     end
@@ -692,7 +694,7 @@ class Query < ActiveRecord::Base
     end
     if column.is_a?(QueryCustomFieldColumn)
       custom_field = column.custom_field
-      send "total_for_#{custom_field.field_format}_custom_field", custom_field, scope
+      send "total_for_custom_field", custom_field, scope
     else
       send "total_for_#{column.name}", scope
     end
@@ -710,21 +712,9 @@ class Query < ActiveRecord::Base
       group(group_by_statement)
   end
 
-  def total_for_float_custom_field(custom_field, scope)
-    total_for_custom_field(custom_field, scope) {|t| t.to_f.round(2)}
-  end
-
-  def total_for_int_custom_field(custom_field, scope)
-    total_for_custom_field(custom_field, scope) {|t| t.to_i}
-  end
-
   def total_for_custom_field(custom_field, scope, &block)
-    total = scope.joins(:custom_values).
-      where(:custom_values => {:custom_field_id => custom_field.id}).
-      where.not(:custom_values => {:value => ''}).
-      sum("CAST(#{CustomValue.table_name}.value AS decimal(30,3))")
-
-    total = map_total(total, &block) if block_given?
+    total = custom_field.format.total_for_scope(custom_field, scope)
+    total = map_total(total) {|t| custom_field.format.cast_total_value(custom_field, t)}
     total
   end
 

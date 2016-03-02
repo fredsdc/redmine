@@ -18,6 +18,7 @@
 <%= yield :header_tags -%>
 </head>
 <body class="<%= body_css_classes %>">
+<%= call_hook :view_layouts_base_body_top %>
 <div id="wrapper">
 
 <div class="flyout-menu js-flyout-menu">
@@ -87,8 +88,12 @@
     <h1><%= page_header_title %></h1>
 
     <% if display_main_menu?(@project) %>
-    <div id="main-menu">
+    <div id="main-menu" class="tabs">
         <%= render_main_menu(@project) %>
+        <div class="tabs-buttons" style="display:none;">
+            <button class="tab-left" onclick="moveTabLeft(this); return false;"></button>
+            <button class="tab-right" onclick="moveTabRight(this); return false;"></button>
+        </div>
     </div>
     <% end %>
 </div>

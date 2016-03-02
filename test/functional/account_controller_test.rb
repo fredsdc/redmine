@@ -247,6 +247,18 @@ class AccountControllerTest < ActionController::TestCase
     end
   end
 
+  def test_get_register_should_show_hide_mail_preference
+    get :register
+    assert_select 'input[name=?][checked=checked]', 'pref[hide_mail]'
+  end
+
+  def test_get_register_should_show_hide_mail_preference_with_setting_turned_off
+    with_settings :default_users_hide_mail => '0' do
+      get :register
+      assert_select 'input[name=?]:not([checked=checked])', 'pref[hide_mail]'
+    end
+  end
+
   # See integration/account_test.rb for the full test
   def test_post_register_with_registration_on
     with_settings :self_registration => '3' do
@@ -284,6 +296,22 @@ class AccountControllerTest < ActionController::TestCase
         }
         assert_redirected_to '/'
       end
+    end
+  end
+
+  def test_post_register_should_create_user_with_hide_mail_preference
+    with_settings :default_users_hide_mail => '0' do
+      user = new_record(User) do
+        post :register, :user => {
+          :login => 'register',
+          :password => 'secret123', :password_confirmation => 'secret123',
+          :firstname => 'John', :lastname => 'Doe',
+          :mail => 'register@example.com'
+        }, :pref => {
+          :hide_mail => '1'
+        }
+      end
+      assert_equal true, user.pref.hide_mail
     end
   end
 
@@ -372,6 +400,7 @@ class AccountControllerTest < ActionController::TestCase
   end
 
   def test_post_lost_password_with_token_should_change_the_user_password
+    ActionMailer::Base.deliveries.clear
     user = User.find(2)
     token = Token.create!(:action => 'recovery', :user => user)
 
@@ -380,6 +409,10 @@ class AccountControllerTest < ActionController::TestCase
     user.reload
     assert user.check_password?('newpass123')
     assert_nil Token.find_by_id(token.id), "Token was not deleted"
+    assert_not_nil (mail = ActionMailer::Base.deliveries.last)
+    assert_select_email do
+      assert_select 'a[href^=?]', 'http://localhost:3000/my/password', :text => 'Change password'
+    end
   end
 
   def test_post_lost_password_with_token_for_non_active_user_should_fail

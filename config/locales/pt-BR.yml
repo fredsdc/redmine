@@ -162,10 +162,11 @@ pt-BR:
   general_csv_decimal_separator: ','
   general_csv_encoding: ISO-8859-1
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '1'
 
   notice_account_updated: Conta atualizada com sucesso.
-  notice_account_invalid_creditentials: Usuário ou senha inválido.
+  notice_account_invalid_credentials: Usuário ou senha inválido.
   notice_account_password_updated: Senha alterada com sucesso.
   notice_account_wrong_password: Senha inválida.
   notice_account_register_done: Conta criada com sucesso. Para ativar sua conta, clique no link que lhe foi enviado por e-mail.
@@ -195,6 +196,7 @@ pt-BR:
   error_issue_not_found_in_project: 'A tarefa não foi encontrada ou não pertence a este projeto'
   error_no_tracker_in_project: 'Não há um tipo de tarefa associado a este projeto. Favor verificar as configurações do projeto.'
   error_no_default_issue_status: 'A situação padrão para tarefa não está definida. Favor verificar sua configuração (Vá em "Administração -> Situação da tarefa").'
+  error_ldap_bind_credentials: "Conta/Palavra-chave do LDAP não é válida"
 
   mail_subject_lost_password: "Sua senha do %{value}."
   mail_body_lost_password: 'Para mudar sua senha, clique no link abaixo:'
@@ -1199,3 +1201,17 @@ pt-BR:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  label_default_values_for_new_users: Default values for new users
+  setting_sys_api_key: Chave de API
+  setting_lost_password: Perdi minha senha
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

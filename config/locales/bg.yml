@@ -143,10 +143,11 @@ bg:
   general_csv_decimal_separator: '.'
   general_csv_encoding: UTF-8
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '1'
 
   notice_account_updated: Профилът е обновен успешно.
-  notice_account_invalid_creditentials: Невалиден потребител или парола.
+  notice_account_invalid_credentials: Невалиден потребител или парола.
   notice_account_password_updated: Паролата е успешно променена.
   notice_account_wrong_password: Грешна парола
   notice_account_register_done: Профилът е създаден успешно. E-mail, съдържащ инструкции за активиране на профила
@@ -214,6 +215,7 @@ bg:
   error_invalid_csv_file_or_settings: Файлът не е CSV файл или не съответства на зададеното по-долу
   error_can_not_read_import_file: Грешка по време на четене на импортирания файл
   error_attachment_extension_not_allowed: Файлове от тип %{extension} не са позволени
+  error_ldap_bind_credentials: Невалидни LDAP име/парола
 
   mail_subject_lost_password: "Вашата парола (%{value})"
   mail_body_lost_password: 'За да смените паролата си, използвайте следния линк:'
@@ -229,6 +231,14 @@ bg:
   mail_body_wiki_content_added: Wiki страницата '%{id}' беше добавена от %{author}.
   mail_subject_wiki_content_updated: "Wiki страницата '%{id}' беше обновена"
   mail_body_wiki_content_updated: Wiki страницата '%{id}' беше обновена от %{author}.
+  mail_subject_security_notification: Известие за промяна в сигурността
+  mail_body_security_notification_change: ! '%{field} беше променено.'
+  mail_body_security_notification_change_to: ! '%{field} беше променено на %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} беше добавено.'
+  mail_body_security_notification_remove: ! '%{field} %{value} беше премахнато.'
+  mail_body_security_notification_notify_enabled: Имейл адрес %{value} вече получава известия.
+  mail_body_security_notification_notify_disabled: Имейл адрес %{value} вече не получава известия.
+  mail_body_settings_updated: ! 'Изменения в конфигурацията:'
 
   field_name: Име
   field_description: Описание
@@ -353,6 +363,7 @@ bg:
   field_time_entries_visibility: Видимост на записи за използвано време
   field_total_estimated_hours: Общо изчислено време
   field_default_version: Версия по подразбиране
+  field_remote_ip: IP адрес
 
   setting_app_title: Заглавие
   setting_app_subtitle: Описание
@@ -977,6 +988,7 @@ bg:
   label_create_missing_values: Създаване на липсващи стойности
   label_api: API
   label_field_format_enumeration: Списък ключ/стойност
+  label_default_values_for_new_users: Стойности по подразбиране за нови потребители
 
   button_login: Вход
   button_submit: Изпращане
@@ -1171,3 +1183,5 @@ bg:
   description_date_from: Въведете начална дата
   description_date_to: Въведете крайна дата
   text_repository_identifier_info: 'Позволени са малки букви (a-z), цифри, тирета и _.<br />Промяна след създаването му не е възможна.'
+  setting_sys_api_key: API ключ
+  setting_lost_password: Забравена парола

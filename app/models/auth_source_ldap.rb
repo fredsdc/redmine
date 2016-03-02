@@ -56,11 +56,16 @@ class AuthSourceLdap < AuthSource
     raise AuthSourceException.new(e.message)
   end
 
-  # test the connection to the LDAP
+  # Test the connection to the LDAP
   def test_connection
     with_timeout do
       ldap_con = initialize_ldap_con(self.account, self.account_password)
       ldap_con.open { }
+
+      if self.account.present? && !self.account.include?("$login") && self.account_password.present?
+        ldap_auth = authenticate_dn(self.account, self.account_password)
+        raise AuthSourceException.new(l(:error_ldap_bind_credentials)) if !ldap_auth
+      end
     end
   rescue *NETWORK_EXCEPTIONS => e
     raise AuthSourceException.new(e.message)
@@ -197,7 +202,8 @@ class AuthSourceLdap < AuthSource
 
   def self.get_attr(entry, attr_name)
     if !attr_name.blank?
-      entry[attr_name].is_a?(Array) ? entry[attr_name].first : entry[attr_name]
+      value = entry[attr_name].is_a?(Array) ? entry[attr_name].first : entry[attr_name]
+      value.to_s.force_encoding('UTF-8')
     end
   end
 end

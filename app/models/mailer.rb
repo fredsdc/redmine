@@ -318,6 +318,36 @@ class Mailer < ActionMailer::Base
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
+  def security_notification(recipients, options={})
+    redmine_headers 'Sender' => User.current.login
+    @user = Array(recipients).detect{|r| r.is_a? User }
+    set_language_if_valid(@user.try :language)
+    @message = l(options[:message],
+      field: (options[:field] && l(options[:field])),
+      value: options[:value]
+    )
+    @title = options[:title] && l(options[:title])
+    @url = options[:url] && (options[:url].is_a?(Hash) ? url_for(options[:url]) : options[:url])
+    mail :to => recipients,
+      :subject => l(:mail_subject_security_notification)
+  end
+
+  def settings_updated(recipients, changes)
+    redmine_headers 'Sender' => User.current.login
+    @changes = changes
+    @url = url_for(controller: 'settings', action: 'index')
+    mail :to => recipients,
+      :subject => l(:mail_subject_security_notification)
+  end
+
+	# Notifies admins about settings changes
+  def self.security_settings_updated(changes)
+    return unless changes.present?
+
+    users = User.active.where(admin: true).to_a
+    Mailer.settings_updated(users, changes).deliver
+  end
+
   def test_email(user)
     set_language_if_valid(user.language)
     @url = url_for(:controller => 'welcome')

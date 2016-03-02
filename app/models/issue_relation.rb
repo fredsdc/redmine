@@ -30,6 +30,8 @@ class IssueRelation < ActiveRecord::Base
     end
   end
 
+  include Redmine::SafeAttributes
+
   belongs_to :issue_from, :class_name => 'Issue'
   belongs_to :issue_to, :class_name => 'Issue'
 
@@ -75,6 +77,24 @@ class IssueRelation < ActiveRecord::Base
   after_create  :call_issues_relation_added_callback
   after_destroy :call_issues_relation_removed_callback
 
+  safe_attributes 'relation_type',
+    'delay',
+    'issue_to_id'
+
+  def safe_attributes=(attrs, user=User.current)
+    return unless attrs.is_a?(Hash)
+    attrs = attrs.deep_dup
+
+    if issue_id = attrs.delete('issue_to_id')
+      if issue_id.to_s.strip.match(/\A#?(\d+)\z/)
+        issue_id = $1.to_i
+        self.issue_to = Issue.visible(user).find_by_id(issue_id)
+      end
+    end
+    
+    super(attrs)
+  end
+
   def visible?(user=User.current)
     (issue_from.nil? || issue_from.visible?(user)) && (issue_to.nil? || issue_to.visible?(user))
   end
@@ -101,11 +121,8 @@ class IssueRelation < ActiveRecord::Base
                 Setting.cross_project_issue_relations?
         errors.add :issue_to_id, :not_same_project
       end
-      # detect circular dependencies depending wether the relation should be reversed
-      if TYPES.has_key?(relation_type) && TYPES[relation_type][:reverse]
-        errors.add :base, :circular_dependency if issue_from.all_dependent_issues.include? issue_to
-      else
-        errors.add :base, :circular_dependency if issue_to.all_dependent_issues.include? issue_from
+      if circular_dependency?
+        errors.add :base, :circular_dependency
       end
       if issue_from.is_descendant_of?(issue_to) || issue_from.is_ancestor_of?(issue_to)
         errors.add :base, :cant_link_an_issue_with_a_descendant
@@ -194,6 +211,22 @@ class IssueRelation < ActiveRecord::Base
       self.issue_to = issue_from
       self.issue_from = issue_tmp
       self.relation_type = TYPES[relation_type][:reverse]
+    end
+  end
+
+  # Returns true if the relation would create a circular dependency
+  def circular_dependency?
+    case relation_type
+    when 'follows'
+      issue_from.would_reschedule? issue_to
+    when 'precedes'
+      issue_to.would_reschedule? issue_from
+    when 'blocked'
+      issue_from.blocks? issue_to
+    when 'blocks'
+      issue_to.blocks? issue_from
+    else
+      false
     end
   end
 

@@ -454,18 +454,18 @@ module ApplicationHelper
   end
 
   def reorder_links(name, url, method = :post)
-    link_to(image_tag('2uparrow.png', :alt => l(:label_sort_highest)),
-            url.merge({"#{name}[move_to]" => 'highest'}),
-            :method => method, :title => l(:label_sort_highest)) +
-    link_to(image_tag('1uparrow.png',   :alt => l(:label_sort_higher)),
-            url.merge({"#{name}[move_to]" => 'higher'}),
-           :method => method, :title => l(:label_sort_higher)) +
-    link_to(image_tag('1downarrow.png', :alt => l(:label_sort_lower)),
-            url.merge({"#{name}[move_to]" => 'lower'}),
-            :method => method, :title => l(:label_sort_lower)) +
-    link_to(image_tag('2downarrow.png', :alt => l(:label_sort_lowest)),
-            url.merge({"#{name}[move_to]" => 'lowest'}),
-           :method => method, :title => l(:label_sort_lowest))
+    link_to('',
+            url.merge({"#{name}[move_to]" => 'highest'}), :method => method,
+            :title => l(:label_sort_highest), :class => 'icon-only icon-move-top') +
+    link_to('',
+            url.merge({"#{name}[move_to]" => 'higher'}), :method => method,
+            :title => l(:label_sort_higher), :class => 'icon-only icon-move-up') +
+    link_to('',
+            url.merge({"#{name}[move_to]" => 'lower'}), :method => method,
+            :title => l(:label_sort_lower), :class => 'icon-only icon-move-down') +
+    link_to('',
+            url.merge({"#{name}[move_to]" => 'lowest'}), :method => method,
+            :title => l(:label_sort_lowest), :class => 'icon-only icon-move-bottom')
   end
 
   def breadcrumb(*args)
@@ -883,12 +883,13 @@ module ApplicationHelper
   def parse_sections(text, project, obj, attr, only_path, options)
     return unless options[:edit_section_links]
     text.gsub!(HEADING_RE) do
-      heading = $1
+      heading, level = $1, $2
       @current_section += 1
       if @current_section > 1
         content_tag('div',
-          link_to(image_tag('edit.png'), options[:edit_section_links].merge(:section => @current_section)),
-          :class => 'contextual',
+          link_to('', options[:edit_section_links].merge(:section => @current_section),
+                  :class => 'icon-only icon-edit'),
+          :class => "contextual heading-#{level}",
           :title => l(:button_edit_section),
           :id => "section-#{@current_section}") + heading.html_safe
       else
@@ -1098,9 +1099,10 @@ module ApplicationHelper
   end
 
   def toggle_checkboxes_link(selector)
-    link_to_function image_tag('toggle_check.png'),
+    link_to_function '',
       "toggleCheckboxesBySelector('#{selector}')",
-      :title => "#{l(:button_check_all)} / #{l(:button_uncheck_all)}"
+      :title => "#{l(:button_check_all)} / #{l(:button_uncheck_all)}",
+      :class => 'toggle-checkboxes'
   end
 
   def progress_bar(pcts, options={})
@@ -1108,19 +1110,21 @@ module ApplicationHelper
     pcts = pcts.collect(&:round)
     pcts[1] = pcts[1] - pcts[0]
     pcts << (100 - pcts[1] - pcts[0])
+    titles = options[:titles].to_a
+    titles[0] = "#{pcts[0]}%" if titles[0].blank?
     legend = options[:legend] || ''
     content_tag('table',
       content_tag('tr',
-        (pcts[0] > 0 ? content_tag('td', '', :style => "width: #{pcts[0]}%;", :class => 'closed') : ''.html_safe) +
-        (pcts[1] > 0 ? content_tag('td', '', :style => "width: #{pcts[1]}%;", :class => 'done') : ''.html_safe) +
-        (pcts[2] > 0 ? content_tag('td', '', :style => "width: #{pcts[2]}%;", :class => 'todo') : ''.html_safe)
+        (pcts[0] > 0 ? content_tag('td', '', :style => "width: #{pcts[0]}%;", :class => 'closed', :title => titles[0]) : ''.html_safe) +
+        (pcts[1] > 0 ? content_tag('td', '', :style => "width: #{pcts[1]}%;", :class => 'done', :title => titles[1]) : ''.html_safe) +
+        (pcts[2] > 0 ? content_tag('td', '', :style => "width: #{pcts[2]}%;", :class => 'todo', :title => titles[2]) : ''.html_safe)
       ), :class => "progress progress-#{pcts[0]}").html_safe +
       content_tag('p', legend, :class => 'percent').html_safe
   end
 
   def checked_image(checked=true)
     if checked
-      @checked_image_tag ||= image_tag('toggle_check.png')
+      @checked_image_tag ||= content_tag(:span, nil, :class => 'icon-only icon-checked')
     end
   end
 

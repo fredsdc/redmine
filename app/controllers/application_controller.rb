@@ -133,6 +133,8 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+    # store current ip address in user object ephemerally
+    user.remote_ip = request.remote_ip if user
     user
   end
 
@@ -595,7 +597,7 @@ class ApplicationController < ActionController::Base
 
   # Returns a string that can be used as filename value in Content-Disposition header
   def filename_for_content_disposition(name)
-    request.env['HTTP_USER_AGENT'] =~ %r{(MSIE|Trident)} ? ERB::Util.url_encode(name) : name
+    request.env['HTTP_USER_AGENT'] =~ %r{(MSIE|Trident|Edge)} ? ERB::Util.url_encode(name) : name
   end
 
   def api_request?

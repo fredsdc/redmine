@@ -47,20 +47,25 @@ class User < Principal
         :order => %w(lastname firstname id),
         :setting_order => 4
       },
+    :lastnamefirstname => {
+        :string => '#{lastname}#{firstname}',
+        :order => %w(lastname firstname id),
+        :setting_order => 5
+      },
     :lastname_comma_firstname => {
         :string => '#{lastname}, #{firstname}',
         :order => %w(lastname firstname id),
-        :setting_order => 5
+        :setting_order => 6
       },
     :lastname => {
         :string => '#{lastname}',
         :order => %w(lastname id),
-        :setting_order => 6
+        :setting_order => 7
       },
     :username => {
         :string => '#{login}',
         :order => %w(login id),
-        :setting_order => 7
+        :setting_order => 8
       },
   }
 
@@ -92,6 +97,8 @@ class User < Principal
 
   attr_accessor :password, :password_confirmation, :generate_password
   attr_accessor :last_before_login_on
+  attr_accessor :remote_ip
+
   # Prevents unauthorized assignments
   attr_protected :login, :admin, :password, :password_confirmation, :hashed_password
 
@@ -544,7 +551,7 @@ class User < Principal
     # No role on archived projects
     return [] if project.nil? || project.archived?
     if membership = membership(project)
-      membership.roles.dup
+      membership.roles.to_a
     elsif project.is_public?
       project.override_roles(builtin_role)
     else

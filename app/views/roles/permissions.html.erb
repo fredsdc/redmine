@@ -13,16 +13,16 @@
   </div>
   <!-- Line 0  -->
   <div id="g_fl" style="position: absolute; left: 0px; right: 13px; overflow: hidden; z-index: 1;">
+    <div style="display: inline-block; margin-right: -4px;">
+      <div class="g_c g_h">&nbsp;</div>
+    </div>
+    <% @roles.each do |role| %>
       <div style="display: inline-block; margin-right: -4px;">
-        <div class="g_c g_h">&nbsp;</div>
-      </div>
-      <% @roles.each do |role| %>
-        <div style="display: inline-block; margin-right: -4px;">
-          <div class="g_c g_h">
-            <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
-          </div>
+        <div class="g_c g_h">
+          <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
         </div>
-      <% end %>
+      </div>
+    <% end %>
   </div>
   <!-- Row 0 -->
   <div id="g_fr" style="position: absolute; left: 0px; top: 0px; bottom: 13px; overflow: hidden; z-index: 1;">
@@ -54,10 +54,11 @@
             <div class="g_c<%= (even)? " g_e":" g_o" %>" title="<%= "#{l_or_humanize(permission.name, :prefix => 'permission_')} - #{role.name}" %>">
               <% even = !even %>
               <% if role.setable_permissions.include? permission %>
-                  <%= check_box_tag "permissions[#{role.id}][]", permission.name, (role.permissions.include? permission.name), :id => nil, :class => "role-#{role.id}" %>
+                <%= check_box_tag "permissions[#{role.id}][]", permission.name, (role.permissions.include? permission.name), :id => nil, :class => "role-#{role.id}" %>
               <% end %>
             </div>
           <% end %>
+        <% end %>
       </div>
     <% end %>
   </div>

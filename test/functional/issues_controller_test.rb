@@ -538,9 +538,9 @@ class IssuesControllerTest < ActionController::TestCase
       lines = @response.body.chomp.split("\n")
       header = lines[0]
       status = "\xaa\xac\xbaA".force_encoding('Big5')
-      assert header.include?(status)
+      assert_include status, header
       issue_line = lines.find {|l| l =~ /^#{issue.id},/}
-      assert issue_line.include?(str_big5)
+      assert_include str_big5, issue_line
     end
   end
 
@@ -1424,7 +1424,7 @@ class IssuesControllerTest < ActionController::TestCase
     assert_select 'div#watchers ul' do
       assert_select 'li' do
         assert_select 'a[href="/users/2"]'
-        assert_select 'a img[alt=Delete]'
+        assert_select 'a[class*=delete]'
       end
     end
   end
@@ -1441,7 +1441,7 @@ class IssuesControllerTest < ActionController::TestCase
       assert_select 'li' do
         assert_select 'img.gravatar'
         assert_select 'a[href="/users/2"]'
-        assert_select 'a img[alt=Delete]'
+        assert_select 'a[class*=delete]'
       end
     end
   end
@@ -2773,6 +2773,14 @@ class IssuesControllerTest < ActionController::TestCase
     get :new, :project_id => 1, :copy_from => 3
 
     assert_select 'input[name=copy_attachments]', 0
+  end
+
+  def test_new_as_copy_should_preserve_parent_id
+    @request.session[:user_id] = 2
+    issue = Issue.generate!(:parent_issue_id => 2)
+    get :new, :project_id => 1, :copy_from => issue.id
+
+    assert_select 'input[name=?][value="2"]', 'issue[parent_issue_id]'
   end
 
   def test_new_as_copy_with_subtasks_should_show_copy_subtasks_checkbox

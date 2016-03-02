@@ -141,10 +141,11 @@ ar:
   general_csv_decimal_separator: '.'
   general_csv_encoding: ISO-8859-1
   general_pdf_fontname: DejaVuSans
+  general_pdf_monospaced_fontname: DejaVuSansMono
   general_first_day_of_week: '7'
 
   notice_account_updated: لقد تم تجديد الحساب بنجاح.
-  notice_account_invalid_creditentials: اسم المستخدم او كلمة المرور غير صحيحة
+  notice_account_invalid_credentials: اسم المستخدم او كلمة المرور غير صحيحة
   notice_account_password_updated: لقد تم تجديد كلمة المرور بنجاح.
   notice_account_wrong_password: كلمة المرور غير صحيحة
   notice_account_register_done: لقد تم انشاء حسابك بنجاح، الرجاء تأكيد الطلب من البريد الالكتروني
@@ -1180,3 +1181,18 @@ ar:
   setting_attachment_extensions_denied: Disallowed extensions
   label_any_open_issues: any open issues
   label_no_open_issues: no open issues
+  label_default_values_for_new_users: Default values for new users
+  error_ldap_bind_credentials: Invalid LDAP Account/Password
+  setting_sys_api_key: API مفتاح
+  setting_lost_password: فقدت كلمة السر
+  mail_subject_security_notification: Security notification
+  mail_body_security_notification_change: ! '%{field} was changed.'
+  mail_body_security_notification_change_to: ! '%{field} was changed to %{value}.'
+  mail_body_security_notification_add: ! '%{field} %{value} was added.'
+  mail_body_security_notification_remove: ! '%{field} %{value} was removed.'
+  mail_body_security_notification_notify_enabled: Email address %{value} now receives
+    notifications.
+  mail_body_security_notification_notify_disabled: Email address %{value} no longer
+    receives notifications.
+  mail_body_settings_updated: ! 'The following settings were changed:'
+  field_remote_ip: IP address

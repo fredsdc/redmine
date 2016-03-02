@@ -142,10 +142,11 @@ en:
   general_csv_decimal_separator: '.'
   general_csv_encoding: ISO-8859-1
   general_pdf_fontname: freesans
+  general_pdf_monospaced_fontname: freemono
   general_first_day_of_week: '7'
 
   notice_account_updated: Account was successfully updated.
-  notice_account_invalid_creditentials: Invalid user or password
+  notice_account_invalid_credentials: Invalid user or password
   notice_account_password_updated: Password was successfully updated.
   notice_account_wrong_password: Wrong password
   notice_account_register_done: Account was successfully created. An email containing the instructions to activate your account was sent to %{email}.
@@ -211,6 +212,7 @@ en:
   error_invalid_csv_file_or_settings: "The file is not a CSV file or does not match the settings below"
   error_can_not_read_import_file: "An error occurred while reading the file to import"
   error_attachment_extension_not_allowed: "Attachment extension %{extension} is not allowed"
+  error_ldap_bind_credentials: "Invalid LDAP Account/Password"
 
   mail_subject_lost_password: "Your %{value} password"
   mail_body_lost_password: 'To change your password, click on the following link:'
@@ -226,6 +228,14 @@ en:
   mail_body_wiki_content_added: "The '%{id}' wiki page has been added by %{author}."
   mail_subject_wiki_content_updated: "'%{id}' wiki page has been updated"
   mail_body_wiki_content_updated: "The '%{id}' wiki page has been updated by %{author}."
+  mail_subject_security_notification: "Security notification"
+  mail_body_security_notification_change: "%{field} was changed."
+  mail_body_security_notification_change_to: "%{field} was changed to %{value}."
+  mail_body_security_notification_add: "%{field} %{value} was added."
+  mail_body_security_notification_remove: "%{field} %{value} was removed."
+  mail_body_security_notification_notify_enabled: "Email address %{value} now receives notifications."
+  mail_body_security_notification_notify_disabled: "Email address %{value} no longer receives notifications."
+  mail_body_settings_updated: "The following settings were changed:"
 
   field_name: Name
   field_description: Description
@@ -350,6 +360,7 @@ en:
   field_time_entries_visibility: Time logs visibility
   field_total_estimated_hours: Total estimated time
   field_default_version: Default version
+  field_remote_ip: IP address
 
   setting_app_title: Application title
   setting_app_subtitle: Application subtitle
@@ -388,7 +399,8 @@ en:
   setting_enabled_scm: Enabled SCM
   setting_mail_handler_body_delimiters: "Truncate emails after one of these lines"
   setting_mail_handler_api_enabled: Enable WS for incoming emails
-  setting_mail_handler_api_key: API key
+  setting_mail_handler_api_key: Incoming email WS API key
+  setting_sys_api_key: Repository management WS API key
   setting_sequential_project_identifiers: Generate sequential project identifiers
   setting_gravatar_enabled: Use Gravatar user icons
   setting_gravatar_default: Default Gravatar image
@@ -398,6 +410,7 @@ en:
   setting_openid: Allow OpenID login and registration
   setting_password_max_age: Require password change after
   setting_password_min_length: Minimum password length
+  setting_lost_password: Allow password reset via email
   setting_new_project_user_role_id: Role given to a non-admin user who creates a project
   setting_default_projects_modules: Default enabled modules for new projects
   setting_issue_done_ratio: Calculate the issue done ratio with
@@ -974,6 +987,7 @@ en:
   label_create_missing_values: Create missing values
   label_api: API
   label_field_format_enumeration: Key/value list
+  label_default_values_for_new_users: Default values for new users
 
   button_login: Login
   button_submit: Submit
