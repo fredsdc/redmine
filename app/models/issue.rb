@@ -812,6 +812,36 @@ class Issue < ActiveRecord::Base
     end
   end
 
+  # rollback the changes in a journal, the journal is destroyed on success
+  def rollback(journal)
+    # only allow rollback of journal details for the last journal
+    (errors.add :base, l(:notice_locking_conflict); return) if !journal.last_valid_journal?(journals)
+
+    # avoid the creation of journals during rollback (see 'attachment removed')
+    @rolling_back = true
+
+    # roll back each change detailed by the journal
+    journal.details.each do |d|
+      case d.property
+        # issue attribute change
+        when 'attr'; send "#{d.prop_key}=", d.old_value
+        # rollback custom field change
+        when 'cf'; custom_field_values.each {|v| v.value = d.old_value if v.custom_field_id == d.prop_key.to_i}
+        # remove any added attachments (we can't recover removed attachments)
+        when 'attachment'; attachments.each {|v| attachments.delete(v) if v.id == d.prop_key.to_i}
+      end
+    end
+
+    # allow the creation of journals again
+    remove_instance_variable(:@rolling_back)
+
+    # destroy the journal once we save the issue changes
+    if save(:validate => false)
+      journal.rolled_back = true
+      journal.save
+    end
+  end
+
   # Return true if the issue is closed, otherwise false
   def closed?
     status.present? && status.is_closed?

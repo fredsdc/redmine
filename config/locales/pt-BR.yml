@@ -845,6 +845,9 @@ pt-BR:
   text_journal_changed: "%{label} alterado de %{old} para %{new}"
   text_journal_set_to: "%{label} ajustado para %{value}"
   text_journal_deleted: "%{label} excluído (%{old})"
+  field_hide_rolled_back_issue_notes: "Esconder mudanças desfeitas"
+  permission_rollback_issue_notes: Desfazer mudanças nas tarefas
+  button_rollback: Desfazer
   label_group_plural: Grupos
   label_group: Grupo
   label_group_new: Novo grupo

@@ -1,8 +1,17 @@
 <% reply_links = issue.notes_addable? -%>
 <% for journal in journals %>
+  <% if journal.show? %>
+
+  <% if journal.rolled_back? %>
+  <strike>
+  <% end %>
+
   <div id="change-<%= journal.id %>" class="<%= journal.css_classes %>">
     <div id="note-<%= journal.indice %>">
     <h4><a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
+    <% if journal.last_valid_journal?(journals) && journal.can_rollback? %>
+       <div class="journal-link"><%= link_to(image_tag('cancel.png'), {:controller => 'journals', :action => 'rollback', :id => journal}, :confirm => l(:text_are_you_sure), :method => :post, :title => l(:button_rollback)) %>&nbsp;</div>
+    <% end %>
     <%= avatar(journal.user, :size => "24") %>
     <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
     <%= content_tag('span', l(:field_is_private), :class => 'private') if journal.private_notes? %></h4>
@@ -25,6 +34,12 @@
     </div>
   </div>
   <%= call_hook(:view_issues_history_journal_bottom, { :journal => journal }) %>
+
+  <% if journal.rolled_back? %>
+  </strike>
+  <% end %>
+
+<% end %>
 <% end %>
 
 <% heads_for_wiki_formatter if User.current.allowed_to?(:edit_issue_notes, issue.project) || User.current.allowed_to?(:edit_own_issue_notes, issue.project) %>

@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       get 'diff'
     end
   end
+  match '/journals/rollback/:id', :to => 'journals#rollback', :id => /\d+/, :via => :post
 
   get '/projects/:project_id/issues/gantt', :to => 'gantts#show', :as => 'project_gantt'
   get '/issues/gantt', :to => 'gantts#show'

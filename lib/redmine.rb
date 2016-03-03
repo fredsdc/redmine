@@ -107,6 +107,7 @@ Redmine::AccessControl.map do |map|
     map.permission :add_issue_notes, {:issues => [:edit, :update], :journals => [:new], :attachments => :upload}
     map.permission :edit_issue_notes, {:journals => [:edit, :update]}, :require => :loggedin
     map.permission :edit_own_issue_notes, {:journals => [:edit, :update]}, :require => :loggedin
+    map.permission :rollback_issue_notes, {:journals => [:rollback]}
     map.permission :view_private_notes, {}, :read => true, :require => :member
     map.permission :set_notes_private, {}, :require => :member
     map.permission :delete_issues, {:issues => :destroy}, :require => :member

@@ -63,6 +63,9 @@ class UserPreference < ActiveRecord::Base
   def warn_on_leaving_unsaved; self[:warn_on_leaving_unsaved] || '1'; end
   def warn_on_leaving_unsaved=(value); self[:warn_on_leaving_unsaved]=value; end
 
+  def hide_rolled_back_issue_notes; self[:hide_rolled_back_issue_notes] || '0'; end
+  def hide_rolled_back_issue_notes=(value); self[:hide_rolled_back_issue_notes]=value; end
+
   def no_self_notified; (self[:no_self_notified] == true || self[:no_self_notified] == '1'); end
   def no_self_notified=(value); self[:no_self_notified]=value; end
 
