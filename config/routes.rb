@@ -51,6 +51,7 @@ Rails.application.routes.draw do
 
   match '/journals/diff/:id', :to => 'journals#diff', :id => /\d+/, :via => :get
   match '/journals/edit/:id', :to => 'journals#edit', :id => /\d+/, :via => [:get, :post]
+  match '/journals/rollback/:id', :to => 'journals#rollback', :id => /\d+/, :via => :post
 
   get '/projects/:project_id/issues/gantt', :to => 'gantts#show', :as => 'project_gantt'
   get '/issues/gantt', :to => 'gantts#show'
