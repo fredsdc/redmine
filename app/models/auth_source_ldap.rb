@@ -86,7 +86,7 @@ class AuthSourceLdap < AuthSource
     return [] unless searchable? && q.present?
 
     results = []
-    search_filter = base_filter & Net::LDAP::Filter.begins(self.attr_login, q)
+    search_filter = base_filter & (Net::LDAP::Filter.begins(self.attr_login, q) | Net::LDAP::Filter.contains(self.attr_firstname, q) | Net::LDAP::Filter.contains(self.attr_lastname, q) | Net::LDAP::Filter.contains(self.attr_mail, q))
     ldap_con = initialize_ldap_con(self.account, self.account_password)
     ldap_con.search(:base => self.base_dn,
                     :filter => search_filter,
@@ -94,7 +94,9 @@ class AuthSourceLdap < AuthSource
                     :size => 10) do |entry|
       attrs = get_user_attributes_from_ldap_entry(entry)
       attrs[:login] = AuthSourceLdap.get_attr(entry, self.attr_login)
-      results << attrs
+      unless results.include?(attrs)
+        results << attrs
+      end
     end
     results
   rescue *NETWORK_EXCEPTIONS => e
