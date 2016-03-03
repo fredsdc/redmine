@@ -139,6 +139,11 @@ class WorkflowsController < ApplicationController
     if @trackers && @used_statuses_only
       @statuses = @trackers.map(&:issue_statuses).flatten.uniq.sort.presence
     end
+    @used_role_statuses_only = (params[:used_role_statuses_only] == '0' ? false : true)
+    if @roles && @used_role_statuses_only
+      @role_statuses = @roles.map(&:issue_statuses).flatten.uniq.sort.presence
+      @statuses = (@statuses ? @statuses & @role_statuses : @role_statuses) if !@role_statuses.nil?
+    end
     @statuses ||= IssueStatus.sorted.to_a
   end
 end

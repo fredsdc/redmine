@@ -89,6 +89,22 @@ class Role < ActiveRecord::Base
     :in => TIME_ENTRIES_VISIBILITY_OPTIONS.collect(&:first),
     :if => lambda {|role| role.respond_to?(:time_entries_visibility) && role.time_entries_visibility_changed?}
 
+  # Returns an array of IssueStatus that are used
+  # in the tracker's workflows
+  def issue_statuses
+    if @issue_statuses
+      return @issue_statuses
+    elsif new_record?
+      return []
+    end
+
+    ids = WorkflowTransition.
+      connection.select_rows("SELECT DISTINCT old_status_id, new_status_id FROM #{WorkflowTransition.table_name} WHERE role_id = #{id} AND type = 'WorkflowTransition'").
+      flatten.
+      uniq
+    @issue_statuses = IssueStatus.where(:id => ids).all.sort
+  end
+
   # Copies attributes from another role, arg can be an id or a Role
   def copy_from(arg, options={})
     return unless arg.present?
