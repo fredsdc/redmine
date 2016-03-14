@@ -95,6 +95,14 @@ module ProjectsHelper
     version_options_for_select(versions, project.default_version)
   end
 
+  def project_workspace_options(project)
+    grouped = Hash.new {|h,k| h[k] = []}
+    Workspace.all.sorted.each do |workspace|
+      grouped[workspace.name] = workspace.id
+    end
+    options_for_select(grouped, project.workspace_id)
+  end
+
   def format_version_sharing(sharing)
     sharing = 'none' unless Version::VERSION_SHARINGS.include?(sharing)
     l("label_version_sharing_#{sharing}")

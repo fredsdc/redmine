@@ -53,7 +53,7 @@ module WorkflowsHelper
     html_options = {}
     
     if perm = permissions[status.id][name]
-      if perm.uniq.size > 1 || perm.size < @roles.size * @trackers.size
+      if perm.uniq.size > 1 || perm.size < @roles.size * @trackers.size * @workspaces.size
         options << [l(:label_no_change_option), "no_change"]
         selected = 'no_change'
       else
@@ -78,7 +78,7 @@ module WorkflowsHelper
     w = workflows.select {|w| w.old_status == old_status && w.new_status == new_status}.size
     
     tag_name = "transitions[#{ old_status.try(:id) || 0 }][#{new_status.id}][#{name}]"
-    if w == 0 || w == @roles.size * @trackers.size
+    if w == 0 || w == @roles.size * @trackers.size * @workspaces.size
       
       hidden_field_tag(tag_name, "0", :id => nil) +
       check_box_tag(tag_name, "1", w != 0,

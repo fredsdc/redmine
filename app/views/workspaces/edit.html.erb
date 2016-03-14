@@ -1,0 +1,6 @@
+<%= title [l(:label_workspace_plural), workspaces_path], @workspace.name %>
+
+<%= labelled_form_for @workspace do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <%= submit_tag l(:button_save) %>
+<% end %>

@@ -28,7 +28,7 @@ class Tracker < ActiveRecord::Base
   has_many :issues
   has_many :workflow_rules, :dependent => :delete_all do
     def copy(source_tracker)
-      WorkflowRule.copy(source_tracker, nil, proxy_association.owner, nil)
+      WorkflowRule.copy(source_tracker, nil, nil, proxy_association.owner, nil, nil)
     end
   end
 

@@ -1,0 +1,30 @@
+<div class="contextual">
+<%= link_to l(:label_workspace_new), new_workspace_path, :class => 'icon icon-add' %>
+</div>
+
+<h2><%=l(:label_workspace_plural)%></h2>
+
+<table class="list">
+  <thead><tr>
+  <th><%=l(:field_name)%></th>
+  <th><%=l(:field_description)%></th>
+  <th><%=l(:button_sort)%></th>
+  <th></th>
+  </tr></thead>
+  <tbody>
+<% for status in @workspaces %>
+  <tr class="<%= cycle("odd", "even") %>">
+  <td class="name"><%= link_to status.name, edit_workspace_path(status) %></td>
+  <td class="description"><%= link_to status.description, edit_workspace_path(status) %></td>
+  <td class="reorder"><%= reorder_links('workspace', {:action => 'update', :id => status, :page => params[:page]}, :put) %></td>
+  <td class="buttons">
+    <%= delete_link workspace_path(status) unless status.id == 1 %>
+  </td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span class="pagination"><%= pagination_links_full @workspace_pages %></span>
+
+<% html_title(l(:label_workspace_plural)) -%>

@@ -1,0 +1,8 @@
+<%= error_messages_for 'workspace' %>
+
+<div class="box tabular">
+<p><%= f.text_field :name, :required => true %></p>
+<p><%= f.text_field :description %></p>
+
+<%= call_hook(:view_workspaces_form, :workspace => @workspace) %>
+</div>

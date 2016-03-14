@@ -20,14 +20,14 @@ class WorkflowPermission < WorkflowRule
   validates_presence_of :old_status
   validate :validate_field_name
 
-  # Returns the workflow permissions for the given trackers and roles
+  # Returns the workflow permissions for the given trackers, roles and workspaces
   # grouped by status_id
   #
   # Example:
-  #   WorkflowPermission.rules_by_status_id trackers, roles
+  #   WorkflowPermission.rules_by_status_id trackers, roles, workspaces
   #   # => {1 => {'start_date' => 'required', 'due_date' => 'readonly'}}
-  def self.rules_by_status_id(trackers, roles)
-    WorkflowPermission.where(:tracker_id => trackers.map(&:id), :role_id => roles.map(&:id)).inject({}) do |h, w|
+  def self.rules_by_status_id(trackers, roles, workspaces)
+    WorkflowPermission.where(:tracker_id => trackers.map(&:id), :role_id => roles.map(&:id), :workspace_id => workspaces.map(&:id)).inject({}) do |h, w|
       h[w.old_status_id] ||= {}
       h[w.old_status_id][w.field_name] ||= []
       h[w.old_status_id][w.field_name] << w.rule
@@ -35,22 +35,25 @@ class WorkflowPermission < WorkflowRule
     end
   end
 
-  # Replaces the workflow permissions for the given trackers and roles
+  # Replaces the workflow permissions for the given trackers, roles and workspaces
   #
   # Example:
-  #   WorkflowPermission.replace_permissions trackers, roles, {'1' => {'start_date' => 'required', 'due_date' => 'readonly'}}
-  def self.replace_permissions(trackers, roles, permissions)
+  #   WorkflowPermission.replace_permissions trackers, roles, {'1' => {'start_date' => 'required', 'due_date' => 'readonly'}}, workspaces
+  def self.replace_permissions(trackers, roles, permissions, workspaces)
     trackers = Array.wrap trackers
     roles = Array.wrap roles
+    workspaces = Array.wrap workspaces
 
     transaction do
       permissions.each { |status_id, rule_by_field|
         rule_by_field.each { |field, rule|
-          destroy_all(:tracker_id => trackers.map(&:id), :role_id => roles.map(&:id), :old_status_id => status_id, :field_name => field)
+          destroy_all(:tracker_id => trackers.map(&:id), :role_id => roles.map(&:id), :old_status_id => status_id, :field_name => field, :workspace_id => workspaces.map(&:id))
           if rule.present?
             trackers.each do |tracker|
               roles.each do |role|
-                WorkflowPermission.create(:role_id => role.id, :tracker_id => tracker.id, :old_status_id => status_id, :field_name => field, :rule => rule)
+                workspaces.each do |workspace|
+                  WorkflowPermission.create(:role_id => role.id, :tracker_id => tracker.id, :old_status_id => status_id, :field_name => field, :rule => rule, :workspace_id => workspace.id)
+                end
               end
             end
           end

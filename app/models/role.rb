@@ -59,7 +59,7 @@ class Role < ActiveRecord::Base
   before_destroy :check_deletable
   has_many :workflow_rules, :dependent => :delete_all do
     def copy(source_role)
-      WorkflowRule.copy(nil, source_role, nil, proxy_association.owner)
+      WorkflowRule.copy(nil, source_role, nil, nil, proxy_association.owner, nil)
     end
   end
   has_and_belongs_to_many :custom_fields, :join_table => "#{table_name_prefix}custom_fields_roles#{table_name_suffix}", :foreign_key => "role_id"
