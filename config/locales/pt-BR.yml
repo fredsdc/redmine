@@ -375,6 +375,11 @@ pt-BR:
   label_tracker: Tipo de tarefa
   label_tracker_plural: Tipos de tarefas
   label_tracker_new: Novo tipo
+  label_workspace: Espaço de trabalho
+  label_workspace_plural: Espaços de trabalho
+  label_workspace_new: Novo espaço de trabalho
+  error_unable_delete_workspace: Não foi possível excluir espaço de trabalho
+  field_workspace: Espaço de trabalho
   label_workflow: Fluxo de trabalho
   label_issue_status: Situação da tarefa
   label_issue_status_plural: Situação das tarefas

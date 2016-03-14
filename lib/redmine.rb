@@ -215,6 +215,7 @@ Redmine::MenuManager.map :admin_menu do |menu|
   menu.push :trackers, {:controller => 'trackers'}, :caption => :label_tracker_plural
   menu.push :issue_statuses, {:controller => 'issue_statuses'}, :caption => :label_issue_status_plural,
             :html => {:class => 'issue_statuses'}
+  menu.push :workspaces, {:controller => 'workspaces'}, :caption => :label_workspace_plural
   menu.push :workflows, {:controller => 'workflows', :action => 'edit'}, :caption => :label_workflow
   menu.push :custom_fields, {:controller => 'custom_fields'},  :caption => :label_custom_field_plural,
             :html => {:class => 'custom_fields'}

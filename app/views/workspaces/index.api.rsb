@@ -1,0 +1,9 @@
+api.array :workspaces do
+  @workspaces.each do |workspace|
+    api.workspace do
+      api.id status.id
+      api.name status.name
+      api.description status.description
+    end
+  end
+end

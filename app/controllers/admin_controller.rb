@@ -36,6 +36,8 @@ class AdminController < ApplicationController
     scope = scope.like(params[:name]) if params[:name].present?
     @projects = scope.to_a
 
+    @workspaces = Hash[Workspace.pluck(:id, :name)]
+
     render :action => "projects", :layout => false if request.xhr?
   end
 
