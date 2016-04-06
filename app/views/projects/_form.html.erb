@@ -17,7 +17,7 @@
 <% end %>
 
 <% if @project.safe_attribute? 'workspace_id' %>
-<p><%= f.select :workspace_id, project_workspace_options(@project) %></p>
+<p><%= f.select :workspace_id, project_workspace_options(@project), {}, {:onChange=>"displaytrackers(this);"} %></p>
 <% end %>
 
 <% if @project.safe_attribute? 'inherit_members' %>
@@ -50,9 +50,9 @@
 
 <% if @project.new_record? || @project.module_enabled?('issue_tracking') %>
 <% unless @trackers.empty? %>
-<fieldset class="box tabular" id="project_trackers"><legend><%=l(:label_tracker_plural)%></legend>
+<fieldset class="box tabular" id="project_trackers"><legend><%=l(:label_tracker_plural)%> (<a onclick="$('#project_trackers').toggleClass('showall'); displaytrackers(document.getElementById('project_workspace_id'));"><%= l(:label_all) %></a>)</legend>
 <% @trackers.each do |tracker| %>
-    <label class="floating">
+    <label class="floating <%= used_workspaces_by_tracker(tracker.id) %>">
     <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.to_a.include?(tracker), :id => nil %>
     <%= tracker %>
     </label>
@@ -108,3 +108,17 @@ $(document).ready(function() {
   }).trigger('change');
 });
 <% end %>
+
+<script>
+  function displaytrackers(sel) {
+    $('#project_trackers').children('label').each( function() {
+      if ($(this).hasClass('ws-' + sel.value) || $('#project_trackers').hasClass('showall'))
+      {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  };
+  displaytrackers(document.getElementById('project_workspace_id'));
+</script>
