@@ -7,10 +7,10 @@
   </div>
 </fieldset>
 <fieldset class="box">
-  <legend><%= l(:label_role_plural) %> <%= toggle_checkboxes_link('.roles-selection input') %></legend>
+  <legend><%= l(:label_role_plural) %> (<a onclick='$(".unused").toggleClass("show");'><%= l(:label_all) %></a>) <%= toggle_checkboxes_link('.roles-selection input') %></legend>
   <div class="roles-selection">
     <% User.current.managed_roles(@project).each do |role| %>
-      <label><%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %> <%= role %></label>
+      <label<%= " class=unused" unless WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? || ! role.assignable %>><%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %> <%= role %></label>
     <% end %>
   </div>
 </fieldset>

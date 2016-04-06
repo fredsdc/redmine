@@ -103,6 +103,10 @@ module ProjectsHelper
     options_for_select(grouped, project.workspace_id)
   end
 
+  def used_workspaces_by_tracker(tracker)
+    WorkflowTransition.where(:tracker_id => tracker).map{|t| "ws-" + t.workspace_id.to_s}.uniq.join(" ")
+  end
+
   def format_version_sharing(sharing)
     sharing = 'none' unless Version::VERSION_SHARINGS.include?(sharing)
     l("label_version_sharing_#{sharing}")

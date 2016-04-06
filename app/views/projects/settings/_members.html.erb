@@ -8,7 +8,7 @@
   <thead>
     <tr>
       <th><%= l(:label_user) %> / <%= l(:label_group) %></th>
-      <th><%= l(:label_role_plural) %></th>
+      <th><%= l(:label_role_plural) %> (<a onclick='$(".unused").toggle();'><%= l(:label_all) %></a>)</th>
       <th style="width:15%"></th>
       <%= call_hook(:view_projects_settings_members_table_header, :project => @project) %>
     </tr>
@@ -28,12 +28,14 @@
              ) do |f| %>
         <p>
           <% roles.each do |role| %>
-          <label>
-            <%= check_box_tag('membership[role_ids][]',
-                              role.id, member.roles.include?(role),
-                              :id => nil,
-                              :disabled => !member.role_editable?(role)) %> <%= role %>
-          </label><br />
+          <div<%= " class=unused" unless WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? || ! role.assignable %>> 
+            <label>
+              <%= check_box_tag('membership[role_ids][]',
+                                role.id, member.roles.include?(role),
+                                :id => nil,
+                                :disabled => !member.role_editable?(role)) %> <%= role %>
+            </label><br />
+          </div>
           <% end %>
         </p>
         <%= hidden_field_tag 'membership[role_ids][]', '', :id => nil %>
