@@ -431,6 +431,7 @@ en:
   setting_search_results_per_page: Search results per page
   setting_attachment_extensions_allowed: Allowed extensions
   setting_attachment_extensions_denied: Disallowed extensions
+  setting_enable_watcher_issue_visibility: Enable watcher issue visibility
 
   permission_add_project: Create project
   permission_add_subprojects: Create subprojects
@@ -984,6 +985,8 @@ en:
   label_api: API
   label_field_format_enumeration: Key/value list
   label_default_values_for_new_users: Default values for new users
+  label_issues_visibility_own_watch: Issues created by, assigned to, or watched by the user
+  label_issues_visibility_own_watch_contributed: Issues created by, assigned to, watched by, or contributed to by the user
 
   button_login: Login
   button_submit: Submit
