@@ -448,6 +448,7 @@ en:
   setting_attachment_extensions_allowed: Allowed extensions
   setting_attachment_extensions_denied: Disallowed extensions
   setting_new_item_menu_tab: Project menu tab for creating new objects
+  setting_enable_watcher_issue_visibility: Enable watcher issue visibility
 
   permission_add_project: Create project
   permission_add_subprojects: Create subprojects
@@ -1007,6 +1008,8 @@ en:
   label_relations: Relations
   label_new_project_issue_tab_enabled: Display the "New issue" tab
   label_new_object_tab_enabled: Display the "+" drop-down
+  label_issues_visibility_own_watch: Issues created by, assigned to, or watched by the user
+  label_issues_visibility_own_watch_contributed: Issues created by, assigned to, watched by, or contributed to by the user
 
   button_login: Login
   button_submit: Submit

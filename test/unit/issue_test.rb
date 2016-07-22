@@ -277,6 +277,40 @@ class IssueTest < ActiveSupport::TestCase
     assert_visibility_match user, issues
   end
 
+  def test_visible_scope_for_non_member_with_own_watch_issues_visibility
+    #Role.non_member.add_permission! :view_issues
+    Role.non_member.update_attribute :issues_visibility, 'own_watch'
+    user = User.find(9)
+    assert user.projects.empty?
+    own_issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => user.id, :subject => 'Issue by non member')
+    watching_issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 1, :subject => 'Issue watched by non member')
+    watching_issue.add_watcher(user)
+
+    #assert_equal true, own_issue.visible?(user)
+    #assert_equal true, watching_issue.visible?(user)
+    assert_visibility_match user, [own_issue, watching_issue]
+  end
+
+  def test_visible_scope_for_non_member_with_own_watch_contributed_issues_visibility
+    #Role.non_member.add_permission! :view_issues
+    Role.non_member.update_attribute :issues_visibility, 'own_watch_contributed'
+    user = User.find(9)
+    assert user.projects.empty?
+    own_issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => user.id, :subject => 'Issue by non member')
+    watching_issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 1, :subject => 'Issue watched by non member')
+    watching_issue.add_watcher(user)
+    watching_issue.reload
+    contributed_issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 1, :subject => 'Issue contributed by non member')
+    journal = contributed_issue.init_journal(user)
+    journal.notes = 'journal notes'
+    journal.save!
+
+    #assert_equal true, own_issue.visible?(user)
+    #assert_equal true, watching_issue.visible?(user)
+    #assert_equal true, contributed_issue.visible?(user)
+    assert_visibility_match user, [own_issue, watching_issue, contributed_issue]
+  end
+
   def test_visible_scope_for_non_member_without_view_issues_permissions
     # Non member user should not see issues without permission
     Role.non_member.remove_permission!(:view_issues)
@@ -353,13 +387,42 @@ class IssueTest < ActiveSupport::TestCase
       :assigned_to => user.groups.first,
       :is_private => true)
 
-    Role.find(2).update_attribute :issues_visibility, 'default'
-    issues = Issue.visible(User.find(8)).to_a
-    assert issues.any?
-    assert issues.include?(issue)
+    ['default', 'own', 'own_watch', 'own_watch_contributed'].each do |issue_visibility|
+      Role.find(2).update_attribute :issues_visibility, issue_visibility
+      issues = Issue.visible(User.find(8)).to_a
+      assert issues.any?
+      assert_include issue, issues
+    end
+  end
 
-    Role.find(2).update_attribute :issues_visibility, 'own'
-    issues = Issue.visible(User.find(8)).to_a
+  def test_visible_scope_for_non_member_and_watcher_should_return_watching_issues
+    user = User.find(9)
+    assert user.projects.empty?
+    Role.non_member.add_permission!(:view_issues)
+
+    issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 1, :subject => 'Issue visible to watcher', :is_private => true)
+    issue.add_watcher(user)
+
+    ['own_watch', 'own_watch_contributed'].each do |issue_visibility|
+      Role.non_member.update_attribute :issues_visibility, issue_visibility
+      issues = Issue.visible(user).to_a
+      assert issues.any?
+      assert_include issue, issues
+    end
+  end
+
+  def test_visible_scope_for_non_member_and_contributer_should_return_contributing_issues
+    user = User.find(9)
+    assert user.projects.empty?
+    Role.non_member.add_permission!(:view_issues)
+
+    issue = Issue.create!(:project_id => 1, :tracker_id => 1, :author_id => 1, :subject => 'Issue visible to watcher', :is_private => true)
+    journal = issue.init_journal(user)
+    journal.notes = 'journal notes'
+    journal.save!
+
+    Role.non_member.update_attribute :issues_visibility, 'own_watch_contributed'
+    issues = Issue.visible(user).to_a
     assert issues.any?
     assert_include issue, issues
   end
