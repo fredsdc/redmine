@@ -268,7 +268,7 @@ class Mailer < ActionMailer::Base
     @user = user
     @password = password
     @login_url = url_for(:controller => 'account', :action => 'login')
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
@@ -297,7 +297,7 @@ class Mailer < ActionMailer::Base
     set_language_if_valid user.language
     @user = user
     @login_url = url_for(:controller => 'account', :action => 'login')
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
@@ -365,7 +365,7 @@ class Mailer < ActionMailer::Base
   def test_email(user)
     set_language_if_valid(user.language)
     @url = url_for(:controller => 'welcome')
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => 'Redmine test'
   end
 
