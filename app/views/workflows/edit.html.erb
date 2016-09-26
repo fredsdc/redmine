@@ -42,19 +42,6 @@
   <%= stylesheet_link_tag 'divgrid' %>
   <%= javascript_include_tag 'divgrid' %>
 
-  <script type="text/javascript">
-    function toggleDivToFieldset(divId, fsClass) {
-      console.log(divId + " " + fsClass);
-      if (fsClass.contains("collapsed")) {
-        document.getElementById(divId).style.visibility='hidden';
-        document.getElementById(divId).style.position='fixed';
-      } else {
-        document.getElementById(divId).style.visibility='';
-        document.getElementById(divId).style.position='relative';
-      }
-    }
-  </script>
-
   <%= form_tag({}, :id => 'workflow_form' ) do %>
     <%= @trackers.map {|tracker| hidden_field_tag 'tracker_id[]', tracker.id, :id => nil}.join.html_safe %>
     <%= @roles.map {|role| hidden_field_tag 'role_id[]', role.id, :id => nil}.join.html_safe %>

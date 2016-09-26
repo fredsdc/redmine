@@ -16,19 +16,33 @@ function g_scroll(div, line, row) {
 // bdi is the body div
 function g_adjust(bli, fri, fli, bdi) {
   var frw = document.getElementById(fri).offsetWidth + "px";
-  document.getElementById(bli).style.width = frw
-  var fl = document.getElementById(fli).children;
-  fl[0].style.width = frw
-  var bd = document.getElementById(bdi).children;
-  bd[0].style.width = frw
+  document.getElementById(bli).style.width = frw;
 
-  for (var i = 1; i < fl.length; ++i) {
-    s1 = fl[i].offsetWidth;
-    s2 = bd[i].offsetWidth;
+  var fl = document.getElementById(fli);
+  fl.children[0].style.width = frw;
+
+  var bd = document.getElementById(bdi);
+  bd.children[0].style.width = frw;
+
+  for (var i = 1; i < fl.children.length; i++) {
+    s1 = fl.children[i].offsetWidth;
+    s2 = bd.children[i].offsetWidth;
     if (s1 > s2) {
-      bd[i].style.width = s1 + "px"
+      bd.children[i].style.width = s1 + "px"
     } else {
-      fl[i].style.width = s2 + "px"
+      fl.children[i].style.width = s2 + "px"
     }
+  }
+}
+
+// Toggle visibility of table
+function toggleDivToFieldset(divId, fsClass) {
+  if (fsClass.includes("collapsed")) {
+    document.getElementById(divId).style.visibility='hidden';
+    document.getElementById(divId).style.position='fixed';
+  } else {
+    document.getElementById(divId).style.visibility='';
+    document.getElementById(divId).style.position='relative';
+    document.getElementById(divId).children[1].style.left='0px';
   }
 }

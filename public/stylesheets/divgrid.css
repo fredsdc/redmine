@@ -2,7 +2,8 @@
 
 /* Cell */
 .g_c { height: 1.5em;
-       padding: 6px 12px 6px 12px;
+       padding: 6px;
+       font-size: 12px;
        border-width: 0px 1px 1px 0px;
        border-style: solid;
        border-color: #CCC;
@@ -10,12 +11,10 @@
 
 /* First Line */
 .g_h { background-color: #EEE;
-       /* font-weight: bold; */
        text-align: center; }
 
 /* First Row */
-.g_v { text-align: left;
-       /* font-weight: bold; */ }
+.g_v { text-align: left; }
 
 /* Image in Cell */
 .g_i { height: 16px;
@@ -34,3 +33,6 @@
 
 /* Odd Cell */
 .g_o { background-color: #FFFFFF; }
+
+/* Inline Block Fix */
+.ibf { font-size: 0; }
