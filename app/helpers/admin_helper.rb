@@ -25,6 +25,12 @@ module AdminHelper
                         [l(:project_status_archived), '9']], selected.to_s)
   end
 
+  # Returns date of last activity on project
+  def last_activity(project)
+    event = Redmine::Activity::Fetcher.new(User.current, :project => project).events(nil, nil, :limit => 1)[0]
+    event[:updated_on].nil? ? event[:created_on] : event[:updated_on]
+  end
+
   def plugin_data_for_updates(plugins)
     data = {"v" => Redmine::VERSION.to_s, "p" => {}}
     plugins.each do |plugin|
