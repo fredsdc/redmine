@@ -241,6 +241,7 @@ en:
   field_downloads: Downloads
   field_author: Author
   field_created_on: Created
+  field_last_activity: Last activity
   field_updated_on: Updated
   field_closed_on: Closed
   field_field_format: Format

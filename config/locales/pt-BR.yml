@@ -221,6 +221,7 @@ pt-BR:
   field_downloads: Downloads
   field_author: Autor
   field_created_on: Criado em
+  field_last_activity: Última atividade
   field_updated_on: Alterado em
   field_field_format: Formato
   field_is_for_all: Para todos os projetos
