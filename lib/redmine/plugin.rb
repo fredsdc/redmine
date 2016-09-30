@@ -60,7 +60,21 @@ module Redmine #:nodoc:
         class_eval do
           names.each do |name|
             define_method(name) do |*args|
-              args.empty? ? instance_variable_get("@#{name}") : instance_variable_set("@#{name}", *args)
+              if "#{name}" == "version" && ! instance_variable_get("@directory").nil?
+                rev = ""
+                if File.directory?(File.join(instance_variable_get("@directory"), '.git'))
+                  if `git --git-dir #{instance_variable_get("@directory")}/.git log -1 --format=%ci|sed 's/ .*//;s/-//g'` =~ /(\d+)/
+                    rev = ".#{$1.to_i}"
+                  end
+                elsif File.directory?(File.join(instance_variable_get("@directory"), '.hg'))
+                  if `hg log -l 1 --template "{date|isodate}" #{instance_variable_get("@directory")}|sed 's/ .*//;s/-//g'` =~ /(\d+)/
+                    rev = ".#{$1.to_i}"
+                  end
+                end
+                args.empty? ? "#{instance_variable_get("@#{name}")}#{rev}" : "#{instance_variable_set("@#{name}", *args)}#{rev}"
+              else
+                args.empty? ? instance_variable_get("@#{name}") : instance_variable_set("@#{name}", *args)
+              end
             end
           end
         end
