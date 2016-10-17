@@ -28,7 +28,7 @@ module AdminHelper
   # Returns date of last activity on project
   def last_activity(project)
     event = Redmine::Activity::Fetcher.new(User.current, :project => project).events(nil, nil, :limit => 1)[0]
-    event[:updated_on].nil? ? event[:created_on] : event[:updated_on]
+    event.nil? ? nil : event[:updated_on].nil? ? event[:created_on] : event[:updated_on]
   end
 
   def plugin_data_for_updates(plugins)
