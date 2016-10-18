@@ -32,7 +32,7 @@ module MyHelper
   end
 
   def issuesassignedtome_items
-    Issue.visible.open.
+    Issue.visible.on_active_project.open.
       assigned_to(User.current).
       limit(10).
       includes(:status, :project, :tracker, :priority).
@@ -41,7 +41,7 @@ module MyHelper
   end
 
   def issuesreportedbyme_items
-    Issue.visible.
+    Issue.visible.on_active_project.
       where(:author_id => User.current.id).
       limit(10).
       includes(:status, :project, :tracker).
