@@ -45,7 +45,7 @@
 
 <div class="splitcontentright">
 <% if @projects.any? %>
-<fieldset class="box" id="tracker_project_ids"><legend><%= l(:label_project_plural) %></legend>
+<fieldset class="box" id="tracker_project_ids"><legend><a onclick='ToggleProjectVisibility(this);'><%= l(:label_project_plural) %> (<%= l(:label_all) %>)</a></legend>
 <% project_ids = @tracker.project_ids.to_a %>
 <%= render_project_nested_lists(@projects) do |p|
   content_tag('label', check_box_tag('tracker[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + h(p))
@@ -54,4 +54,33 @@ end %>
 <p><%= check_all_links 'tracker_project_ids' %></p>
 </fieldset>
 <% end %>
+<script>
+  function ToggleProjectVisibility(a) {
+    switch(a.innerHTML.split(" ")[1]) {
+      case "(<%= l(:label_all) %>)":
+        a.innerHTML="<%= l(:label_project_plural) %> <%= l(:project_status_active_plural) %>";
+        $(".status_5").toggle();
+        $(".status_9").toggle();
+        break;
+      case "<%= l(:project_status_active_plural) %>":
+        a.innerHTML="<%= l(:label_project_plural) %> <%= l(:project_status_closed_plural) %>";
+        $(".status_1").toggle();
+        $(".status_5").toggle();
+        break;
+      case "<%= l(:project_status_closed_plural) %>":
+        a.innerHTML="<%= l(:label_project_plural) %> <%= l(:project_status_archived_plural) %>";
+        $(".status_5").toggle();
+        $(".status_9").toggle();
+        break;
+      case "<%= l(:project_status_archived_plural) %>":
+        a.innerHTML="<%= l(:label_project_plural) %> (<%= l(:label_all) %>)";
+        $(".status_1").toggle();
+        $(".status_5").toggle();
+        break;
+      default:
+        a.innerHTML="<%= l(:label_project_plural) %> <%= l(:project_status_active_plural) %>";
+        break;
+    }
+  }
+</script>
 </div>

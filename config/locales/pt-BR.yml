@@ -1063,6 +1063,9 @@ pt-BR:
   project_status_active: ativo
   project_status_closed: fechado
   project_status_archived: arquivado
+  project_status_active_plural: ativos
+  project_status_closed_plural: fechados
+  project_status_archived_plural: arquivados
   text_project_closed: Este projeto está fechado e somente leitura.
   notice_user_successful_create: Usuário %{id} criado.
   field_core_fields: campos padrão
