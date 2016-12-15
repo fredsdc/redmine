@@ -223,7 +223,7 @@ module Redmine
             end
           end
   
-          if issue.attachments.any?
+          if issue.attachments.any? && User.current.allowed_to?(:view_attachments, @project)
             pdf.SetFontStyle('B',9)
             pdf.RDMCell(190,5, l(:label_attachment_plural), "B")
             pdf.ln

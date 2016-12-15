@@ -35,7 +35,7 @@ api.issue do
     @issue.attachments.each do |attachment|
       render_api_attachment(attachment, api)
     end
-  end if include_in_api_response?('attachments')
+  end if include_in_api_response?('attachments') && User.current.allowed_to?(:view_attachments, @project)
 
   api.array :relations do
     @relations.each do |relation|

@@ -141,7 +141,7 @@ class IssuesController < ApplicationController
       raise ::Unauthorized
     end
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
-    @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads])) if User.current.allowed_to?(:edit_attachments, @issue.project)
     if @issue.save
       call_hook(:controller_issues_new_after_save, { :params => params, :issue => @issue})
       respond_to do |format|
@@ -486,6 +486,7 @@ class IssuesController < ApplicationController
     @issue.safe_attributes = attrs
 
     if @issue.project
+      @issue.attachments = [] unless User.current.allowed_to?(:edit_attachments, @issue.project)
       @issue.tracker ||= @issue.allowed_target_trackers.first
       if @issue.tracker.nil?
         if @issue.project.trackers.any?
