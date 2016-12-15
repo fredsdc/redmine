@@ -97,20 +97,24 @@ Redmine::AccessControl.map do |map|
                                   :queries => :index,
                                   :reports => [:issue_report, :issue_report_details]},
                                   :read => true
-    map.permission :add_issues, {:issues => [:new, :create], :attachments => :upload}
-    map.permission :edit_issues, {:issues => [:edit, :update, :bulk_edit, :bulk_update], :journals => [:new], :attachments => :upload}
-    map.permission :copy_issues, {:issues => [:new, :create, :bulk_edit, :bulk_update], :attachments => :upload}
+    map.permission :add_issues, {:issues => [:new, :create]}
+    map.permission :edit_issues, {:issues => [:edit, :update, :bulk_edit, :bulk_update], :journals => [:new]}
+    map.permission :copy_issues, {:issues => [:new, :create, :bulk_edit, :bulk_update]}
     map.permission :manage_issue_relations, {:issue_relations => [:index, :show, :create, :destroy]}
     map.permission :manage_subtasks, {}
     map.permission :set_issues_private, {}
     map.permission :set_own_issues_private, {}, :require => :loggedin
-    map.permission :add_issue_notes, {:issues => [:edit, :update], :journals => [:new], :attachments => :upload}
+    map.permission :add_issue_notes, {:issues => [:edit, :update], :journals => [:new]}
     map.permission :edit_issue_notes, {:journals => :edit}, :require => :loggedin
     map.permission :edit_own_issue_notes, {:journals => :edit}, :require => :loggedin
     map.permission :rollback_issue_notes, {:journals => [:rollback]}
     map.permission :view_private_notes, {}, :read => true, :require => :member
     map.permission :set_notes_private, {}, :require => :member
     map.permission :delete_issues, {:issues => :destroy}, :require => :member
+    # Attachments
+    map.permission :view_attachments, {}, :require => :member
+    map.permission :edit_attachments, {:attachments => :upload}, :require => :member
+    map.permission :delete_attachments, {:attachments => :destroy}, :require => :member
     # Queries
     map.permission :manage_public_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :member
     map.permission :save_queries, {:queries => [:new, :create, :edit, :update, :destroy]}, :require => :loggedin

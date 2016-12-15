@@ -790,6 +790,9 @@ pt-BR:
   permission_manage_members: Gerenciar membros
   permission_edit_messages: Editar mensagens
   permission_delete_issues: Excluir tarefas
+  permission_view_attachments: Ver arquivos anexos
+  permission_edit_attachments: Editar arquivos anexos
+  permission_delete_attachments: Apagar arquivos anexos
   permission_view_issue_watchers: Ver lista de observadores
   permission_manage_repository: Gerenciar repositório
   permission_commit_access: Acesso do commit

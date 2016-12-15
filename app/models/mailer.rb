@@ -66,7 +66,7 @@ class Mailer < ActionMailer::Base
   end
 
   # Builds a mail for notifying to_users and cc_users about an issue update
-  def issue_edit(journal, to_users, cc_users)
+  def issue_edit(journal, to_users, cc_users, att=false)
     issue = journal.journalized
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
@@ -83,6 +83,7 @@ class Mailer < ActionMailer::Base
     @journal = journal
     @journal_details = journal.visible_details(@users.first)
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
+    @att = att
     mail :to => to_users,
       :cc => cc_users,
       :subject => s
@@ -91,11 +92,18 @@ class Mailer < ActionMailer::Base
   # Notifies users about an issue update
   def self.deliver_issue_edit(journal)
     issue = journal.journalized.reload
-    to = journal.notified_users
-    cc = journal.notified_watchers - to
+    toa = journal.notified_users.select{|user| user.allowed_to?(:view_attachments, issue.project)}
+    cca = journal.notified_watchers.select{|user| user.allowed_to?(:view_attachments, issue.project)} - toa
+    to = journal.notified_users - toa
+    cc = journal.notified_watchers - to - toa - cca 
     journal.each_notification(to + cc) do |users|
       issue.each_notification(users) do |users2|
-        Mailer.issue_edit(journal, to & users2, cc & users2).deliver
+        Mailer.issue_edit(journal, to & users2, cc & users2, false).deliver
+      end
+    end
+    journal.each_notification(toa + cca) do |users|
+      issue.each_notification(users) do |users2|
+        Mailer.issue_edit(journal, toa & users2, cca & users2, true).deliver
       end
     end
   end

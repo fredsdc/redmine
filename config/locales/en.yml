@@ -457,6 +457,9 @@ en:
   permission_set_notes_private: Set notes as private
   permission_move_issues: Move issues
   permission_delete_issues: Delete issues
+  permission_view_attachments: View attachments
+  permission_edit_attachments: Edit attachments
+  permission_delete_attachments: Delete attachments
   permission_manage_public_queries: Manage public queries
   permission_save_queries: Save queries
   permission_view_gantt: View gantt chart

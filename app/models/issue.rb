@@ -43,7 +43,8 @@ class Issue < ActiveRecord::Base
   has_many :relations_from, :class_name => 'IssueRelation', :foreign_key => 'issue_from_id', :dependent => :delete_all
   has_many :relations_to, :class_name => 'IssueRelation', :foreign_key => 'issue_to_id', :dependent => :delete_all
 
-  acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed
+  acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed,
+                     :view_permission => :view_attachments, :edit_permission => :edit_attachments, :delete_permission => :delete_attachments
   acts_as_customizable
   acts_as_watchable
   acts_as_searchable :columns => ['subject', "#{table_name}.description"],
@@ -247,7 +248,7 @@ class Issue < ActiveRecord::Base
     self.custom_field_values = issue.custom_field_values.inject({}) {|h,v| h[v.custom_field_id] = v.value; h}
     self.status = issue.status
     self.author = User.current
-    unless options[:attachments] == false
+    if options[:attachments] == true && User.current.allowed_to?(:view_attachments, issue.project)
       self.attachments = issue.attachments.map do |attachement|
         attachement.copy(:container => self)
       end

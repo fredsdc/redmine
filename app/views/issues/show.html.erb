@@ -72,7 +72,7 @@ end %>
 <%= call_hook(:view_issues_show_details_bottom, :issue => @issue) %>
 </div>
 
-<% if @issue.description? || @issue.attachments.any? -%>
+<% if @issue.description? || (@issue.attachments.any? && User.current.allowed_to?(:view_attachments, @project)) -%>
 <hr />
 <% if @issue.description? %>
 <div class="description">
@@ -86,7 +86,7 @@ end %>
   </div>
 </div>
 <% end %>
-<%= link_to_attachments @issue, :thumbnails => true %>
+<%= link_to_attachments @issue, :thumbnails => true if User.current.allowed_to?(:view_attachments, @project) %>
 <% end -%>
 
 <%= call_hook(:view_issues_show_description_bottom, :issue => @issue) %>

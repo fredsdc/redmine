@@ -39,9 +39,11 @@
     <%= call_hook(:view_issues_edit_notes_bottom, { :issue => @issue, :notes => @notes, :form => f }) %>
     </fieldset>
 
+    <% if User.current.allowed_to?(:edit_attachments, @project) %>
     <fieldset><legend><%= l(:label_attachment_plural) %></legend>
     <p><%= render :partial => 'attachments/form', :locals => {:container => @issue} %></p>
     </fieldset>
+    <% end %>
     </div>
 
     <%= f.hidden_field :lock_version %>
