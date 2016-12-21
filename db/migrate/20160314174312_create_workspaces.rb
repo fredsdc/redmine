@@ -6,7 +6,7 @@ class CreateWorkspaces < ActiveRecord::Migration
       create_table :workspaces do |t|
         t.string :name
         t.string :description
-        t.integer :position, :null => false
+        t.integer :position
       end
 
       # create default workspace
