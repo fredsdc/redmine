@@ -24,7 +24,7 @@
 <% if IssueCustomField.all.any? %>
 <p>
   <label><%= l(:label_custom_field_plural) %></label>
-  <% IssueCustomField.all.each do |field| %>
+  <% IssueCustomField.all.sorted.each do |field| %>
     <label class="block">
       <%= check_box_tag 'tracker[custom_field_ids][]',field.id, @tracker.custom_fields.to_a.include?(field), :id => nil %>
       <%= field.name %>
