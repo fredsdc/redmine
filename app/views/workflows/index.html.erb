@@ -12,8 +12,8 @@
 
   <div style="position: relative; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
     <!-- Cell 0 -->
-    <div id="g_bl" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
-      <div class="g_c g_h">&nbsp;</div>
+    <div id="g_bl" class="collapsed" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
+      <div class="g_c g_h" onclick="expand_grid(this.parentNode.parentNode);"><i><span class='tip_exp_off'><%= l(:button_expand_all) %></span><span class='tip_exp_on'><%= l(:button_collapse_all) %></span></i></div>
     </div>
     <!-- Line 0  -->
     <div id="g_fl" class="ibf" style="position: absolute; top: 0px; left: 0px; right: 13px; overflow: hidden; z-index: 1;">
@@ -71,9 +71,58 @@
     function refresh_table(value) {
       $('.ws').css("display","none");
       $('.ws' + value).css("display","inline");
+      collapse_grid(document.getElementById('g_bl').parentNode);
     }
-    refresh_table(document.getElementById('workspace_id').value);
+
+    function expand_grid(grid) {
+      $(grid.children[0]).toggleClass("collapsed");
+      collapse_grid(grid);
+    }
+
+    function collapse_grid(grid) {
+      i = document.getElementById('workspace_id').value;
+      var x = !$(grid.children[0]).hasClass("collapsed");
+      if (x) {
+        $('.tip_exp_on').css("display", "");
+        $('.tip_exp_off').css("display", "none");
+      } else {
+        $('.tip_exp_on').css("display", "none");
+        $('.tip_exp_off').css("display", "");
+      }
+      var line = [];
+      f = grid.children[2].children;
+      for (var j = 1; j < grid.children[1].children.length; j++) {
+        row = false;
+        for (var k = 1; k < grid.children[2].children.length; k++) {
+          for (var e = 0; e < grid.children[3].children[j].children[k].children.length; e++) {
+            tf = $(grid.children[3].children[j].children[k].children[e]).hasClass('ws' + i) && ! $(grid.children[3].children[j].children[k].children[e].children[0].firstChild).is("img");
+            row = row || tf;
+            line[k] = line[k] || tf;
+          }
+        }
+        if ( row || x ) {
+          grid.children[1].children[j].style.display='inline-block';
+          grid.children[3].children[j].style.display='inline-block';
+        } else {
+          grid.children[1].children[j].style.display='none';
+          grid.children[3].children[j].style.display='none';
+        }
+      }
+        for (var k = 1; k < grid.children[2].children.length; k++) {
+      for (var j = 1; j < grid.children[1].children.length; j++) {
+          if ( line[k] || x ) {
+            grid.children[2].children[k].style.display='';
+            grid.children[3].children[j].children[k].style.display='';
+          } else {
+            grid.children[2].children[k].style.display='none';
+            grid.children[3].children[j].children[k].style.display='none';
+          }
+        }
+      }
+    }
+
     g_adjust('g_bl', 'g_fr', 'g_fl', 'g_bd');
+    refresh_table(document.getElementById('workspace_id').value);
   </script>
 
 <% end %>
