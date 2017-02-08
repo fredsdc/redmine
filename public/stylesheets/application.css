@@ -475,6 +475,9 @@ div#roadmap .wiki h1 { font-size: 120%; }
 div#roadmap .wiki h2 { font-size: 110%; }
 body.controller-versions.action-show div#roadmap .related-issues {width:70%;}
 
+span.tip_exp_on {font-weight:bold; position:relative; color:#fff; background:#9DB9D5; padding:0px 6px 1px 6px; border-radius:3px; margin-left:4px;}
+span.tip_exp_off {font-weight:bold; position:relative; color:#fff; background:#9DB9D5; padding:0px 6px 1px 6px; border-radius:3px; margin-left:4px;}
+
 div#version-summary { float:right; width:28%; margin-left: 16px; margin-bottom: 16px; background-color: #fff; }
 div#version-summary fieldset { margin-bottom: 1em; }
 div#version-summary fieldset.time-tracking table { width:100%; }

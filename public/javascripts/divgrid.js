@@ -15,7 +15,15 @@ function g_scroll(div, line, row) {
 // fli is the first line div
 // bdi is the body div
 function g_adjust(bli, fri, fli, bdi) {
-  var frw = document.getElementById(fri).offsetWidth + "px";
+  var frw = document.getElementById(fri).offsetWidth;
+  var frw2 = document.getElementById(bli).offsetWidth;
+  if ( frw2 > frw ) {
+    frw = frw2 + "px"
+  } else {
+    frw = frw + "px";
+  }
+
+  document.getElementById(fri).style.width = frw;
   document.getElementById(bli).style.width = frw;
 
   var fl = document.getElementById(fli);
