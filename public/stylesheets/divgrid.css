@@ -9,6 +9,8 @@
        border-color: #CCC;
        text-align: center; }
 
+div.g_c select { margin-top: -3px; }
+
 /* First Line */
 .g_h { background-color: #EEE;
        text-align: center; }
