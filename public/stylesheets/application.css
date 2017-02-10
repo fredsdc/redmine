@@ -261,6 +261,9 @@ table.boards td.last-message {text-align:left;font-size:80%;}
 
 table.messages td.last_message {text-align:left;}
 
+tr td a, tr td label { vertical-align: top; margin-top: 7px; display: inline-block; }
+tr td { vertical-align: top; }
+
 #query_form_content {font-size:90%;}
 
 .query_sort_criteria_count {
