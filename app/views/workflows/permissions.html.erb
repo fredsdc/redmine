@@ -13,7 +13,7 @@
 
 <%= form_tag({}, :method => 'get') do %>
 <p>
-  <table>
+  <table class="workflows">
   <tr><td>
     <label><%=l(:label_role)%>:</label>
     <%= options_for_workflow_select 'role_id[]', Role.sorted.select(&:consider_workflow?), @roles, :id => 'role_id', :class => 'expandable' %>
