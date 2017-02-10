@@ -296,8 +296,8 @@ div.table-list.boards .table-list-cell.name {width: 30%;}
 
 table.messages td.last_message {text-align:left;}
 
-tr td a, tr td label { vertical-align: top; margin-top: 7px; display: inline-block; }
-tr td { vertical-align: top; }
+table.workflows a, table.workflows label { vertical-align: top; margin-top: 7px; display: inline-block; }
+table.workflows td { vertical-align: top; }
 
 #query_form_content {font-size:90%;}
 
