@@ -136,7 +136,8 @@ input#openid_url { background: url(../images/openid-bg.gif) no-repeat; backgroun
 /***** Links *****/
 a, a:link, a:visited{ color: #169; text-decoration: none; }
 a:hover, a:active{ color: #c61a1a; text-decoration: underline;}
-a img{ border: 0; margin-bottom: -4px}
+a img{ border: 0;}
+div.ibf a img{ margin-bottom: -4px;}
 
 a.issue.closed, a.issue.closed:link, a.issue.closed:visited { color: #999; text-decoration: line-through; }
 a.project.closed, a.project.closed:link, a.project.closed:visited { color: #999; }
