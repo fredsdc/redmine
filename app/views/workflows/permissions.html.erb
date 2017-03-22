@@ -103,7 +103,7 @@
               <div class="g_c">&nbsp;</div>
               <% even = false %>
               <% @fields.each do |field, name| %>
-                <div class="g_c<%= (even)? " g_e" : " g_o" %> <%= @permissions[status.id][field.id.to_s].try(:join, ' ') %>" title="<%= "#{name} - #{status.name}" %>">
+                <div class="g_c<%= (even)? " g_e" : " g_o" %> <%= @permissions[status.id][field].try(:join, ' ') %>" title="<%= "#{name} - #{status.name}" %>">
                   <div style="margin-top: -5px;" >
                     <% even = !even %>
                     <%= field_permission_tag(@permissions, status, field, @roles) %>
