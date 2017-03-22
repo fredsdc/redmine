@@ -55,6 +55,8 @@
               <% even = !even %>
               <% if role.setable_permissions.include? permission %>
                 <%= check_box_tag "permissions[#{role.id}][]", permission.name, (role.permissions.include? permission.name), :id => nil, :class => "role-#{role.id}" %>
+              <% else %>
+                &nbsp;
               <% end %>
             </div>
           <% end %>
