@@ -45,7 +45,7 @@ function g_adjust(bli, fri, fli, bdi) {
 
 // Toggle visibility of table
 function toggleDivToFieldset(divId, fsClass) {
-  if (fsClass.includes("collapsed")) {
+  if (~fsClass.indexOf("collapsed")) {
     document.getElementById(divId).style.visibility='hidden';
     document.getElementById(divId).style.position='fixed';
   } else {
