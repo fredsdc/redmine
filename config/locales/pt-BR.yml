@@ -237,6 +237,7 @@ pt-BR:
   field_status: Situação
   field_notes: Notas
   field_is_closed: Tarefa fechada
+  field_in_workflows: Em fluxos de trabalho
   field_is_default: Situação padrão
   field_tracker: Tipo
   field_subject: Título

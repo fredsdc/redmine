@@ -12,6 +12,7 @@
   <th><%=l(:field_done_ratio)%></th>
   <% end %>
   <th><%=l(:field_is_closed)%></th>
+  <th><%=l(:field_in_workflows)%></th>
   <th><%=l(:button_sort)%></th>
   <th></th>
   </tr></thead>
@@ -23,6 +24,8 @@
   <td><%= status.default_done_ratio %></td>
   <% end %>
   <td><%= checked_image status.is_closed? %></td>
+  <td><%= (status.workflow_transitions_as_new_status.pluck(:workspace_id, :tracker_id, :role_id).to_a +
+           status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.sort.count %></td>
   <td class="reorder"><%= reorder_links('issue_status', {:action => 'update', :id => status, :page => params[:page]}, :put) %></td>
   <td class="buttons">
     <%= delete_link issue_status_path(status) %>

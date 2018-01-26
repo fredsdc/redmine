@@ -6,6 +6,18 @@
   <p><%= f.select :default_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), :include_blank => true, :label => :field_done_ratio %></p>
 <% end %>
 <p><%= f.check_box :is_closed %></p>
+<% issue_usage = (@issue_status.workflow_transitions_as_new_status.pluck(:workspace_id, :tracker_id, :role_id).to_a +
+                  @issue_status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.
+                   select{|x| Role.select(&:consider_workflow?).map{|x| x[:id]}.include?(x[2])}.sort %>
+<% if issue_usage.count > 0 %>
+  <p><label><%= l(:field_in_workflows) %></label>
+  <i><span style="width: 160px; display: inline-block;"><%= l(:label_workspace) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_tracker) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_role) %></span></i><br>  
+  <% issue_usage.each do |x| %>
+    <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{Workspace.where(:id => x[0]).pluck(:name)[0]}"'</span><span style="width: 160px; display: inline-block;">'"#{Tracker.where(:id => x[1]).pluck(:name)[0]}"'</span><span style="width: 160px; display: inline-block;">'"#{Role.where(:id => x[2]).pluck(:name)[0]}"'</span>'), workflows_edit_path(:role_id => x[2], :tracker_id => x[1], :workspace_id => x[0]) %>
+    <br>
+  <% end %>
+  </p>
+<% end %>
 
 <%= call_hook(:view_issue_statuses_form, :issue_status => @issue_status) %>
 </div>
