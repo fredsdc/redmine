@@ -36,7 +36,8 @@ class MyController < ApplicationController
              'timelog' => :label_spent_time
            }.merge(Redmine::Views::MyPage::Block.additional_blocks).freeze
 
-  DEFAULT_LAYOUT = {  'left' => ['issuesassignedtome'],
+  DEFAULT_LAYOUT = {  'top' => ['issueswatched'],
+                      'left' => ['issuesassignedtome'],
                       'right' => ['issuesreportedbyme']
                    }.freeze
 
