@@ -25,7 +25,8 @@
   <% end %>
   <td><%= checked_image status.is_closed? %></td>
   <td><%= (status.workflow_transitions_as_new_status.pluck(:workspace_id, :tracker_id, :role_id).to_a +
-           status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.sort.count %></td>
+           status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.
+           select{|x| Role.select(&:consider_workflow?).map{|x| x[:id]}.include?(x[2])}.count %></td>
   <td class="reorder"><%= reorder_links('issue_status', {:action => 'update', :id => status, :page => params[:page]}, :put) %></td>
   <td class="buttons">
     <%= delete_link issue_status_path(status) %>
