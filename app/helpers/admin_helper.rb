@@ -31,6 +31,16 @@ module AdminHelper
     event.nil? ? project.created_on : event[:updated_on].nil? ? event[:created_on] : event[:updated_on]
   end
 
+  def last_activities()
+    Redmine::Activity::Fetcher.new(User.current).
+      events(nil, nil).
+      select{|e| e.has_attribute?("project_id")}.
+      sort{|a,b| b.updated_on <=> a.updated_on}.
+      group_by{|e| e.project_id}.
+      map{|k,e| [k, e.first.updated_on]}.
+      to_h
+  end
+
   def plugin_data_for_updates(plugins)
     data = {"v" => Redmine::VERSION.to_s, "p" => {}}
     plugins.each do |plugin|
