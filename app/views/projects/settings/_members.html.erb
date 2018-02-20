@@ -14,6 +14,7 @@
     </tr>
   </thead>
   <tbody>
+  <% target_roles = WorkflowTransition.where(:workspace_id => @project.workspace_id).pluck(:role_id) & roles.select(&:assignable).map(&:id) %>
   <% members.each do |member| %>
   <% next if member.new_record? %>
   <tr id="member-<%= member.id %>" class="<%= cycle 'odd', 'even' %> member">
@@ -28,7 +29,7 @@
              ) do |f| %>
         <p>
           <% roles.each do |role| %>
-          <div<%= " class=unused" unless WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? || ! role.assignable %>> 
+          <div<%= " class=unused" unless target_roles.include?(role.id) %>> 
             <label>
               <%= check_box_tag('membership[role_ids][]',
                                 role.id, member.roles.include?(role),
