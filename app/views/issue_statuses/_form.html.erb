@@ -6,14 +6,18 @@
   <p><%= f.select :default_done_ratio, ((0..10).to_a.collect {|r| ["#{r*10} %", r*10] }), :include_blank => true, :label => :field_done_ratio %></p>
 <% end %>
 <p><%= f.check_box :is_closed %></p>
-<% issue_usage = (@issue_status.workflow_transitions_as_new_status.pluck(:workspace_id, :tracker_id, :role_id).to_a +
-                  @issue_status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.
-                   select{|x| Role.select(&:consider_workflow?).map{|x| x[:id]}.include?(x[2])}.sort %>
-<% if issue_usage.count > 0 %>
+<% flows = WorkflowTransition.where(role_id: Role.select(&:consider_workflow?).map(&:id)).
+   where("old_status_id = #{@issue_status.id} OR new_status_id = #{@issue_status.id}").
+   select(:workspace_id, :tracker_id, :role_id).uniq.
+   order(:workspace_id, :tracker_id, :role_id).to_a %>
+<% if flows.count > 0 %>
+  <% workspaces = Workspace.pluck(:id, :name).to_h %>
+  <% roles = Role.pluck(:id, :name).to_h %>
+  <% trackers = Tracker.pluck(:id, :name).to_h %>
   <p><label><%= l(:field_in_workflows) %></label>
   <i><span style="width: 160px; display: inline-block;"><%= l(:label_workspace) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_tracker) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_role) %></span></i><br>  
-  <% issue_usage.each do |x| %>
-    <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{Workspace.where(:id => x[0]).pluck(:name)[0]}"'</span><span style="width: 160px; display: inline-block;">'"#{Tracker.where(:id => x[1]).pluck(:name)[0]}"'</span><span style="width: 160px; display: inline-block;">'"#{Role.where(:id => x[2]).pluck(:name)[0]}"'</span>'), workflows_edit_path(:role_id => x[2], :tracker_id => x[1], :workspace_id => x[0]) %>
+  <% flows.each do |x| %>
+    <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{workspaces[x[:workspace_id]]}"'</span><span style="width: 160px; display: inline-block;">'"#{trackers[x[:tracker_id]]}"'</span><span style="width: 160px; display: inline-block;">'"#{roles[x[:role_id]]}"'</span>'), workflows_edit_path(:role_id => x[:role_id], :tracker_id => x[:tracker_id], :workspace_id => x[:workspace_id]) %>
     <br>
   <% end %>
   </p>

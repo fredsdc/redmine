@@ -17,6 +17,10 @@
   <th></th>
   </tr></thead>
   <tbody>
+<% flows = WorkflowTransition.where(role_id: Role.select(&:consider_workflow?).map(&:id)).
+   joins("INNER JOIN issue_statuses ON issue_statuses.id = workflows.old_status_id OR issue_statuses.id = workflows.new_status_id").
+   select("issue_statuses.id", :workspace_id, :tracker_id, :role_id).uniq.map(&:id)
+   flows = flows.uniq.map{|e| [e, flows.count(e)]}.to_h %>
 <% for status in @issue_statuses %>
   <tr class="<%= cycle("odd", "even") %>">
   <td class="name"><%= link_to status.name, edit_issue_status_path(status) %></td>
@@ -24,9 +28,7 @@
   <td><%= status.default_done_ratio %></td>
   <% end %>
   <td><%= checked_image status.is_closed? %></td>
-  <td><%= (status.workflow_transitions_as_new_status.pluck(:workspace_id, :tracker_id, :role_id).to_a +
-           status.workflow_transitions_as_old_status.pluck(:workspace_id, :tracker_id, :role_id).to_a).uniq.
-           select{|x| Role.select(&:consider_workflow?).map{|x| x[:id]}.include?(x[2])}.count %></td>
+  <td><%= flows[status.id] %></td>
   <td class="reorder"><%= reorder_links('issue_status', {:action => 'update', :id => status, :page => params[:page]}, :put) %></td>
   <td class="buttons">
     <%= delete_link issue_status_path(status) %>
