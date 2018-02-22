@@ -32,13 +32,11 @@ module AdminHelper
   end
 
   def last_activities()
-    Redmine::Activity::Fetcher.new(User.current).
-      events(nil, nil).
+    Redmine::Activity::Fetcher.new(User.current).events(nil, nil).
       select{|e| e.has_attribute?("project_id")}.
-      sort{|a,b| b.updated_on <=> a.updated_on}.
-      group_by{|e| e.project_id}.
-      map{|k,e| [k, e.first.updated_on]}.
-      to_h
+      collect{|e| [e.project_id, e.has_attribute?("updated_on") ? e.updated_on : e.has_attribute?("updated_at") ? e.updated_at :
+                                 e.has_attribute?("created_on") ? e.created_on : e.has_attribute?("created_at") ? e.created_at : ""]}.
+      group_by{|e| e.first}.map{|k,e| [k, e.max{|a,b| a[1] <=> b[1]}[1]]}.to_h
   end
 
   def plugin_data_for_updates(plugins)
