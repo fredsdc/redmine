@@ -14,7 +14,7 @@
     </tr>
   </thead>
   <tbody>
-  <% target_roles = WorkflowTransition.where(:workspace_id => @project.workspace_id).pluck(:role_id) & roles.select(&:assignable).map(&:id) %>
+  <% target_roles = (WorkflowTransition.where(:workspace_id => @project.workspace_id).pluck(:role_id) + roles.reject(&:assignable).map(&:id)).uniq %>
   <% members.each do |member| %>
   <% next if member.new_record? %>
   <tr id="member-<%= member.id %>" class="<%= cycle 'odd', 'even' %> member">
