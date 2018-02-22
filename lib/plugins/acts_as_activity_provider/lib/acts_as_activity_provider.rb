@@ -78,6 +78,10 @@ module Redmine
               scope = scope.where(Project.allowed_to_condition(user, "view_#{self.name.underscore.pluralize}".to_sym, options))
             end
 
+            if options[:last_by_project]
+              scope = scope.group("projects.id").maximum(provider_options[:timestamp])
+            end
+
             scope.to_a
           end
         end
