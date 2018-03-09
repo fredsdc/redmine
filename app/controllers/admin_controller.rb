@@ -35,8 +35,8 @@ class AdminController < ApplicationController
     scope = Project.status(@status).sorted
     scope = scope.like(params[:name]) if params[:name].present?
     @projects = scope.to_a
-
     @workspaces = Hash[Workspace.pluck(:id, :name)]
+    @last_activity = Redmine::Activity::Fetcher.new(User.current).events(nil, nil, :last_by_project => true).to_h
 
     render :action => "projects", :layout => false if request.xhr?
   end

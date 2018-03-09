@@ -27,8 +27,6 @@ class ActivitiesController < ApplicationController
       begin; @date_to = params[:from].to_date + 1; rescue; end
     end
 
-    @date_to ||= Date.today + 1
-    @date_from = @date_to - @days
     @with_subprojects = params[:with_subprojects].nil? ? Setting.display_subprojects_issues? : (params[:with_subprojects] == '1')
     if params[:user_id].present?
       @author = User.active.find(params[:user_id])
@@ -51,6 +49,26 @@ class ActivitiesController < ApplicationController
       else
         @activity.scope = :all
       end
+    end
+
+    @date_to ||= Date.today + 1
+    @date_from = @date_to
+
+    # Expand to activity period
+    @activity_before = last_activity(@date_to)
+    if ! @activity_before.nil?
+      @date_from = @date_to - (((@date_to - @activity_before.to_date - 1) / @days).to_i + 1 ) * @days
+      @activity_before = last_activity(@date_from - 1)
+      if ! @activity_before.nil?
+        @date_from = @date_from - (((@date_from - @activity_before.to_date - 1) / @days).to_i) * @days
+      end
+    end
+
+    @activity_after = next_activity(@date_to)
+    if @activity_after.nil?
+      @date_to = Date.today + 1
+    else
+      @date_to = @date_to + (((@activity_after.to_date - @date_to) / @days).to_i) * @days
     end
 
     events = @activity.events(@date_from, @date_to)
@@ -86,5 +104,19 @@ class ActivitiesController < ApplicationController
     authorize
   rescue ActiveRecord::RecordNotFound
     render_404
+  end
+
+  def last_activity(to=nil)
+    Redmine::Activity::Fetcher.new(User.current, :project => @project,
+                                                 :with_subprojects => @with_subprojects,
+                                                 :author => @author).
+                               events(nil, to, :last_by_project => true).map{|e| e[1]}.sort.last
+  end
+
+  def next_activity(from=nil)
+    Redmine::Activity::Fetcher.new(User.current, :project => @project,
+                                                 :with_subprojects => @with_subprojects,
+                                                 :author => @author).
+                               events(from, nil, :next_by_project => true).map{|e| e[1]}.sort.first
   end
 end

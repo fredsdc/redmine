@@ -1,5 +1,5 @@
 <h2><%= @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %></h2>
-<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to - @days), :end => format_date(@date_to-1)) %></p>
+<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_from), :end => format_date(@date_to-1)) unless @events_by_day.empty? %></p>
 
 <div id="activity">
 <% @events_by_day.keys.sort.reverse.each do |day| %>
@@ -23,9 +23,9 @@
 
 <div style="float:left;">
 <%= link_to_content_update("\xc2\xab " + l(:label_previous),
-                   params.merge(:from => @date_to - @days - 1),
-                   :title => l(:label_date_from_to, :start => format_date(@date_to - 2*@days), :end => format_date(@date_to - @days - 1)),
-                   :accesskey => accesskey(:previous)) %>
+                   params.merge(:from => @date_from - 1),
+                   :title => l(:label_date_from_to, :start => format_date(@date_from - @days), :end => format_date(@date_from - 1)),
+                   :accesskey => accesskey(:previous)) unless @activity_before.nil? %>
 </div>
 <div style="float:right;">
 <%= link_to_content_update(l(:label_next) + " \xc2\xbb",
