@@ -106,6 +106,8 @@ module IssuesHelper
 
   def render_descendants_tree(issue)
     s = '<form><table class="list issues">'
+    s += "<tr style='font-style: italic;'><td class='subject'>#{l(:field_issue)}</td><td>#{l(:field_status)}</td><td>#{l(:field_assigned_to)}</td>"
+    s += "<td>#{l(:field_start_date)}</td><td>#{l(:field_due_date)}</td><td>#{l(:field_done_ratio)}</td><td style='width: 5%;'></td></tr>"
     issue_list(issue.descendants.visible.preload(:status, :priority, :tracker).sort_by(&:lft)) do |child, level|
       css = "issue issue-#{child.id} hascontextmenu"
       css << " idnt idnt-#{level}" if level > 0
@@ -114,7 +116,10 @@ module IssuesHelper
              content_tag('td', link_to_issue(child, :project => (issue.project_id != child.project_id)), :class => 'subject', :style => 'width: 50%') +
              content_tag('td', h(child.status)) +
              content_tag('td', link_to_user(child.assigned_to)) +
-             content_tag('td', progress_bar(child.done_ratio)),
+             content_tag('td', format_date(child.start_date)) +
+             content_tag('td', format_date(child.due_date)) +
+             content_tag('td', progress_bar(child.done_ratio)) +
+             content_tag('td', ''),
              :class => css)
     end
     s << '</table></form>'

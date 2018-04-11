@@ -9,6 +9,8 @@
 <% if @relations.present? %>
 <form>
 <table class="list issues">
+<tr style='font-style: italic;'><td class='subject'><%= l(:field_issue) %></td><td><%= l(:field_status) %></td><td><%= l(:field_assigned_to) %></td>
+<td><%= l(:field_start_date) %></td><td><%= l(:field_due_date) %></td><td><%= l(:field_done_ratio) %></td><td/></tr>
 <% @relations.each do |relation| %>
   <% other_issue = relation.other_issue(@issue) -%>
   <tr class="issue hascontextmenu" id="relation-<%= relation.id %>">
@@ -17,9 +19,11 @@
     <%= relation.to_s(@issue) {|other| link_to_issue(other, :project => Setting.cross_project_issue_relations?)}.html_safe %>
   </td>
   <td class="status"><%= other_issue.status.name %></td>
+  <td class="assigned_to"><%= other_issue.assigned_to %></td>
   <td class="start_date"><%= format_date(other_issue.start_date) %></td>
   <td class="due_date"><%= format_date(other_issue.due_date) %></td>
-  <td class="buttons"><%= link_to image_tag('link_break.png'),
+  <td class="done_ratio"><%= progress_bar(other_issue.done_ratio) %></td>
+  <td class="buttons" style="width: 5%;"><%= link_to image_tag('link_break.png'),
                                   relation_path(relation),
                                   :remote => true,
                                   :method => :delete,
