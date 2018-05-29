@@ -10,7 +10,15 @@
   <legend><%= l(:label_role_plural) %> (<a onclick='$(".unused").toggleClass("show");'><%= l(:label_all) %></a>) <%= toggle_checkboxes_link('.roles-selection input') %></legend>
   <div class="roles-selection">
     <% User.current.managed_roles(@project).each do |role| %>
-      <label<%= " class=unused" unless WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? || ! role.assignable %>><%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %> <%= role %></label>
+      <label<%= " class=unused" unless WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? || ! role.assignable %>><%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %>
+        <% if ! role.assignable %>
+          <span style="color: darkblue;"><%= role %></span>
+        <% elsif WorkflowTransition.where(:role_id => role.id, :workspace_id => @project.workspace_id).any? %>
+          <%= role %>
+        <% else %>
+          <span style="color: darkred;"><%= role %></span>
+        <% end %>
+      </label>
     <% end %>
   </div>
 </fieldset>

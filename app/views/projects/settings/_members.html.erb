@@ -34,7 +34,14 @@
               <%= check_box_tag('membership[role_ids][]',
                                 role.id, member.roles.include?(role),
                                 :id => nil,
-                                :disabled => !member.role_editable?(role)) %> <%= role %>
+                                :disabled => !member.role_editable?(role)) %>
+              <% if !role.assignable? %>
+                <span style="color: darkblue;"><%= role %></span>
+              <% elsif target_roles.include?(role.id) %>
+                <%= role %>
+              <% else %>
+                <span style="color: darkred;"><%= role %></span>
+              <% end %>
             </label><br />
           </div>
           <% end %>
