@@ -700,6 +700,18 @@ function keepAnchorOnSignIn(form){
   return true;
 }
 
+function expand_div(elem, to_check, to_disable){
+  $(elem).html($('#member-roles-div-model').html());
+  var i, len = to_check.length;
+  for (i=0; i<len; i++) {
+    $(elem + " input[value='" + to_check[i] + "']").prop('checked', true);
+  }
+  len=to_disable.length;
+  for (i=0; i<len; i++) {
+    $(elem + " input[value='" + to_disable[i] + "']").prop('disabled', true);
+  }
+}
+
 $(document).ready(setupAjaxIndicator);
 $(document).ready(hideOnLoad);
 $(document).ready(addFormObserversForDoubleSubmit);

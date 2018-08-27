@@ -4,6 +4,27 @@
 <p><%= link_to l(:label_member_new), new_project_membership_path(@project), :remote => true, :class => "icon icon-add" %></p>
 
 <% if members.any? %>
+<% target_roles = (WorkflowTransition.where(:workspace_id => @project.workspace_id).pluck(:role_id) + roles.reject(&:assignable).map(&:id)).uniq %>
+<% disabled_roles = roles.map(&:id) - User.current.managed_roles(@project).map(&:id) %>
+<div id="member-roles-div-model" style="display: none;">
+  <% roles.each do |role| %>
+  <div<%= " class=unused" unless target_roles.include?(role.id) %>> 
+    <label>
+      <%= check_box_tag('membership[role_ids][]',
+                        role.id, false,
+                        :id => nil,
+                        :disabled => false) %>
+      <% if !role.assignable? %>
+        <span style="color: darkblue;"><%= role %></span>
+      <% elsif target_roles.include?(role.id) %>
+        <%= role %>
+      <% else %>
+        <span style="color: darkred;"><%= role %></span>
+      <% end %>
+    </label><br />
+  </div>
+  <% end %>
+</div>
 <table class="list members">
   <thead>
     <tr>
@@ -14,7 +35,6 @@
     </tr>
   </thead>
   <tbody>
-  <% target_roles = (WorkflowTransition.where(:workspace_id => @project.workspace_id).pluck(:role_id) + roles.reject(&:assignable).map(&:id)).uniq %>
   <% members.each do |member| %>
   <% next if member.new_record? %>
   <tr id="member-<%= member.id %>" class="<%= cycle 'odd', 'even' %> member">
@@ -27,36 +47,19 @@
                     :method => :put,
                     :html => { :id => "member-#{member.id}-roles-form", :class => 'hol' }}
              ) do |f| %>
-        <p>
-          <% roles.each do |role| %>
-          <div<%= " class=unused" unless target_roles.include?(role.id) %>> 
-            <label>
-              <%= check_box_tag('membership[role_ids][]',
-                                role.id, member.roles.include?(role),
-                                :id => nil,
-                                :disabled => !member.role_editable?(role)) %>
-              <% if !role.assignable? %>
-                <span style="color: darkblue;"><%= role %></span>
-              <% elsif target_roles.include?(role.id) %>
-                <%= role %>
-              <% else %>
-                <span style="color: darkred;"><%= role %></span>
-              <% end %>
-            </label><br />
-          </div>
-          <% end %>
-        </p>
+        <p id="member-<%= member.id %>-roles-div"></p>
         <%= hidden_field_tag 'membership[role_ids][]', '', :id => nil %>
         <p>
           <%= submit_tag l(:button_save), :class => "small" %>
           <%= link_to_function(l(:button_cancel),
-                               "$('#member-#{member.id}-roles').show(); $('#member-#{member.id}-roles-form').hide(); return false;") %>
+                               "$('#member-#{member.id}-roles').show(); $('#member-#{member.id}-roles-div').html(""); $('#member-#{member.id}-roles-form').hide(); return false;") %>
         </p>
       <% end %>
   </td>
   <td class="buttons">
       <%= link_to_function l(:button_edit),
-                           "$('#member-#{member.id}-roles').hide(); $('#member-#{member.id}-roles-form').show(); return false;",
+                           "$('#member-#{member.id}-roles').hide(); expand_div('#member-#{member.id}-roles-div', #{member.roles.pluck(:id)}, #{disabled_roles +
+                             member.roles.select{|r| member.has_inherited_role?(r)}.map(&:id)}); $('#member-#{member.id}-roles-form').show(); return false;",
                            :class => 'icon icon-edit' %>
       <%= delete_link membership_path(member),
                       :remote => true,
