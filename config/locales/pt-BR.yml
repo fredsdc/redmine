@@ -1221,3 +1221,7 @@ pt-BR:
   label_default_values_for_new_users: Default values for new users
   label_issues_visibility_own_watch: Tarefas observadas, criadas ou atribuídas ao usuário 
   label_issues_visibility_own_watch_contributed: Tarefas editadas, observadas, criadas ou atribuídas ao usuário
+
+  grouped_cf: Agrupar campos personalizados
+  global_cf_position: Posição global de campos personalizados
+  changed_cf_position: Alterar posição de campos personalizados

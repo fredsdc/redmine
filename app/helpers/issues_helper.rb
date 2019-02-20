@@ -215,17 +215,32 @@ module IssuesHelper
     r.to_html
   end
 
+  def group_by_keys(project_id, tracker_id, custom_field_values)
+    keys_grouped = AttributeGroupField.joins(:attribute_group).
+      where(:attribute_groups => {project_id: project_id, tracker_id: tracker_id}).
+      order("attribute_groups.position", :position).pluck(:name, :custom_field_id).group_by(&:shift)
+    custom_fields_grouped = { nil => (keys_grouped[nil].nil? ? [] : keys_grouped[nil].map{|n| custom_field_values.select{|x| x.custom_field[:id] == n[0]}}.flatten) |
+      custom_field_values.select{|y| ! keys_grouped.values.flatten.include?(y.custom_field[:id])}}
+    keys_grouped.reject{|k,v| k == nil}.each{|k,v| custom_fields_grouped[k] = v.map{|n| custom_field_values.select{|x| x.custom_field[:id] == n[0]}}.flatten}
+    custom_fields_grouped
+  end
+
   def render_custom_fields_rows(issue)
-    values = issue.visible_custom_field_values
-    return if values.empty?
-    half = (values.size / 2.0).ceil
-    issue_fields_rows do |rows|
-      values.each_with_index do |value, i|
-        css = "cf_#{value.custom_field.id}"
-        m = (i < half ? :left : :right)
-        rows.send m, custom_field_name_tag(value.custom_field), show_value(value), :class => css
+    s=''
+    group_by_keys(issue.project_id, issue.tracker_id, issue.visible_custom_field_values).each do |title, values|
+      if values.present?
+        s << content_tag('h4', title, :style => 'background: #0001; padding: 0.3em;') unless title.nil?
+        half = (values.size / 2.0).ceil
+        s << issue_fields_rows do |rows|
+          values.each_with_index do |value, i|
+            css = "cf_#{value.custom_field.id}"
+            m = (i < half ? :left : :right)
+            rows.send m, custom_field_name_tag(value.custom_field), show_value(value), :class => css
+          end
+        end
       end
     end
+    s.html_safe
   end
 
   # Returns the path for updating the issue form

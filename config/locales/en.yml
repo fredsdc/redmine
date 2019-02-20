@@ -1189,3 +1189,7 @@ en:
   description_date_from: Enter start date
   description_date_to: Enter end date
   text_repository_identifier_info: 'Only lower case letters (a-z), numbers, dashes and underscores are allowed.<br />Once saved, the identifier cannot be changed.'
+
+  grouped_cf: Grouped Custom Fields
+  global_cf_position: Global Custom Fields Position
+  changed_cf_position: Changed Custom Fields Position
