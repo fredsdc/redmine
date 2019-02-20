@@ -4,13 +4,13 @@
   <% @project.trackers.each do |t| %>
   <div id='tracker_<%= t.id %>' class='tracker'>
     <span style="color: #888;"><%= l(:changed_cf_position) %></span>
-    <ul class='sortable_items sortable_<%= t.name %> nil not_a_group'>
+    <ul class='sortable_items sortable_tracker-<%= t.id %> nil not_a_group'>
       <% @cfs.select{|x| x[0]==t.id && x[2]==nil}.each do |x| %>
       <li id="<%= x[6] %>" pos="<%= x[8] %>"><%= x[7] %></li>
       <% end %>
     </ul>
     <span style="color: #888;"><%= l(:global_cf_position) %></span>
-    <ul class="sortable_items sortable_<%= t.name %> unsorted not_a_group">
+    <ul class="sortable_items sortable_tracker-<%= t.id %> unsorted not_a_group">
       <% Issue.new(project_id: @project.id, tracker_id: t.id).custom_field_values.
            select{|x| ! @cfs.select{|c| c[0]==t.id}.map{|c| c[6]}.include?(x.custom_field_id)}.
            collect{|x| [x.custom_field.id, x.custom_field.name, x.custom_field.position]}.each do |x| %>
@@ -18,12 +18,12 @@
       <% end %>
     </ul>
     <span style="color: #888;"><%= l(:grouped_cf) %></span>
-    <div class='sortable_groups groups_<%= t.name %>'>
+    <div class='sortable_groups groups_tracker-<%= t.id %>'>
       <% @cfs.select{|x| x[0]==t.id && x[2]!=nil}.map{|x| x[2]}.uniq.each do |g| %>
       <div class="sortable_group">
         <input type="text" value="<%= g %>" style="background: #ddf; padding: 5px; width: 360px"/>
-        <img src="/images/delete.png" onclick="remove_label(this, '<%= t.name %>');"/>
-        <ul class='sortable_items sortable_<%= t.name %>'>
+        <img src="/images/delete.png" onclick="remove_label(this, 'tracker-<%= t.id %>');"/>
+        <ul class='sortable_items sortable_tracker-<%= t.id %>'>
           <% @cfs.select{|x| x[0]==t.id && x[2]==g}.each do |x| %>
           <li id="<%= x[6] %>" pos="<%= x[8] %>"><%= x[7] %></li>
           <% end %>
@@ -32,7 +32,7 @@
       <% end %>
       <div>
         <input type="text" value="" style="background: #ddf; padding: 5px; width: 370px"/>
-        <img src="/images/add.png" style="" onclick="add_label(this, '<%= t.name %>');"/>
+        <img src="/images/add.png" style="" onclick="add_label(this, 'tracker-<%= t.id %>');"/>
       </div>
     </div>
   </div>
@@ -135,6 +135,6 @@ function fill_json_data() {
   $('#group_issues_custom_fields').val(JSON.stringify(r)); }
 $('#tracker_id').change();
 <% @project.trackers.each do |t| %>
-init_sortables('<%= t.name %>');
+init_sortables('tracker-<%= t.id %>');
 <% end %>
 </script>
