@@ -68,51 +68,59 @@ module Redmine
             right << nil
           end
   
-          half = (issue.visible_custom_field_values.size / 2.0).ceil
-          issue.visible_custom_field_values.each_with_index do |custom_value, i|
-            (i < half ? left : right) << [custom_value.custom_field.name, show_value(custom_value, false)]
-          end
+          group_by_keys(issue.project_id, issue.tracker_id, issue.visible_custom_field_values).each do |title, values|
+            unless title.nil?
+              pdf.RDMCell(35+155, 5, title, "LRT", 1)
+              left = []
+              right = []
+            end  
   
-          if pdf.get_rtl
-            border_first_top = 'RT'
-            border_last_top  = 'LT'
-            border_first = 'R'
-            border_last  = 'L'
-          else
-            border_first_top = 'LT'
-            border_last_top  = 'RT'
-            border_first = 'L'
-            border_last  = 'R'
-          end
+            half = (values.size / 2.0).ceil
+            values.each_with_index do |custom_value, i|
+              (i < half ? left : right) << [custom_value.custom_field.name, show_value(custom_value, false)]
+            end
   
-          rows = left.size > right.size ? left.size : right.size
-          rows.times do |i|
-            heights = []
-            pdf.SetFontStyle('B',9)
-            item = left[i]
-            heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
-            item = right[i]
-            heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
-            pdf.SetFontStyle('',9)
-            item = left[i]
-            heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
-            item = right[i]
-            heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
-            height = heights.max
-  
-            item = left[i]
-            pdf.SetFontStyle('B',9)
-            pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "", (i == 0 ? border_first_top : border_first), '', 0, 0)
-            pdf.SetFontStyle('',9)
-            pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 0)
-  
-            item = right[i]
-            pdf.SetFontStyle('B',9)
-            pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "",  (i == 0 ? border_first_top : border_first), '', 0, 0)
-            pdf.SetFontStyle('',9)
-            pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 2)
-  
-            pdf.set_x(base_x)
+            if pdf.get_rtl
+              border_first_top = 'RT'
+              border_last_top  = 'LT'
+              border_first = 'R'
+              border_last  = 'L'
+            else
+              border_first_top = 'LT'
+              border_last_top  = 'RT'
+              border_first = 'L'
+              border_last  = 'R'
+            end
+    
+            rows = left.size > right.size ? left.size : right.size
+            rows.times do |i|
+              heights = []
+              pdf.SetFontStyle('B',9)
+              item = left[i]
+              heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+              item = right[i]
+              heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+              pdf.SetFontStyle('',9)
+              item = left[i]
+              heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+              item = right[i]
+              heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+              height = heights.max
+    
+              item = left[i]
+              pdf.SetFontStyle('B',9)
+              pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "", (i == 0 ? border_first_top : border_first), '', 0, 0)
+              pdf.SetFontStyle('',9)
+              pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 0)
+    
+              item = right[i]
+              pdf.SetFontStyle('B',9)
+              pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "",  (i == 0 ? border_first_top : border_first), '', 0, 0)
+              pdf.SetFontStyle('',9)
+              pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 2)
+    
+              pdf.set_x(base_x)
+            end
           end
   
           pdf.SetFontStyle('B',9)

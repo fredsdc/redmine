@@ -327,8 +327,20 @@ module IssuesHelper
         items << "#{l("field_#{attribute}")}: #{issue.send attribute}"
       end
     end
-    issue.visible_custom_field_values(user).each do |value|
-      items << "#{value.custom_field.name}: #{show_value(value, false)}"
+    group_by_keys(issue.project_id, issue.tracker_id, issue.visible_custom_field_values(user)).each do |title, values|
+      if values.present?
+        if title.nil?
+          values.each do |value|
+            items << "#{value.custom_field.name}: #{show_value(value, false)}"
+          end
+        else   
+          item = [ "#{title}" ]
+          values.each do |value|
+            item << "#{value.custom_field.name}: #{show_value(value, false)}"
+          end
+          items << item
+        end
+      end
     end
     items
   end
@@ -336,9 +348,12 @@ module IssuesHelper
   def render_email_issue_attributes(issue, user, html=false)
     items = email_issue_attributes(issue, user)
     if html
-      content_tag('ul', items.map{|s| content_tag('li', s)}.join("\n").html_safe)
+      content_tag('ul', items.select{|s| s.is_a? String}.map{|s| content_tag('li', s)}.join("\n").html_safe) + "\n" +
+      items.select{|s| !s.is_a? String}.map{|item| content_tag('div', item.shift) + "\n" +
+        content_tag('ul', item.map{|s| content_tag('li', s)}.join("\n").html_safe)}.join("\n").html_safe
     else
-      items.map{|s| "* #{s}"}.join("\n")
+      items.select{|s| s.is_a? String}.map{|s| "* #{s}"}.join("\n") + "\n" +
+      items.select{|s| !s.is_a? String}.map{|item| "#{item.shift}\n" + item.map{|s| "* #{s}"}.join("\n")}.join("\n")
     end
   end
 
