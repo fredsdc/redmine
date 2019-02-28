@@ -45,21 +45,21 @@ module Redmine
           pdf.SetFontStyle('',8)
           pdf.RDMMultiCell(190, 5, "#{format_time(issue.created_on)} - #{issue.author}")
           pdf.ln
-  
+
           left = []
           left << [l(:field_status), issue.status]
           left << [l(:field_priority), issue.priority]
           left << [l(:field_assigned_to), issue.assigned_to] unless issue.disabled_core_fields.include?('assigned_to_id')
           left << [l(:field_category), issue.category] unless issue.disabled_core_fields.include?('category_id')
           left << [l(:field_fixed_version), issue.fixed_version] unless issue.disabled_core_fields.include?('fixed_version_id')
-  
+
           right = []
           right << [l(:field_start_date), format_date(issue.start_date)] unless issue.disabled_core_fields.include?('start_date')
           right << [l(:field_due_date), format_date(issue.due_date)] unless issue.disabled_core_fields.include?('due_date')
           right << [l(:field_done_ratio), "#{issue.done_ratio}%"] unless issue.disabled_core_fields.include?('done_ratio')
           right << [l(:field_estimated_hours), l_hours(issue.estimated_hours)] unless issue.disabled_core_fields.include?('estimated_hours')
           right << [l(:label_spent_time), l_hours(issue.total_spent_hours)] if User.current.allowed_to?(:view_time_entries, issue.project)
-  
+
           rows = left.size > right.size ? left.size : right.size
           while left.size < rows
             left << nil
@@ -67,66 +67,97 @@ module Redmine
           while right.size < rows
             right << nil
           end
-  
+
+          if pdf.get_rtl
+            border_first_top = 'RT'
+            border_last_top  = 'LT'
+            border_first = 'R'
+            border_last  = 'L'
+          else
+            border_first_top = 'LT'
+            border_last_top  = 'RT'
+            border_first = 'L'
+            border_last  = 'R'
+          end
+          border_middle_top  = 'T'
+
+          rows = left.size > right.size ? left.size : right.size
+          rows.times do |i|
+            heights = []
+            pdf.SetFontStyle('B',9)
+            item = left[i]
+            heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+            item = right[i]
+            heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+            pdf.SetFontStyle('',9)
+            item = left[i]
+            heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+            item = right[i]
+            heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+            height = heights.max
+
+            item = left[i]
+            pdf.SetFontStyle('B',9)
+            pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "", (i == 0 ? border_first_top : border_first), '', 0, 0)
+            pdf.SetFontStyle('',9)
+            pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_middle_top : ""), '', 0, 0)
+
+            item = right[i]
+            pdf.SetFontStyle('B',9)
+            pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "",  (i == 0 ? border_middle_top : ""), '', 0, 0)
+            pdf.SetFontStyle('',9)
+            pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 2)
+
+            pdf.set_x(base_x)
+          end
+
           group_by_keys(issue.project_id, issue.tracker_id, issue.visible_custom_field_values).each do |title, values|
-            unless title.nil?
-              pdf.RDMCell(35+155, 5, title, "LRT", 1)
+            if values.present?
+              pdf.RDMCell(35+155, 5, title, "LRT", 1) unless title.nil?
+
+              half = (values.size / 2.0).ceil
               left = []
               right = []
-            end  
-  
-            half = (values.size / 2.0).ceil
-            values.each_with_index do |custom_value, i|
-              (i < half ? left : right) << [custom_value.custom_field.name, show_value(custom_value, false)]
-            end
-  
-            if pdf.get_rtl
-              border_first_top = 'RT'
-              border_last_top  = 'LT'
-              border_first = 'R'
-              border_last  = 'L'
-            else
-              border_first_top = 'LT'
-              border_last_top  = 'RT'
-              border_first = 'L'
-              border_last  = 'R'
-            end
-    
-            rows = left.size > right.size ? left.size : right.size
-            rows.times do |i|
-              heights = []
-              pdf.SetFontStyle('B',9)
-              item = left[i]
-              heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
-              item = right[i]
-              heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
-              pdf.SetFontStyle('',9)
-              item = left[i]
-              heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
-              item = right[i]
-              heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
-              height = heights.max
-    
-              item = left[i]
-              pdf.SetFontStyle('B',9)
-              pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "", (i == 0 ? border_first_top : border_first), '', 0, 0)
-              pdf.SetFontStyle('',9)
-              pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 0)
-    
-              item = right[i]
-              pdf.SetFontStyle('B',9)
-              pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "",  (i == 0 ? border_first_top : border_first), '', 0, 0)
-              pdf.SetFontStyle('',9)
-              pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", (i == 0 ? border_last_top : border_last), '', 0, 2)
-    
-              pdf.set_x(base_x)
+              values.each_with_index do |custom_value, i|
+                (i < half ? left : right) << [custom_value.custom_field.name, show_value(custom_value, false)]
+              end
+
+              rows = left.size > right.size ? left.size : right.size
+              rows.times do |i|
+                heights = []
+                pdf.SetFontStyle('B',9)
+                item = left[i]
+                heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+                item = right[i]
+                heights << pdf.get_string_height(35, item ? "#{item.first}:" : "")
+                pdf.SetFontStyle('',9)
+                item = left[i]
+                heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+                item = right[i]
+                heights << pdf.get_string_height(60, item ? item.last.to_s  : "")
+                height = heights.max
+
+                item = left[i]
+                pdf.SetFontStyle('B',9)
+                pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "", border_first, '', 0, 0)
+                pdf.SetFontStyle('',9)
+                pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", "", '', 0, 0)
+
+                item = right[i]
+                pdf.SetFontStyle('B',9)
+                pdf.RDMMultiCell(35, height, item ? "#{item.first}:" : "",  "", '', 0, 0)
+                pdf.SetFontStyle('',9)
+                pdf.RDMMultiCell(60, height, item ? item.last.to_s : "", border_last, '', 0, 2)
+
+                pdf.set_x(base_x)
+              end
             end
           end
-  
+
           pdf.SetFontStyle('B',9)
           pdf.RDMCell(35+155, 5, l(:field_description), "LRT", 1)
           pdf.SetFontStyle('',9)
-  
+
           # Set resize image scale
           pdf.set_image_scale(1.6)
           text = textilizable(issue, :description,
@@ -136,7 +167,7 @@ module Redmine
             :inline_attachments => false
           )
           pdf.RDMwriteFormattedCell(35+155, 5, '', '', text, issue.attachments, "LRB")
-  
+
           unless issue.leaf?
             truncate_length = (!is_cjk? ? 90 : 65)
             pdf.SetFontStyle('B',9)
@@ -153,7 +184,7 @@ module Redmine
               pdf.ln
             end
           end
-  
+
           relations = issue.relations.select { |r| r.other_issue(issue).visible? }
           unless relations.empty?
             truncate_length = (!is_cjk? ? 80 : 60)
@@ -181,7 +212,7 @@ module Redmine
           end
           pdf.RDMCell(190,5, "", "T")
           pdf.ln
-  
+
           if issue.changesets.any? &&
                User.current.allowed_to?(:view_changesets, issue.project)
             pdf.SetFontStyle('B',9)
@@ -201,7 +232,7 @@ module Redmine
               pdf.ln
             end
           end
-  
+
           if assoc[:journals].present?
             pdf.SetFontStyle('B',9)
             pdf.RDMCell(190,5, l(:label_history), "B")
@@ -230,7 +261,7 @@ module Redmine
               pdf.ln
             end
           end
-  
+
           if issue.attachments.any? && User.current.allowed_to?(:view_attachments, @project)
             pdf.SetFontStyle('B',9)
             pdf.RDMCell(190,5, l(:label_attachment_plural), "B")
@@ -257,7 +288,7 @@ module Redmine
           pdf.footer_date = format_date(Date.today)
           pdf.set_auto_page_break(false)
           pdf.add_page("L")
-  
+
           # Landscape A4 = 210 x 297 mm
           page_height   = pdf.get_page_height # 210
           page_width    = pdf.get_page_width  # 297
@@ -265,7 +296,7 @@ module Redmine
           right_margin  = pdf.get_original_margins['right'] # 10
           bottom_margin = pdf.get_footer_margin
           row_height    = 4
-  
+
           # column widths
           table_width = page_width - right_margin - left_margin
           col_width = []
@@ -273,13 +304,13 @@ module Redmine
             col_width = calc_col_width(issues, query, table_width, pdf)
             table_width = col_width.inject(0, :+)
           end
-  
+
           # use full width if the description is displayed
           if table_width > 0 && query.has_column?(:description)
             col_width = col_width.map {|w| w * (page_width - right_margin - left_margin) / table_width}
             table_width = col_width.inject(0, :+)
           end
-  
+
           # title
           pdf.SetFontStyle('B',11)
           pdf.RDMCell(190, 8, title)
@@ -311,10 +342,10 @@ module Redmine
               end
               previous_group = group
             end
-  
+
             # fetch row values
             col_values = fetch_row_values(issue, query, level)
-  
+
             # make new page if it doesn't fit on the current one
             base_y     = pdf.get_y
             max_height = get_issues_to_pdf_write_cells(pdf, col_values, col_width)
@@ -324,11 +355,11 @@ module Redmine
               render_table_header(pdf, query, col_width, row_height, table_width)
               base_y = pdf.get_y
             end
-  
+
             # write the cells on page
             issues_to_pdf_write_cells(pdf, col_values, col_width, max_height)
             pdf.set_y(base_y + max_height)
-  
+
             if query.has_column?(:description) && issue.description?
               pdf.set_x(10)
               pdf.set_auto_page_break(true, bottom_margin)
@@ -336,7 +367,7 @@ module Redmine
               pdf.set_auto_page_break(false)
             end
           end
-  
+
           if issues.size == Setting.issues_export_limit.to_i
             pdf.SetFontStyle('B',10)
             pdf.RDMCell(0, row_height, '...')
