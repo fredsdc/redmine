@@ -162,10 +162,10 @@ class ProjectsController < ApplicationController
     @member ||= @project.members.new
     @trackers = Tracker.sorted.to_a
     @wiki ||= @project.wiki || Wiki.new(:project => @project)
-    @cfs=AttributeGroupField.joins(:attribute_group).joins(:custom_field).joins(:tracker).
-       where(:attribute_groups => {project_id: @project}, :custom_fields => {id: @project.all_issue_custom_fields.pluck(:id)}).
-       pluck("trackers.id", "attribute_groups.id", "attribute_groups.name", "attribute_groups.position",
-             "id", "position", "custom_fields.id", "custom_fields.name", "custom_fields.position").sort_by{|x| [x[3], x[5]]}
+    @cfs=AttributeGroup.joins(:custom_fields).joins(:tracker).
+      where(project_id: @project, tracker_id: @trackers, :custom_fields => {id: @project.all_issue_custom_fields.pluck(:id)}).
+      pluck("trackers.id", "id", "name", "position","attribute_group_fields.id", "attribute_group_fields.position",
+            "custom_fields.id", "custom_fields.name", "custom_fields.position").sort_by{|x| [x[3], x[5]]}
   end
 
   def edit
@@ -225,12 +225,8 @@ class ProjectsController < ApplicationController
         end
       end
     end
-    fields.each do |i|
-      AttributeGroupField.delete(i)
-    end
-    groups.each do |i|
-      AttributeGroup.delete(i)
-    end
+    AttributeGroupField.where(id: fields).delete_all
+    AttributeGroup.where(id: groups).destroy_all
     flash[:notice] = l(:notice_successful_update)
     redirect_to settings_project_path(@project, :tab => 'groupissuescustomfields')
   end

@@ -51,7 +51,7 @@ class Project < ActiveRecord::Base
   has_many :changesets, :through => :repository
   has_one :wiki, :dependent => :destroy
   # Custom field for the project issues
-  has_many :attribute_groups
+  has_many :attribute_groups, :dependent => :destroy
   has_many :attribute_group_fields, :through => :attribute_groups
   has_and_belongs_to_many :issue_custom_fields,
                           lambda {order("#{CustomField.table_name}.position")},
