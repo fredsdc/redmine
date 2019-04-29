@@ -1001,6 +1001,7 @@ en:
   button_collapse_all: Collapse all
   button_expand_all: Expand all
   button_delete: Delete
+  button_delete_issue: Delete Issue
   button_create: Create
   button_create_and_continue: Create and continue
   button_test: Test

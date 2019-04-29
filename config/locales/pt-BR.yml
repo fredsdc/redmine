@@ -651,6 +651,7 @@ pt-BR:
   button_check_all: Marcar todos
   button_uncheck_all: Desmarcar todos
   button_delete: Excluir
+  button_delete_issue: Excluir Tarefa
   button_create: Criar
   button_test: Testar
   button_edit: Editar
