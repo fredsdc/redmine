@@ -31,70 +31,127 @@
 <% end %>
 
 <% if @trackers && @roles && @statuses.any? %>
+  <%= stylesheet_link_tag 'divgrid' %>
+  <%= javascript_include_tag 'divgrid' %>
+
   <%= form_tag({}, :id => 'workflow_form' ) do %>
     <%= @trackers.map {|tracker| hidden_field_tag 'tracker_id[]', tracker.id, :id => nil}.join.html_safe %>
     <%= @roles.map {|role| hidden_field_tag 'role_id[]', role.id, :id => nil}.join.html_safe %>
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
     <div class="autoscroll">
-    <table class="list workflows fields_permissions">
-    <thead>
-      <tr>
-        <th>
-        </th>
-        <th colspan="<%= @statuses.length %>"><%=l(:label_issue_status)%></th>
-      </tr>
-      <tr>
-        <td></td>
-        <% for status in @statuses %>
-        <td style="width:<%= 75 / @statuses.size %>%;">
-          <%= status.name %>
-        </td>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="group open">
-        <td colspan="<%= @statuses.size + 1 %>">
-          <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+      <fieldset class="collapsible" style="padding: 0; margin-top: 2em; margin-bottom: 1em;">
+        <legend style="padding-left: 0; background: none;">
           <%= l(:field_core_fields) %>
-        </td>
-      </tr>
-      <% @fields.each do |field, name| %>
-      <tr>
-        <td class="name">
-          <%= name %> <%= content_tag('span', '*', :class => 'required') if field_required?(field) %>
-        </td>
-        <% for status in @statuses -%>
-        <td class="<%= @permissions[status.id][field].try(:join, ' ') %>" title="<%= name %> (<%= status.name %>)">
-          <%= field_permission_tag(@permissions, status, field, @roles) %>
-          <% unless status == @statuses.last %><a href="#" class="repeat-value">&#187;</a><% end %>
-        </td>
-        <% end -%>
-      </tr>
-      <% end %>
+        </legend>
+      </fieldset>
+      <div id='default_fields' style="position: relative; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
+        <!-- Cell 0 -->
+        <div id="g_bla" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
+          <div class="g_c g_h">&nbsp;</div>
+        </div>
+        <!-- Line 0  -->
+        <div id="g_fla" class="ibf" style="position: absolute; top: 0px; left: 0px; right: 12px; overflow: hidden; z-index: 1;">
+          <div style="display: inline-block;">
+            <div class="g_c">&nbsp;</div>
+          </div>
+          <% for status in @statuses %>
+            <div style="display: inline-block;">
+              <div class="g_c g_h">
+                <%= status.name %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <!-- Row 0 -->
+        <div id="g_fra" style="position: absolute; top: 0px; left: 0px; bottom: 12px; overflow: hidden; z-index: 1;">
+          <div class="g_c">&nbsp;</div>
+          <% even = false %>
+          <% @fields.each do |field, name| %>
+            <div class="g_c g_v<%= (even)? " g_e":" g_o" %>">
+              <% even = !even %>
+              <%= name %> <%= content_tag('span', '*', :class => 'required') if field_required?(field) %>
+            </div>
+          <% end %>
+        </div>
+        <!-- Body -->
+        <div id="g_bda" class="ibf" style="width: 100%; max-height: 80vh; overflow: scroll;" onscroll="g_scroll(this, 'g_fla', 'g_fra')">
+          <div style="display: inline-block;"></div>
+          <% for status in @statuses %>
+            <div style="display: inline-block;">
+              <div class="g_c">&nbsp;</div>
+              <% even = false %>
+              <% @fields.each do |field, name| %>
+                <div class="g_c<%= (even)? " g_e" : " g_o" %> <%= @permissions[status.id][field].try(:join, ' ') %>" title="<%= name %> (<%= status.name %>)">
+                  <div style="margin-top: -5px;" >
+                    <% even = !even %>
+                    <%= field_permission_tag(@permissions, status, field, @roles) %>
+                    <% unless status == @statuses.last %><a href="#" class="repeat-value">&#187;</a><% end %>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
       <% if @custom_fields.any? %>
-        <tr class="group open">
-          <td colspan="<%= @statuses.size + 1 %>">
-            <span class="expander" onclick="toggleRowGroup(this);">&nbsp;</span>
+        <fieldset class="collapsible" style="padding: 0; margin-top: 2em; margin-bottom: 1em;">
+          <legend onclick="toggleFieldset(this);toggleDivToFieldset('personal_fields',this.parentNode.className);">
             <%= l(:label_custom_field_plural) %>
-          </td>
-        </tr>
-        <% @custom_fields.each do |field| %>
-        <tr>
-          <td class="name">
-            <%= field.name %> <%= content_tag('span', '*', :class => 'required') if field_required?(field) %>
-          </td>
-          <% for status in @statuses -%>
-          <td class="<%= @permissions[status.id][field.id.to_s].try(:join, ' ') %>" title="<%= field.name %> (<%= status.name %>)">
-            <%= field_permission_tag(@permissions, status, field, @roles) %>
-            <% unless status == @statuses.last %><a href="#" class="repeat-value">&#187;</a><% end %>
-          </td>
-          <% end -%>
-        </tr>
-        <% end %>
-      <% end %>
-    </tbody>
-    </table>
+          </legend>
+        </fieldset>
+        <div id='personal_fields' style="position: relative; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
+          <!-- Cell 0 -->
+          <div id="g_blb" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
+            <div class="g_c g_h">&nbsp;</div>
+          </div>
+          <!-- Line 0  -->
+          <div id="g_flb" class="ibf" style="position: absolute; top: 0px; left: 0px; right: 12px; overflow: hidden; z-index: 1;">
+            <div style="display: inline-block;">
+              <div class="g_c">&nbsp;</div>
+            </div>
+            <% for status in @statuses %>
+              <div style="display: inline-block;">
+                <div class="g_c g_h">
+                  <%= status.name %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- Row 0 -->
+          <div id="g_frb" style="position: absolute; top: 0px; left: 0px; bottom: 12px; overflow: hidden; z-index: 1;">
+            <div class="g_c">&nbsp;</div>
+            <% even = false %>
+            <% @custom_fields.each do |field| %>
+              <div class="g_c g_v<%= (even)? " g_e":" g_o" %>">
+                <% even = !even %>
+                <%= field.name %> <%= content_tag('span', '*', :class => 'required') if field_required?(field) %>
+              </div>
+            <% end %>
+          </div>
+          <!-- Body -->
+          <div id="g_bdb" class="ibf" style="width: 100%; max-height: 80vh; overflow: scroll;" onscroll="g_scroll(this, 'g_flb', 'g_frb')">
+            <div style="display: inline-block;"></div>
+            <% for status in @statuses %>
+              <div style="display: inline-block;">
+                <div class="g_c">&nbsp;</div>
+                <% even = false %>
+                <% @custom_fields.each do |field| %>
+                  <div class="g_c<%= (even)? " g_e" : " g_o" %> <%= @permissions[status.id][field.id.to_s].try(:join, ' ') %>" title="<%= field.name %> (<%= status.name %>)">
+                    <div style="margin-top: -5px;" >
+                      <% even = !even %>
+                      <%= field_permission_tag(@permissions, status, field, @roles) %>
+                      <% unless status == @statuses.last %><a href="#" class="repeat-value">&#187;</a><% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end -%>
+      <script> g_adjust('g_bla', 'g_fra', 'g_fla', 'g_bda'); </script>
+      <script> g_adjust('g_blb', 'g_frb', 'g_flb', 'g_bdb'); </script>
     </div>
     <%= submit_tag l(:button_save) %>
   <% end %>
@@ -103,9 +160,10 @@
 <%= javascript_tag do %>
 $("a.repeat-value").click(function(e){
   e.preventDefault();
-  var td = $(this).closest('td');
-  var selected = td.find("select").find(":selected").val();
-  td.nextAll('td').find("select").val(selected);
+  var div = $(this).closest('div.g_c');
+  var selected = div.find("select").find(":selected").val();
+  var index = div.index() + 1;
+  div.parent().nextAll('div').find(":nth-child(" + index + ") select").val(selected);
 });
 
 $("a[data-expands]").click(function(e){

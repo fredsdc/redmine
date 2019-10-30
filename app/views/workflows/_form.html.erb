@@ -1,49 +1,61 @@
-<table class="list workflows transitions transitions-<%= name %>">
-<thead>
-  <tr>
-    <th>
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled)')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'icon-only icon-checked') %>
-      <%=l(:label_current_status)%>
-    </th>
-    <th colspan="<%= @statuses.length %>"><%=l(:label_new_statuses_allowed)%></th>
-  </tr>
-  <tr>
-    <td></td>
-    <% for new_status in @statuses %>
-    <td style="width:<%= 75 / @statuses.size %>%;">
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled).new-status-#{new_status.id}')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'icon-only icon-checked') %>
-      <%= new_status.name %>
-    </td>
-    <% end %>
-  </tr>
-</thead>
-<tbody>
-  <% for old_status in [nil] + @statuses %>
-  <% next if old_status.nil? && name != 'always' %>
-  <tr>
-    <td class="name">
-      <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled).old-status-#{old_status.try(:id) || 0}')",
-                           :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
-                           :class => 'icon-only icon-checked') %>
-      <% if old_status %>
-        <% old_status_name = old_status.name %>
-        <%= old_status_name %>
-      <% else %>
-        <% old_status_name = l(:label_issue_new) %>
-        <%= content_tag('em', old_status_name) %>
-      <% end %>
-    </td>
-    <% for new_status in @statuses -%>
-    <% checked = (old_status == new_status) || workflows.detect {|w| w.old_status == old_status && w.new_status == new_status} %>
-    <td class="<%= checked ? 'enabled' : '' %>" title="<%= old_status_name %> &#187; <%= new_status.name %>">
-      <%= transition_tag workflows, old_status, new_status, name %>
-    </td>
-    <% end -%>
-  </tr>
+<!-- Cell 0 -->
+<div id="g_bl_<%= name %>" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
+  <div class="g_c g_h">
+    <%= link_to_function('',
+      "toggleCheckboxesBySelector('#workflow_#{name} input[type=checkbox]:not(:disabled)')",
+      :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
+      :class => 'icon-only icon-checked') %>
+    <%=l(:label_current_status)%>
+  </div>
+</div>
+<!-- Line 0  -->
+<div id="g_fl_<%= name %>" class="ibf" style="position: absolute; top: 0px; left: 0px; right: 12px; overflow: hidden; z-index: 1;">
+  <div style="display: inline-block;">
+    <div class="g_c">&nbsp;</div>
+  </div>
+  <% for new_status in @statuses %>
+    <div style="display: inline-block;">
+      <div class="g_c g_h">
+        <%= link_to_function('',
+          "toggleCheckboxesBySelector('#workflow_#{name} input[type=checkbox]:not(:disabled).new-status-#{new_status.id}')",
+          :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
+          :class => 'icon-only icon-checked') %>
+        <%= new_status.name %>
+      </div>
+    </div>
   <% end %>
-</tbody>
-</table>
+</div>
+<!-- Row 0 -->
+<div id="g_fr_<%= name %>" style="position: absolute; top: 0px; left: 0px; bottom: 12px; overflow: hidden; z-index: 1;">
+  <div class="g_c">&nbsp;</div>
+  <% even = false %>
+  <% for old_status in [nil] + @statuses %>
+    <% next if old_status.nil? && name != 'always' %>
+    <div class="g_c g_v<%= (even)? " g_e":" g_o" %>">
+      <% even = !even %>
+      <%= link_to_function('',
+        "toggleCheckboxesBySelector('#workflow_#{name} input[type=checkbox]:not(:disabled).old-status-#{old_status.try(:id) || 0}')",
+        :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
+        :class => 'icon-only icon-checked') %>
+      <%= old_status ? old_status.name : content_tag('em', l(:label_issue_new)) %>
+    </div>
+  <% end %>
+</div>
+<!-- Body -->
+<div id="g_bd_<%= name %>" class="ibf" style="width: 100%; max-height: 80vh; overflow: scroll;" onscroll="g_scroll(this, 'g_fl_<%= name %>', 'g_fr_<%= name %>')">
+  <div style="display: inline-block;"></div>
+  <% for new_status in @statuses %>
+    <div style="display: inline-block;">
+      <div class="g_c">&nbsp;</div>
+      <% even = false %>
+      <% for old_status in [nil] + @statuses %>
+        <% next if old_status.nil? && name != 'always' %>
+        <% checked = (old_status == new_status) || workflows.detect {|w| w.old_status == old_status && w.new_status == new_status} %>
+        <div class="g_c<%= checked ? " g_m" : (even)? " g_e" : " g_o" %>" title="<%= old_status ? old_status.name : content_tag('em', l(:label_issue_new)) %> &rarr; <%= new_status.name %>">
+          <% even = !even %>
+          <%= transition_tag workflows, old_status, new_status, name %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
