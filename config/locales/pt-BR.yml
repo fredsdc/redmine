@@ -880,7 +880,8 @@ pt-BR:
   setting_start_of_week: Início da semana
   field_watcher: Observador
   permission_view_issues: Ver tarefas
-  label_display_used_statuses_only: Somente exibir situações que são usadas por este tipo de tarefa
+  label_display_used_statuses_only: Somente situações deste tipo de tarefa
+  label_display_used_role_statuses_only: Somente situações deste papel
   label_revision_id: Revisão %{value}
   label_api_access_key: Chave de acesso à API
   button_show: Exibir
