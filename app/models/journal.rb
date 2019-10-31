@@ -114,6 +114,27 @@ class Journal < ActiveRecord::Base
     usr && usr.logged? && (usr.allowed_to?(:edit_issue_notes, project) || (self.user == usr && usr.allowed_to?(:edit_own_issue_notes, project)))
   end
 
+  def last_valid_journal?(journals)
+    self == journals.reject{|j| j.rolled_back}.sort_by(&:id).last
+  end
+
+  def can_rollback?(user = nil)
+    user ||= User.current
+    editable_by?(user) && (details.empty? || user.allowed_to?(:rollback_issue_notes, project))
+  end
+
+  def show?
+    !self.rolled_back || User.current.pref.hide_rolled_back_issue_notes == '0'
+  end
+
+  # rollback the changes in a journal, the journal is destroyed on success
+  def rollback
+    # we could have details to rollback, so let the issue take care of this more complicated task
+    journalized.rollback(self) ||
+    # on failure, collect the error messages from the issue on failure
+      (journalized.errors.full_messages.each {|msg| errors.add :base, msg}; false)
+  end
+
   def project
     journalized.respond_to?(:project) ? journalized.project : nil
   end

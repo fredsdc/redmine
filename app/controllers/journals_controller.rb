@@ -16,10 +16,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class JournalsController < ApplicationController
-  before_action :find_journal, :only => [:edit, :update, :diff]
+  before_action :find_journal, :only => [:edit, :update, :diff, :rollback]
   before_action :find_issue, :only => [:new]
   before_action :find_optional_project, :only => [:index]
-  before_action :authorize, :only => [:new, :edit, :update, :diff]
+  before_action :authorize, :only => [:new, :edit, :update, :diff, :rollback]
   accept_rss_auth :index
   menu_item :issues
 
@@ -93,6 +93,22 @@ class JournalsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to issue_path(@journal.journalized) }
       format.js
+    end
+  end
+
+  def rollback
+    (render_403; return false) unless @journal.can_rollback?(User.current)
+    if @journal.rollback
+      flash[:notice] = l(:notice_successful_update)
+    else
+      # can't seem to bring in the helper method 'error_messages_for'
+      # and injecting it into show.rhtml doesn't seem to work, since
+      # the @issue loses the errors on redirect (due to issue reload)
+      flash[:error] = "<ul>" + @journal.errors.full_messages.map {|msg| "<li>" + ERB::Util.html_escape(msg) + "</li>"}.join + "</ul>"
+    end
+    respond_to do |format|
+      format.html { redirect_to :controller => 'issues', :action => 'show', :id => @journal.journalized_id, :anchor => "note-#{@journal.issue.journals.index(@journal) + 1}" }
+      format.api  { render_validation_errors(@issue) }
     end
   end
 

@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   resources :journals, :only => [:edit, :update] do
     member do
       get 'diff'
+      post 'rollback'
     end
   end
 
