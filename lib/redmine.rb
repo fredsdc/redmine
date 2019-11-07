@@ -235,6 +235,8 @@ Redmine::MenuManager.map :admin_menu do |menu|
             :html => {:class => 'icon icon-issue'}
   menu.push :issue_statuses, {:controller => 'issue_statuses'}, :caption => :label_issue_status_plural,
             :html => {:class => 'icon icon-issue-edit'}
+  menu.push :workspaces, {:controller => 'workspaces'}, :caption => :label_workspace_plural,
+            :html => {:class => 'icon icon-multiple'}
   menu.push :workflows, {:controller => 'workflows', :action => 'edit'}, :caption => :label_workflow,
             :html => {:class => 'icon icon-workflows'}
   menu.push :custom_fields, {:controller => 'custom_fields'},  :caption => :label_custom_field_plural,

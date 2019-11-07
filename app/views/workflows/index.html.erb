@@ -6,10 +6,14 @@
   <%= stylesheet_link_tag 'divgrid' %>
   <%= javascript_include_tag 'divgrid' %>
 
+  <p><label><%=l(:label_workspace)%>:
+    <%= options_for_workflow_select 'workspace_id[]', Workspace.sorted, @workspaces, :id => 'workspace_id', :class => 'expandable', :onchange=>'refresh_table(this.value);' %>
+  </label></p>
+
   <div style="position: relative; overflow: hidden; white-space: nowrap; border-width: 1px; border-style: solid; border-color: #CCC;">
     <!-- Cell 0 -->
-    <div id="g_bl" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
-      <div class="g_c g_h">&nbsp;</div>
+    <div id="g_bl" class="collapsed" style="position: absolute; top: 0px; left: 0px; z-index: 2;">
+      <div class="g_c g_h" onclick="expand_grid(this.parentNode.parentNode);"><i><span class='tip_exp_off'><%= l(:button_expand_all) %></span><span class='tip_exp_on'><%= l(:button_collapse_all) %></span></i></div>
     </div>
     <!-- Line 0  -->
     <div id="g_fl" class="ibf" style="position: absolute; top: 0px; left: 0px; right: 12px; overflow: hidden; z-index: 1;">
@@ -43,12 +47,23 @@
           <div class="g_c">&nbsp;</div>
           <% even = false %>
           <% @trackers.each do |tracker| %>
-            <% count = @workflow_counts[[tracker.id, role.id]] || 0 %>
             <div class="g_c<%= (even)? " g_e":" g_o" %>" title="<%= "#{tracker} - #{role}" %>">
               <% even = !even %>
-              <%= link_to((count > 0 ? count : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
-                          {:action => 'edit', :role_id => role, :tracker_id => tracker},
-                          :title => l(:button_edit)) %>
+              <% countall = 0 %>
+              <% @workspaces.each do |workspace| %>
+                <% count = @workflow_counts[[tracker.id, role.id, workspace.id]] || 0 %>
+                <% countall += count %>
+                <span class="ws ws<%= workspace.id%>" style="display: none;">
+                  <%= link_to((count > 0 ? count : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
+                              {:action => 'edit', :role_id => role, :tracker_id => tracker, :workspace_id => workspace},
+                              :title => l(:button_edit)) %>
+                </span>
+              <% end %>
+              <span class="ws wsall" style="display: none;">
+                <%= link_to((countall > 0 ? countall : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
+                            {:action => 'edit', :role_id => role, :tracker_id => tracker, :workspace_id => 'all'},
+                            :title => l(:button_edit)) %>
+              </span>
             </div>
           <% end %>
         </div>
@@ -56,6 +71,45 @@
     </div>
   </div>
 
-  <script> g_adjust('g_bl', 'g_fr', 'g_fl', 'g_bd'); </script>
+  <script>
+    function refresh_table(value) {
+      $('.ws').css("display","none");
+      $('.ws' + value).css("display","inline");
+      collapse_grid(document.getElementById('g_bl').parentNode);
+    }
+
+    function expand_grid(grid) {
+      $(grid.children[0]).toggleClass("collapsed");
+      collapse_grid(grid);
+    }
+
+    function collapse_grid(grid) {
+      i = document.getElementById('workspace_id').value;
+      var x = !$(grid.children[0]).hasClass("collapsed");
+      if (x) {
+        $('.tip_exp_on').css("display", "");
+        $('.tip_exp_off').css("display", "none");
+      } else {
+        $('.tip_exp_on').css("display", "none");
+        $('.tip_exp_off').css("display", "");
+      }
+      $(grid).find('div').toggle(true);
+      for (var j = 2; j <= $(grid).find('#g_fr > div').length; j++) {
+        if ($(grid).find('#g_bd > div > div:nth-child(' + j + ') > span:visible > a:not(:has(span))').length == 0) {
+          $(grid).find('#g_bd > div > div:nth-child(' + j + ')').toggle(x);
+          $(grid).find('#g_fr > div:nth-child(' + j + ')').toggle(x);
+        }
+      }
+      for (var j = 2; j <= $(grid).find('#g_fl > div').length; j++) {
+        if ($(grid).find('#g_bd > div:nth-child(' + j + ') > div > span:visible > a:not(:has(span))').length == 0) {
+          $(grid).find('#g_bd > div:nth-child(' + j + ')').toggle(x);
+          $(grid).find('#g_fl > div:nth-child(' + j + ')').toggle(x);
+        }
+      }
+    }
+
+    g_adjust('g_bl', 'g_fr', 'g_fl', 'g_bd');
+    refresh_table(document.getElementById('workspace_id').value);
+  </script>
 
 <% end %>

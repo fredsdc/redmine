@@ -51,18 +51,18 @@ class IssueStatus < ActiveRecord::Base
   end
 
   # Returns an array of all statuses the given role can switch to
-  def new_statuses_allowed_to(roles, tracker, author=false, assignee=false)
-    self.class.new_statuses_allowed(self, roles, tracker, author, assignee)
+  def new_statuses_allowed_to(roles, tracker, workspace_id, author=false, assignee=false)
+    self.class.new_statuses_allowed(self, roles, tracker, workspace_id, author, assignee)
   end
   alias :find_new_statuses_allowed_to :new_statuses_allowed_to
 
-  def self.new_statuses_allowed(status, roles, tracker, author=false, assignee=false)
-    if roles.present? && tracker
+  def self.new_statuses_allowed(status, roles, tracker, workspace_id, author=false, assignee=false)
+    if roles.present? && tracker && workspace_id
       status_id = status.try(:id) || 0
 
       scope = IssueStatus.
         joins(:workflow_transitions_as_new_status).
-        where(:workflows => {:old_status_id => status_id, :role_id => roles.map(&:id), :tracker_id => tracker.id})
+        where(:workflows => {:old_status_id => status_id, :role_id => roles.map(&:id), :tracker_id => tracker.id, :workspace_id => workspace_id})
 
       unless author && assignee
         if author || assignee

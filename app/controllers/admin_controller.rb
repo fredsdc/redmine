@@ -38,6 +38,8 @@ class AdminController < ApplicationController
     @project_pages = Paginator.new @project_count, per_page_option, params['page']
     @projects = scope.limit(@project_pages.per_page).offset(@project_pages.offset).to_a
 
+    @workspaces = Hash[Workspace.pluck(:id, :name)]
+
     render :action => "projects", :layout => false if request.xhr?
   end
 
