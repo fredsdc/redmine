@@ -1195,9 +1195,12 @@ pt-BR:
   error_attachment_extension_not_allowed: Extensão anexada %{extension} não é permitida
   setting_attachment_extensions_allowed: Permitir extensões
   setting_attachment_extensions_denied: Negar extensões
+  setting_enable_watcher_issue_visibility: Habilitar visibilidade para observadores da tarefa
   label_any_open_issues: Quaisquer tarefas abertas
   label_no_open_issues: Sem tarefas abertas
   label_default_values_for_new_users: Valores padrões para novos usuários
+  label_issues_visibility_own_watch: Tarefas observadas, criadas ou atribuídas ao usuário
+  label_issues_visibility_own_watch_contributed: Tarefas editadas, observadas, criadas ou atribuídas ao usuário
   setting_sys_api_key: Chave de API
   setting_lost_password: Perdi minha senha
   mail_subject_security_notification: Notificação de segurança
