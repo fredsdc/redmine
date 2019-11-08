@@ -330,7 +330,7 @@ class Mailer < ActionMailer::Base
     @user = user
     @password = password
     @login_url = url_for(:controller => 'account', :action => 'login')
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
@@ -366,7 +366,7 @@ class Mailer < ActionMailer::Base
   def account_activated(user)
     @user = user
     @login_url = url_for(:controller => 'account', :action => 'login')
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
@@ -380,7 +380,7 @@ class Mailer < ActionMailer::Base
 
   # Builds a mail with the password recovery link.
   def lost_password(user, token, recipient=nil)
-    recipient ||= user.mail
+    recipient ||= user.mails
     @token = token
     @url = url_for(:controller => 'account', :action => 'lost_password', :token => token.value)
     mail :to => recipient,
@@ -419,7 +419,7 @@ class Mailer < ActionMailer::Base
   def register(user, token)
     @token = token
     @url = url_for(:controller => 'account', :action => 'activate', :token => token.value)
-    mail :to => user.mail,
+    mail :to => user.mails,
       :subject => l(:mail_subject_register, Setting.app_title)
   end
 
