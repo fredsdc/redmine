@@ -300,11 +300,11 @@ module ApplicationHelper
   end
 
   def format_version_name(version)
-    if version.project == @project
-      h(version)
-    else
+    # if version.project == @project
+    #   h(version)
+    # else
       h("#{version.project} - #{version}")
-    end
+    # end
   end
 
   def format_changeset_comments(changeset, options={})
