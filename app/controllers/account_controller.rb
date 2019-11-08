@@ -38,7 +38,7 @@ class AccountController < ApplicationController
       authenticate_user
     else
       if User.current.logged?
-        redirect_back_or_default home_url, :referer => true
+        redirect_back_or_default my_page_url, :referer => true
       end
     end
   rescue AuthSourceException => e
@@ -176,11 +176,11 @@ class AccountController < ApplicationController
 
   # Token based account activation
   def activate
-    (redirect_to(home_url); return) unless Setting.self_registration? && params[:token].present?
+    (redirect_to(my_page_url); return) unless Setting.self_registration? && params[:token].present?
     token = Token.find_token('register', params[:token].to_s)
-    (redirect_to(home_url); return) unless token and !token.expired?
+    (redirect_to(my_page_url); return) unless token and !token.expired?
     user = token.user
-    (redirect_to(home_url); return) unless user.registered?
+    (redirect_to(my_page_url); return) unless user.registered?
     user.activate
     if user.save
       token.destroy
@@ -240,7 +240,7 @@ class AccountController < ApplicationController
         user = User.find_or_initialize_by_identity_url(identity_url)
         if user.new_record?
           # Self-registration off
-          (redirect_to(home_url); return) unless Setting.self_registration?
+          (redirect_to(my_page_url); return) unless Setting.self_registration?
           # Create on the fly
           user.login = registration['nickname'] unless registration['nickname'].nil?
           user.mail = registration['email'] unless registration['email'].nil?
@@ -282,7 +282,11 @@ class AccountController < ApplicationController
       set_autologin_cookie(user)
     end
     call_hook(:controller_account_success_authentication_after, {:user => user })
-    redirect_back_or_default my_page_path
+    if back_url == home_url
+      redirect_to my_page_path
+    else
+      redirect_back_or_default my_page_path
+    end
   end
 
   def set_autologin_cookie(user)

@@ -84,6 +84,7 @@ module Redmine
     # Returns the default layout for My Page
     def self.default_layout
       {
+        'top' => ['issueswatched'],
         'left' => ['issuesassignedtome'],
         'right' => ['issuesreportedbyme']
       }
