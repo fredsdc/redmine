@@ -35,4 +35,14 @@ module MembersHelper
 
     s + content_tag('span', links, :class => 'pagination')
   end
+
+  def role_color_and_hide(role)
+    color_and_hide = ""
+    if ! role.assignable
+      color_and_hide += " style=color:darkblue"
+    elsif ! role.workflow_rules.where(:workspace_id => @project.workspace_id).any?
+      color_and_hide += " class=unused style=color:darkred"
+    end
+    color_and_hide
+  end
 end

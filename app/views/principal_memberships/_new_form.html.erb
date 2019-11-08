@@ -15,7 +15,7 @@
   <legend><%= toggle_checkboxes_link('.roles-selection input') %><%= l(:label_role_plural) %></legend>
   <div class="roles-selection">
   <% @roles.each do |role| %>
-    <label>
+    <label<%= role_color_and_hide(role) %>>
       <%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %>
       <%= role %>
     </label>

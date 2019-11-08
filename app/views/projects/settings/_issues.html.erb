@@ -2,9 +2,9 @@
   <%= hidden_field_tag 'tab', 'issues' %>
 
   <% unless @trackers.empty? %>
-  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]') %><%= l(:label_tracker_plural)%></legend>
+  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]') %><%= l(:label_tracker_plural)%> (<a onclick="ws='.ws-' + $('#project_workspace_id').val(); $('#project_trackers > label' + ws).show(); $('#project_trackers > label:not(' + ws + ')').toggle();"><%= l(:label_all) %></a>)</legend>
   <% @trackers.each do |tracker| %>
-    <label class="floating">
+    <label class="floating <%= used_workspaces_by_tracker(tracker).map{|t| "ws-" + t.to_s}.join(" ") %>"<% unless used_workspaces_by_tracker(tracker).include?(@project.workspace_id) %>style="display: none;"<% end %>>
       <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.to_a.include?(tracker), :id => nil %>
       <%= tracker %>
     </label>

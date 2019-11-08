@@ -103,6 +103,10 @@ module ProjectsHelper
     options_for_select(grouped, project.workspace_id)
   end
 
+  def used_workspaces_by_tracker(tracker)
+    tracker.workflow_rules.map(&:workspace_id).uniq
+  end
+
   def format_version_sharing(sharing)
     sharing = 'none' unless Version::VERSION_SHARINGS.include?(sharing)
     l("label_version_sharing_#{sharing}")

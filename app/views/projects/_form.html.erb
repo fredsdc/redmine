@@ -20,7 +20,7 @@
 <% end %>
 
 <% if @project.safe_attribute? 'workspace_id' %>
-<p><%= f.select :workspace_id, project_workspace_options(@project) %></p>
+<p><%= f.select :workspace_id, project_workspace_options(@project), {}, :onchange => "$('#project_trackers > label').hide(); $('#project_trackers > label.ws-' + this.value).show();" %></p>
 <% end %>
 
 <% if @project.safe_attribute? 'inherit_members' %>

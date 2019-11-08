@@ -61,4 +61,14 @@ module PrincipalMembershipsHelper
       user_membership_path(principal, membership, *args)
     end
   end
+
+  def role_color_and_hide(role, project = nil)
+    color_and_hide = ""
+    if ! role.assignable
+      color_and_hide += " style=color:darkblue"
+    elsif ! project.nil? && ! role.workflow_rules.where(:workspace_id => project.workspace_id).any?
+      color_and_hide += " class=unused style=color:darkred"
+    end
+    color_and_hide
+  end
 end
