@@ -46,7 +46,8 @@
 
 <div class="splitcontentright">
 <% if @projects.any? %>
-<fieldset class="box" id="tracker_project_ids"><legend><%= toggle_checkboxes_link("#tracker_project_ids input[type=checkbox]") %><%= l(:label_project_plural) %></legend>
+<fieldset class="box" id="tracker_project_ids"><legend><%= toggle_checkboxes_link("#tracker_project_ids input[type=checkbox]:visible") %><a class="status_1" onclick='cycleVisibility(this, [["<%= l(:label_all) %>","<%= l(:project_status_active_plural) %>","<%= l(:project_status_closed_plural) %>","<%= l(:project_status_archived_plural) %>"],["status_0", "status_1", "status_5", "status_9"]]);'><%= l(:label_project_plural) %> (<span><%= l(:project_status_active_plural)
+ %></span>)</a></legend>
 <% project_ids = @tracker.project_ids.to_a %>
 <%= render_project_nested_lists(@projects) do |p|
   content_tag('label', check_box_tag('tracker[project_ids][]', p.id, project_ids.include?(p.id), :id => nil) + ' ' + h(p))

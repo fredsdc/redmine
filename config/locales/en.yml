@@ -1109,6 +1109,9 @@ en:
   project_status_active: active
   project_status_closed: closed
   project_status_archived: archived
+  project_status_active_plural: active
+  project_status_closed_plural: closed
+  project_status_archived_plural: archived
 
   version_status_open: open
   version_status_locked: locked
