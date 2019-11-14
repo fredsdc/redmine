@@ -4,7 +4,7 @@
 
 <%= textilizable(issue, :description, :only_path => false) %>
 
-<% if issue.attachments.any? %>
+<% if issue.attachments.any? && @att %>
   <fieldset class="attachments"><legend><%= l(:label_attachment_plural) %></legend>
   <% issue.attachments.each do |attachment| %>
     <%= link_to_attachment attachment, :download => true, :only_path => false %>

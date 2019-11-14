@@ -29,7 +29,7 @@ api.array :issues, api_meta(:total_count => @issue_count, :offset => @offset, :l
       api.array :attachments do
         issue.attachments.each do |attachment|
           render_api_attachment(attachment, api)
-        end
+        end if issue.attachments_visible?
       end if include_in_api_response?('attachments')
 
       api.array :relations do

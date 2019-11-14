@@ -86,6 +86,7 @@ class IssuesController < ApplicationController
     @journals = @issue.visible_journals_with_index
     @changesets = @issue.changesets.visible.preload(:repository, :user).to_a
     @relations = @issue.relations.select {|r| r.other_issue(@issue) && r.other_issue(@issue).visible? }
+    @attachments = @issue.attachments_visible?(User.current) ? @issue.attachments : []
 
     if User.current.wants_comments_in_reverse_order?
       @journals.reverse!
@@ -126,7 +127,9 @@ class IssuesController < ApplicationController
       raise ::Unauthorized
     end
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
-    @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    if @issue.attachments_addable?(User.current)
+      @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    end
     if @issue.save
       call_hook(:controller_issues_new_after_save, { :params => params, :issue => @issue})
       respond_to do |format|
@@ -163,7 +166,9 @@ class IssuesController < ApplicationController
 
   def update
     return unless update_issue_from_params
-    @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    if @issue.attachments_addable?(User.current)
+      @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
+    end
     saved = false
     begin
       saved = save_issue_with_child_records
@@ -264,7 +269,7 @@ class IssuesController < ApplicationController
     @versions = target_projects.map {|p| p.shared_versions.open}.reduce(:&)
     @categories = target_projects.map {|p| p.issue_categories}.reduce(:&)
     if @copy
-      @attachments_present = @issues.detect {|i| i.attachments.any?}.present?
+      @attachments_present = @issues.detect {|i| i.attachments.any? && i.attachments_visible?(User.current)}.present?
       @subtasks_present = @issues.detect {|i| !i.leaf?}.present?
       @watchers_present = User.current.allowed_to?(:add_issue_watchers, @projects) && Watcher.where(:watchable_type => 'Issue', :watchable_id => @issues.map(&:id)).exists?
     end
@@ -327,6 +332,7 @@ class IssuesController < ApplicationController
       end
       journal = issue.init_journal(User.current, params[:notes])
       issue.safe_attributes = attributes
+      issue.attachments = [] unless issue.attachments_addable?(User.current) if @copy
       call_hook(:controller_issues_bulk_edit_before_save, { :params => params, :issue => issue })
       if issue.save
         saved_issues << issue
@@ -545,6 +551,7 @@ class IssuesController < ApplicationController
 
     @priorities = IssuePriority.active
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
+    @issue.attachments = [] unless @issue.attachments_addable?(User.current)
   end
 
   # Saves @issue and a time_entry from the parameters

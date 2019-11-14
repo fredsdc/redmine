@@ -40,10 +40,10 @@
       </fieldset>
 
       <fieldset><legend><%= l(:label_attachment_plural) %></legend>
-        <% if @issue.attachments.any? && @issue.safe_attribute?('deleted_attachment_ids') %>
+        <% if @attachments.any? && @issue.safe_attribute?('deleted_attachment_ids') %>
         <div class="contextual"><%= link_to l(:label_edit_attachments), '#', :onclick => "$('#existing-attachments').toggle(); return false;" %></div>
         <div id="existing-attachments" style="<%= @issue.deleted_attachment_ids.blank? ? 'display:none;' : '' %>">
-          <% @issue.attachments.each do |attachment| %>
+          <% @attachments.each do |attachment| %>
           <span class="existing-attachment">
             <%= text_field_tag '', attachment.filename, :class => "icon icon-attachment filename", :disabled => true %>
             <label>
@@ -76,4 +76,3 @@
     <%= hidden_field_tag 'issue_count', @issue_count if @issue_count %>
 
 <% end %>
-

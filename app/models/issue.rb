@@ -38,7 +38,10 @@ class Issue < ActiveRecord::Base
   has_many :relations_from, :class_name => 'IssueRelation', :foreign_key => 'issue_from_id', :dependent => :delete_all
   has_many :relations_to, :class_name => 'IssueRelation', :foreign_key => 'issue_to_id', :dependent => :delete_all
 
-  acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed
+  acts_as_attachable :after_add => :attachment_added, :after_remove => :attachment_removed,
+                     :view_permission => :view_attachments, :edit_permission => :edit_attachments,
+                     :delete_permission => :delete_attachments
+
   acts_as_customizable
   acts_as_watchable
   acts_as_searchable :columns => ['subject', "#{table_name}.description"],
@@ -192,8 +195,23 @@ class Issue < ActiveRecord::Base
   end
 
   # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
+  def attachments_visible?(user=User.current)
+    user_tracker_permission?(user, :view_attachments)
+  end
+
+  # Returns true if user or current user is allowed to add the attachment to the issue
+  def attachments_addable?(user=User.current)
+    user_tracker_permission?(user, :add_attachments)
+  end
+
+  # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
   def attachments_editable?(user=User.current)
-    attributes_editable?(user)
+    user_tracker_permission?(user, :edit_attachments)
+  end
+
+  # Overrides Redmine::Acts::Attachable::InstanceMethods#attachments_editable?
+  def attachments_deletable?(user=User.current)
+    user_tracker_permission?(user, :delete_attachments)
   end
 
   # Returns true if user or current user is allowed to add notes to the issue
@@ -283,7 +301,7 @@ class Issue < ActiveRecord::Base
       self.status = issue.status
     end
     self.author = User.current
-    unless options[:attachments] == false
+    if options[:attachments] == true && issue.attachments_visible?(user=User.current)
       self.attachments = issue.attachments.map do |attachement|
         attachement.copy(:container => self)
       end
@@ -1673,6 +1691,7 @@ class Issue < ActiveRecord::Base
         copy.parent_issue_id = copied_issue_ids[child.parent_id]
         copy.fixed_version_id = nil unless child.fixed_version.present? && child.fixed_version.status == 'open'
         copy.assigned_to = nil unless child.assigned_to_id.present? && child.assigned_to.status == User::STATUS_ACTIVE
+        copy.attachments = [] unless copy.attachments_addable?(User.current)
         unless copy.save
           logger.error "Could not copy subtask ##{child.id} while copying ##{@copied_from.id} to ##{id} due to validation errors: #{copy.errors.full_messages.join(', ')}" if logger
           next
