@@ -578,7 +578,7 @@ div.wiki a:target + h1, div.wiki a:target + h2, div.wiki a:target + h3, div.wiki
 
 .wiki-update-info {text-align:right; color:#666; font-size:90%;}
 
-form .attributes select { width: 60%; }
+form .attributes select { width: 100%; }
 form .attributes select + a.icon-only { vertical-align: middle; margin-left: 4px; }
 input#issue_subject, input#document_title { width: 99%; }
 select#issue_done_ratio { width: 95px; }
