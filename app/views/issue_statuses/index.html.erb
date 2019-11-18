@@ -12,9 +12,11 @@
   <th><%=l(:field_done_ratio)%></th>
   <% end %>
   <th><%=l(:field_is_closed)%></th>
+  <th><%=l(:field_in_workflows)%></th>
   <th></th>
   </tr></thead>
   <tbody>
+  <%  flows = issue_status_transition_map %>
 <% for status in @issue_statuses %>
   <tr>
   <td class="name"><%= link_to status.name, edit_issue_status_path(status) %></td>
@@ -22,6 +24,7 @@
   <td><%= status.default_done_ratio %></td>
   <% end %>
   <td><%= checked_image status.is_closed? %></td>
+  <td><%= flows[status.id].empty? ? '' : flows[status.id].count %></td>
   <td class="buttons">
     <%= reorder_handle(status) %>
     <%= delete_link issue_status_path(status) %>

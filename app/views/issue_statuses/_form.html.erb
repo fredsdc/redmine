@@ -7,5 +7,21 @@
 <% end %>
 <p><%= f.check_box :is_closed %></p>
 
+<% unless @issue_status.new_record? %>
+  <% flows = issue_status_transition_map(params[:id]).values.first %>
+  <% if flows.count > 0 %>
+    <% workspaces = Workspace.pluck(:id, :name).to_h %>
+    <% roles = Role.pluck(:id, :name).to_h %>
+    <% trackers = Tracker.pluck(:id, :name).to_h %>
+    <p><label><%= l(:field_in_workflows) %></label>
+    <i><span style="width: 160px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_tracker) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_workspace) %></span></i><br>
+    <% flows.each do |x| %>
+      <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{roles[x[0]]}"'</span><span style="width: 160px; display: inline-block;">'"#{trackers[x[1]]}"'</span><span style="width: 160px; display: inline-block;">'"#{workspaces[x[2]]}"'</span>'), workflows_edit_path(:role_id => x[0], :tracker_id => x[1], :workspace_id => x[2]) %>
+      <br>
+    <% end %>
+    </p>
+  <% end %>
+<% end %>
+
 <%= call_hook(:view_issue_statuses_form, :issue_status => @issue_status) %>
 </div>
