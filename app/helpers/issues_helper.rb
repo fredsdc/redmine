@@ -91,6 +91,14 @@ module IssuesHelper
 
   def render_descendants_tree(issue)
     s = '<table class="list issues odd-even">'
+    s << content_tag('tr',
+      content_tag('td', l(:field_issue), :class => 'subject summary') +
+      content_tag('td', l(:field_status), :class => 'summary') +
+      content_tag('td', l(:field_assigned_to), :class => 'summary') +
+      content_tag('td', l(:field_start_date), :class => 'summary') +
+      content_tag('td', l(:field_due_date), :class => 'summary') +
+      content_tag('td', l(:field_done_ratio), :class => 'summary') +
+      content_tag('td', ''))
     issue_list(issue.descendants.visible.preload(:status, :priority, :tracker, :assigned_to).sort_by(&:lft)) do |child, level|
       css = "issue issue-#{child.id} hascontextmenu #{child.css_classes}"
       css << " idnt idnt-#{level}" if level > 0
@@ -99,6 +107,8 @@ module IssuesHelper
              content_tag('td', link_to_issue(child, :project => (issue.project_id != child.project_id)), :class => 'subject', :style => 'width: 50%') +
              content_tag('td', h(child.status), :class => 'status') +
              content_tag('td', link_to_user(child.assigned_to), :class => 'assigned_to') +
+             content_tag('td', format_date(child.start_date)) +
+             content_tag('td', format_date(child.due_date)) +
              content_tag('td', child.disabled_core_fields.include?('done_ratio') ? '' : progress_bar(child.done_ratio), :class=> 'done_ratio') +
              content_tag('td', link_to_context_menu, :class => 'buttons'),
              :class => css)
@@ -112,6 +122,14 @@ module IssuesHelper
     manage_relations = User.current.allowed_to?(:manage_issue_relations, issue.project)
 
     s = ''.html_safe
+    s << content_tag('tr',
+      content_tag('td', l(:field_issue), :class => 'subject summary') +
+      content_tag('td', l(:field_status), :class => 'summary') +
+      content_tag('td', l(:field_assigned_to), :class => 'summary') +
+      content_tag('td', l(:field_start_date), :class => 'summary') +
+      content_tag('td', l(:field_due_date), :class => 'summary') +
+      content_tag('td', l(:field_done_ratio), :class => 'summary') +
+      content_tag('td', ''))
     relations.each do |relation|
       other_issue = relation.other_issue(issue)
       css = "issue hascontextmenu #{other_issue.css_classes}"
@@ -129,6 +147,7 @@ module IssuesHelper
              content_tag('td', check_box_tag("ids[]", other_issue.id, false, :id => nil), :class => 'checkbox') +
              content_tag('td', relation.to_s(@issue) {|other| link_to_issue(other, :project => Setting.cross_project_issue_relations?)}.html_safe, :class => 'subject', :style => 'width: 50%') +
              content_tag('td', other_issue.status, :class => 'status') +
+             content_tag('td', link_to_user(other_issue.assigned_to), :class => 'assigned_to') +
              content_tag('td', format_date(other_issue.start_date), :class => 'start_date') +
              content_tag('td', format_date(other_issue.due_date), :class => 'due_date') +
              content_tag('td', other_issue.disabled_core_fields.include?('done_ratio') ? '' : progress_bar(other_issue.done_ratio), :class=> 'done_ratio') +
