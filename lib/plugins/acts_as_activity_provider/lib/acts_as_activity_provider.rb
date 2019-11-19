@@ -55,9 +55,8 @@ module Redmine
 
             scope = (provider_options[:scope] || self)
 
-            if from && to
-              scope = scope.where("#{provider_options[:timestamp]} BETWEEN ? AND ?", from, to)
-            end
+            scope = scope.where("#{provider_options[:timestamp]} >= ?", from) if from
+            scope = scope.where("#{provider_options[:timestamp]} <= ?", to) if to
 
             if options[:author]
               return [] if provider_options[:author_key].nil?
@@ -76,6 +75,14 @@ module Redmine
             else
               ActiveSupport::Deprecation.warn "acts_as_activity_provider with implicit :permission option is deprecated. Add a visible scope to the #{self.name} model or use explicit :permission option."
               scope = scope.where(Project.allowed_to_condition(user, "view_#{self.name.underscore.pluralize}".to_sym, options))
+            end
+
+            if options[:next_by_project]
+              scope = scope.group("projects.id").minimum(provider_options[:timestamp])
+            end
+
+            if options[:last_by_project]
+              scope = scope.group("projects.id").maximum(provider_options[:timestamp])
             end
 
             scope.to_a

@@ -1,25 +1,12 @@
 <h2><%= @author.nil? ? l(:label_activity) : l(:label_user_activity, link_to_user(@author)).html_safe %></h2>
 
-<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_to - @days), :end => format_date(@date_to-1)) %></p>
+<p class="subtitle"><%= l(:label_date_from_to, :start => format_date(@date_from), :end => format_date(@date_to-1)) unless @events_by_day.empty? %></p>
 
+<%= render :partial => 'activities/pagination' %>
 <%= render :partial => 'activities/activities', :locals => {:events_by_day => @events_by_day} %>
 <%= content_tag('p', l(:label_no_data), :class => 'nodata') if @events_by_day.empty? %>
+<%= render :partial => 'activities/pagination' %>
 
-<span class="pagination">
-  <ul class="pages">
-    <li class="previous page">
-<%= link_to("\xc2\xab " + l(:label_previous),
-                   {:params => request.query_parameters.merge(:from => @date_to - @days - 1)},
-                   :title => l(:label_date_from_to, :start => format_date(@date_to - 2*@days), :end => format_date(@date_to - @days - 1)),
-                   :accesskey => accesskey(:previous)) %>
-    </li><% unless @date_to > User.current.today %><li class="next page">
-<%= link_to(l(:label_next) + " \xc2\xbb",
-                   {:params => request.query_parameters.merge(:from => @date_to + @days - 1)},
-                   :title => l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to + @days - 1)),
-                   :accesskey => accesskey(:next)) %><% end %>
-    </li>
-  </ul>
-</span>
 &nbsp;
 <% other_formats_links do |f| %>
   <%= f.link_to_with_query_parameters 'Atom', 'from' => nil, :key => User.current.rss_key %>
