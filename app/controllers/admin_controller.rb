@@ -41,6 +41,8 @@ class AdminController < ApplicationController
     @projects = scope.limit(@project_pages.per_page).offset(@project_pages.offset).to_a
 
     @workspaces = Hash[Workspace.pluck(:id, :name)]
+    @last_activity = Redmine::Activity::Fetcher.new(User.current).
+      events(nil, nil, :last_by_project => true).to_h
 
     render :action => "projects", :layout => false if request.xhr?
   end

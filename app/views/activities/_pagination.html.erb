@@ -1,0 +1,25 @@
+<span class="pagination">
+  <ul class="pages">
+    <li class="previous page">
+        <% content = "\xc2\xab " + l(:label_previous) %>
+        <% if @activity_before.nil? %>
+          <%= content_tag(:span, content) %>
+        <% else %>
+          <%= link_to(content,
+              {:params => request.query_parameters.merge(:from => @date_from - 1)},
+              :title => l(:label_date_from_to, :start => format_date(@date_from - @days), :end => format_date(@date_from - 1)),
+              :accesskey => accesskey(:previous)) %>
+        <% end %>
+    </li><li class="next page">
+        <% content = l(:label_next) + " \xc2\xbb" %>
+        <% if @date_to > User.current.today %>
+          <%= content_tag(:span, content) %>
+        <% else %>
+          <%= link_to(content,
+              {:params => request.query_parameters.merge(:from => @date_to + @days - 1)},
+              :title => l(:label_date_from_to, :start => format_date(@date_to), :end => format_date(@date_to + @days - 1)),
+              :accesskey => accesskey(:next)) %>
+        <% end %>
+    </li>
+  </ul>
+</span>
