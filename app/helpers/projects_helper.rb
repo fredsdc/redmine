@@ -27,7 +27,8 @@ module ProjectsHelper
             {:name => 'categories', :action => :manage_categories, :partial => 'projects/settings/issue_categories', :label => :label_issue_category_plural},
             {:name => 'repositories', :action => :manage_repository, :partial => 'projects/settings/repositories', :label => :label_repository_plural},
             {:name => 'boards', :action => :manage_boards, :partial => 'projects/settings/boards', :label => :label_board_plural},
-            {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :label_time_tracking}
+            {:name => 'activities', :action => :manage_project_activities, :partial => 'projects/settings/activities', :label => :label_time_tracking},
+            {:name => 'groupissuescustomfields', :action => :edit_project, :partial => 'projects/settings/groupissuescustomfields', :label => :grouped_cf}
             ]
     tabs.
       select {|tab| User.current.allowed_to?(tab[:action], @project)}.

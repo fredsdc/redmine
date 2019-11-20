@@ -106,6 +106,7 @@ Rails.application.routes.draw do
 
     member do
       get 'settings(/:tab)', :action => 'settings', :as => 'settings'
+      post 'groupissuescustomfields'
       post 'archive'
       post 'unarchive'
       post 'close'

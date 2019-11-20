@@ -475,9 +475,10 @@ div.issue p.author {margin-top:0.5em;}
 div.issue span.private, div.journal span.private { position:relative; bottom: 2px; text-transform: uppercase; background: #d22; color: #fff; font-weight:bold; padding: 0px 2px 0px 2px; font-size: 60%; margin-right: 2px; border-radius: 2px;}
 div.issue .next-prev-links {color:#999;}
 div.issue .attributes {margin-top: 2em;}
-div.issue .attributes .attribute {padding-left:180px; clear:left; min-height: 1.8em;}
-div.issue .attributes .attribute .label {width: 170px; margin-left:-180px; font-weight:bold; float:left;  overflow:hidden; text-overflow: ellipsis;}
+div.issue .attributes .attribute {padding-left: 225px; clear:left; min-height: 1.8em;}
+div.issue .attributes .attribute .label {width: 215px; margin-left:-225px; font-weight:bold; float:left; overflow:hidden; text-overflow: ellipsis;}
 div.issue .attribute .value {overflow:auto; text-overflow: ellipsis;}
+div.issue .attribute .value p {margin: 0 0 0.8em 0;}
 div.issue.overdue .due-date .value { color: #c22; }
 
 #issue_tree table.issues, #relations table.issues { border: 0; }
@@ -1561,4 +1562,49 @@ img {
   position: absolute;
   max-height: 100%;
   max-width: 100%;
+}
+
+/* Custom Field Groups */
+.sortable_groups {
+  background: #eee;
+  border: 1px solid #888;
+  width: 445px;
+  min-height: 30px;
+  margin: 5px;
+  padding: 5px;
+}
+.sortable_groups div {
+  background: #ddf;
+  border: 1px solid #888;
+  min-height: 30px;
+  margin: 5px;
+  padding: 5px;
+}
+.sortable_items {
+  background: #eee;
+  border: 1px solid #888;
+  width: 400px;
+  min-height: 30px;
+  margin: 5px;
+  padding: 5px;
+}
+.sortable_items li {
+  background: #ffffff;
+  border: 1px solid #888;
+  margin: 5px;
+  padding: 5px;
+  list-style-type: none;
+  font-size: 1.2em;
+}
+.not_a_group {
+  padding: 5px 27px;
+}
+.ui-sortable-handle:before {
+  content:url('/images/reorder.png');
+  margin-right: 5px;
+}
+.ui-sortable-placeholder {
+  background: #8888ff;
+  border: 1px solid #888;
+  visibility: visible;
 }
