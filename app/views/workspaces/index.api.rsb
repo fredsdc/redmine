@@ -1,9 +1,9 @@
 api.array :workspaces do
   @workspaces.each do |workspace|
     api.workspace do
-      api.id status.id
-      api.name status.name
-      api.description status.description
+      api.id workspace.id
+      api.name workspace.name
+      api.description workspace.description
     end
   end
 end

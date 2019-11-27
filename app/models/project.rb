@@ -453,7 +453,8 @@ class Project < ActiveRecord::Base
 
   def rolled_up_statuses
     issue_status_ids = WorkflowTransition.
-      where(:tracker_id => rolled_up_trackers.map(&:id)).
+      where(:tracker_id => rolled_up_trackers.map(&:id),
+            :workspace_id => self.workspace_id).
       distinct.
       pluck(:old_status_id, :new_status_id).
       flatten.
