@@ -68,7 +68,7 @@ api.issue do
             end
           end
         end
-      end
+      end unless journal.rolled_back?
     end
   end if include_in_api_response?('journals')
 

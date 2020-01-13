@@ -53,7 +53,7 @@ api.array :issues, api_meta(:total_count => @issue_count, :offset => @offset, :l
                 end
               end
             end
-          end
+          end unless journal.rolled_back?
         end
       end if include_in_api_response?('journals')
     end
