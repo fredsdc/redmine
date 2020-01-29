@@ -722,6 +722,7 @@ en:
   label_more_than_ago: more than days ago
   label_ago: days ago
   label_contains: contains
+  label_from: from
   label_not_contains: doesn't contain
   label_any_issues_in_project: any issues in project
   label_any_issues_not_in_project: any issues not in project

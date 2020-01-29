@@ -200,6 +200,7 @@ class Query < ActiveRecord::Base
     "><t-"=> :label_in_the_past_days,
     "t-"  => :label_ago,
     "~"   => :label_contains,
+    "~="  => :label_from,
     "!~"  => :label_not_contains,
     "=p"  => :label_any_issues_in_project,
     "=!p" => :label_any_issues_not_in_project,
@@ -221,7 +222,7 @@ class Query < ActiveRecord::Base
     :integer => [ "=", ">=", "<=", "><", "!*", "*" ],
     :float => [ "=", ">=", "<=", "><", "!*", "*" ],
     :relation => ["=", "=p", "=!p", "!p", "*o", "!o", "!*", "*"],
-    :tree => ["=", "~", "!*", "*"]
+    :tree => ["=", "~", "~=", "!*", "*"]
   }
 
   class_attribute :available_columns
