@@ -21,7 +21,7 @@ module WorkflowsHelper
   def options_for_workflow_select(name, objects, selected, options={})
     option_tags = ''.html_safe
     multiple = false
-    if selected 
+    if selected
       if selected.size == objects.size
         selected = 'all'
       else
@@ -37,7 +37,7 @@ module WorkflowsHelper
     if multiple
       all_tag_options.merge!(:style => "display:none;")
     end
-    option_tags << content_tag('option', l(:label_all), all_tag_options)
+    # option_tags << content_tag('option', l(:label_all), all_tag_options)
     option_tags << options_from_collection_for_select(objects, "id", "name", selected)
     select_tag name, option_tags, {:multiple => multiple}.merge(options)
   end
@@ -51,7 +51,7 @@ module WorkflowsHelper
     options = [["", ""], [l(:label_readonly), "readonly"]]
     options << [l(:label_required), "required"] unless field_required?(field)
     html_options = {}
-    
+
     if perm = permissions[status.id][name]
       if perm.uniq.size > 1 || perm.size < @roles.size * @trackers.size * @workspaces.size
         options << [l(:label_no_change_option), "no_change"]
@@ -76,10 +76,10 @@ module WorkflowsHelper
 
   def transition_tag(workflows, old_status, new_status, name)
     w = workflows.select {|w| w.old_status == old_status && w.new_status == new_status}.size
-    
+
     tag_name = "transitions[#{ old_status.try(:id) || 0 }][#{new_status.id}][#{name}]"
     if w == 0 || w == @roles.size * @trackers.size * @workspaces.size
-      
+
       hidden_field_tag(tag_name, "0", :id => nil) +
       check_box_tag(tag_name, "1", w != 0,
             :class => "old-status-#{old_status.try(:id) || 0} new-status-#{new_status.id}")
