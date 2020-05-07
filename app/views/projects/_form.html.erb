@@ -53,7 +53,7 @@
 <fieldset class="box tabular" id="project_trackers"><legend><%=l(:label_tracker_plural)%> (<a onclick="$('#project_trackers').toggleClass('showall'); displaytrackers(document.getElementById('project_workspace_id'));"><%= l(:label_all) %></a>)</legend>
 <% @trackers.each do |tracker| %>
     <label class="floating <%= used_workspaces_by_tracker(tracker.id) %>">
-    <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.to_a.include?(tracker), :id => nil %>
+    <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.to_a.include?(tracker), :id => nil, :onchange => 'displaycfs();' %>
     <%= tracker %>
     </label>
 <% end %>
@@ -121,4 +121,9 @@ $(document).ready(function() {
     });
   };
   displaytrackers(document.getElementById('project_workspace_id'));
+  function displaycfs() {
+    $('#project_issue_custom_fields label span').css('color', '');
+    $('#project_trackers label input:checked').each(function(){$('.tr-' + this.value).css('color','blue');});
+  };
+  displaycfs();
 </script>
