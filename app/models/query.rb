@@ -935,7 +935,7 @@ class Query < ActiveRecord::Base
 
   # Adds filters for the given custom fields scope
   def add_custom_fields_filters(scope, assoc=nil)
-    scope.visible.where(:is_filter => true).sorted.each do |field|
+    scope.visible.where(:is_filter => true).reorder("name").each do |field|
       add_custom_field_filter(field, assoc)
     end
   end
