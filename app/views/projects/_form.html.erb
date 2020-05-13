@@ -62,7 +62,7 @@
 <% end %>
 
 <% unless @issue_custom_fields.empty? %>
-<fieldset class="box tabular" id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%></legend>
+<fieldset class="box tabular" id="project_issue_custom_fields"><legend><%=l(:label_custom_field_plural)%> (<a onclick="$('#project_issue_custom_fields').toggleClass('showall'); displaycfs();"><%= l(:label_all) %></a>)</legend>
 <% @issue_custom_fields.each do |custom_field| %>
     <label class="floating">
   <%= check_box_tag 'project[issue_custom_field_ids][]', custom_field.id, (@project.all_issue_custom_fields.include? custom_field),
@@ -122,8 +122,14 @@ $(document).ready(function() {
   };
   displaytrackers(document.getElementById('project_workspace_id'));
   function displaycfs() {
+    if ($('#project_issue_custom_fields').hasClass('showall')) {
+      $('#project_issue_custom_fields label').show();
+    } else {
+      $('#project_issue_custom_fields label').hide();
+    }
     $('#project_issue_custom_fields label span').css('color', '');
-    $('#project_trackers label input:checked').each(function(){$('.tr-' + this.value).css('color','blue');});
+    $('#project_issue_custom_fields label input:checked').parent().show();
+    $('#project_trackers label input:checked').each(function(){$('.tr-' + this.value).css('color','blue').parent().show();});
   };
   displaycfs();
 </script>
