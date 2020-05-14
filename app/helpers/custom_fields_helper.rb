@@ -90,8 +90,8 @@ module CustomFieldsHelper
   def custom_field_name_tag(custom_field)
     title = custom_field.description.presence
     css = title ? "field-description" : nil
-    cfs = custom_field.trackers.map{|x| "tr-" + x.id.to_s}.join(" ")
-    css = css.nil? ? cfs : css + " " + cfs unless cfs.empty?
+    css = ([css].reject(&:blank?) + custom_field.trackers.map{|x| "tr-" + x.id.to_s}).
+      join(" ") if custom_field.type == "IssueCustomField"
     content_tag 'span', custom_field.name, :title => title, :class => css
   end
 
