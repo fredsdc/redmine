@@ -274,7 +274,7 @@ module ApplicationHelper
           end
         end
         classes = (ancestors.empty? ? 'root' : 'child')
-        s << "<li class='#{classes}'><div class='#{classes} status_#{project.status}'>"
+        s << "<li class='#{classes}'><div class='#{classes} status_0 status_#{project.status}' style='#{'display: none;' unless project.status == 1}'>"
         s << h(block_given? ? capture(project, &block) : project.name)
         s << "</div>\n"
         ancestors << project

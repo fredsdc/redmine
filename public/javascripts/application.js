@@ -712,6 +712,13 @@ function expand_div(elem, to_check, to_disable){
   }
 }
 
+function cycleVisibility(element, statuses) {
+  $(element).closest('fieldset').find('div').hide();
+  $(element).attr('class', statuses[1][(statuses[1].indexOf($(element).attr('class')) + 1) % statuses[1].length]);
+  $(element).closest('fieldset').find('div.' + $(element).attr('class')).show();
+  $(element).find('span').text(statuses[0][(statuses[1].indexOf($(element).attr('class')))]);
+}
+
 $(document).ready(setupAjaxIndicator);
 $(document).ready(hideOnLoad);
 $(document).ready(addFormObserversForDoubleSubmit);
