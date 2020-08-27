@@ -165,8 +165,10 @@ function buildFilterRow(field, operator, values) {
   case "list_subprojects":
     tr.find('td.values').append(
       '<span style="display:none;"><select class="value" id="values_'+fieldId+'_1" name="v['+field+'][]"></select>' +
-      ' <span class="toggle-multiselect">&nbsp;</span></span>'
+      ' <span class="toggle-multiselect">&nbsp;</span></span>' +
+      ' <span style="display:none;"><input type="text" name="v['+field+'][]" id="values_'+fieldId+'" size="30" class="value" /></span>'
     );
+    $('#values_'+fieldId).val(values[0]);
     select = tr.find('td.values select');
     if (values.length > 1) { select.attr('multiple', true); }
     for (i = 0; i < filterValues.length; i++) {
@@ -292,6 +294,8 @@ function toggleOperator(field) {
     case "t-":
       enableValues(field, [2]);
       break;
+    case "~~":
+    case "!~~":
     case "=p":
     case "=!p":
     case "!p":

@@ -200,8 +200,10 @@ class Query < ActiveRecord::Base
     "><t-"=> :label_in_the_past_days,
     "t-"  => :label_ago,
     "~"   => :label_contains,
+    "~~"  => :label_contains,
     "~="  => :label_from,
     "!~"  => :label_not_contains,
+    "!~~" => :label_not_contains,
     "=p"  => :label_any_issues_in_project,
     "=!p" => :label_any_issues_not_in_project,
     "!p"  => :label_no_issues_in_project,
@@ -213,7 +215,7 @@ class Query < ActiveRecord::Base
   self.operators_by_filter_type = {
     :list => [ "=", "!" ],
     :list_status => [ "o", "=", "!", "c", "*" ],
-    :list_optional => [ "=", "!", "!*", "*" ],
+    :list_optional => [ "=", "!", "~~", "!~~", "!*", "*" ],
     :list_subprojects => [ "*", "!*", "=" ],
     :date => [ "=", ">=", "<=", "><", "<t+", ">t+", "><t+", "t+", "t", "ld", "w", "lw", "l2w", "m", "lm", "y", ">t-", "<t-", "><t-", "t-", "!*", "*" ],
     :date_past => [ "=", ">=", "<=", "><", ">t-", "<t-", "><t-", "t-", "t", "ld", "w", "lw", "l2w", "m", "lm", "y", "!*", "*" ],
@@ -895,9 +897,9 @@ class Query < ActiveRecord::Base
       # = this year
       date = Date.today
       sql = date_clause(db_table, db_field, date.beginning_of_year, date.end_of_year, is_custom_filter)
-    when "~"
+    when "~", "~~"
       sql = sql_contains("#{db_table}.#{db_field}", value.first)
-    when "!~"
+    when "!~", "!~~"
       sql = sql_contains("#{db_table}.#{db_field}", value.first, false)
     else
       raise "Unknown query operator #{operator}"
