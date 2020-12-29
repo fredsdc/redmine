@@ -672,6 +672,7 @@ pt-BR:
   button_sort: Ordenar
   button_log_time: Tempo de trabalho
   button_rollback: Voltar para esta versão
+  button_journal_rollback: Desfazer esta alteração
   button_watch: Observar
   button_unwatch: Parar de observar
   button_reply: Responder

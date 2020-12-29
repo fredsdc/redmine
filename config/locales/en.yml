@@ -1025,6 +1025,7 @@ en:
   button_sort: Sort
   button_log_time: Log time
   button_rollback: Rollback to this version
+  button_journal_rollback: Rollback this update
   button_watch: Watch
   button_unwatch: Unwatch
   button_reply: Reply

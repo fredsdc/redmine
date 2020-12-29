@@ -10,7 +10,7 @@
     <div id="note-<%= journal.indice %>">
     <h4><a href="#note-<%= journal.indice %>" class="journal-link">#<%= journal.indice %></a>
     <% if journal.last_valid_journal?(journals) && journal.can_rollback? %>
-       <div class="journal-link"><%= link_to(image_tag('cancel.png'), {:controller => 'journals', :action => 'rollback', :id => journal}, :confirm => l(:text_are_you_sure), :method => :post, :title => l(:button_rollback)) %>&nbsp;</div>
+       <div class="journal-link"><%= link_to(image_tag('cancel.png'), {:controller => 'journals', :action => 'rollback', :id => journal}, :confirm => l(:text_are_you_sure), :method => :post, :title => l(:button_journal_rollback)) %>&nbsp;</div>
     <% end %>
     <%= avatar(journal.user, :size => "24") %>
     <%= authoring journal.created_on, journal.user, :label => :label_updated_time_by %>
