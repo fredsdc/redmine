@@ -45,12 +45,12 @@
 <% perms_by_module.keys.sort.each do |mod| %>
     <% unless mod.blank? %>
         <tr class="group open">
-          <td>
+          <th>
             <span class="expander icon icon-expended" onclick="toggleRowGroup(this);">&nbsp;</span>
             <%= l_or_humanize(mod, :prefix => 'project_module_') %>
-          </td>
+          </th>
           <% @roles.each do |role| %>
-          <td class="role"><%= role.name %></td>
+          <th class="role"><%= role.name %></th>
           <% end %>
         </tr>
     <% end %>

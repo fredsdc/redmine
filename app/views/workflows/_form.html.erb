@@ -7,17 +7,13 @@
                            :class => 'icon-only icon-checked') %>
       <%=l(:label_current_status)%>
     </th>
-    <th colspan="<%= @statuses.length %>"><%=l(:label_new_statuses_allowed)%></th>
-  </tr>
-  <tr>
-    <td></td>
     <% for new_status in @statuses %>
-    <td style="width:<%= 75 / @statuses.size %>%;">
+    <th style="width:<%= 75 / @statuses.size %>%;">
       <%= link_to_function('', "toggleCheckboxesBySelector('table.transitions-#{name} input[type=checkbox]:not(:disabled).new-status-#{new_status.id}')",
                            :title => "#{l(:button_check_all)}/#{l(:button_uncheck_all)}",
                            :class => 'icon-only icon-checked') %>
       <%= new_status.name %>
-    </td>
+    </th>
     <% end %>
   </tr>
 </thead>

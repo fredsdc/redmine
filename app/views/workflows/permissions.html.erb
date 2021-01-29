@@ -37,27 +37,17 @@
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
     <div class="autoscroll">
     <table class="list workflows fields_permissions">
-    <thead>
-      <tr>
-        <th>
-        </th>
-        <th colspan="<%= @statuses.length %>"><%=l(:label_issue_status)%></th>
-      </tr>
-      <tr>
-        <td></td>
-        <% for status in @statuses %>
-        <td style="width:<%= 75 / @statuses.size %>%;">
-          <%= status.name %>
-        </td>
-        <% end %>
-      </tr>
-    </thead>
     <tbody>
       <tr class="group open">
-        <td colspan="<%= @statuses.size + 1 %>">
+        <th>
           <span class="expander icon icon-expended" onclick="toggleRowGroup(this);">&nbsp;</span>
           <%= l(:field_core_fields) %>
-        </td>
+        </th>
+        <% for status in @statuses %>
+        <th style="width:<%= 75 / @statuses.size %>%;">
+          <%= status.name %>
+        </th>
+        <% end %>
       </tr>
       <% @fields.each do |field, name| %>
       <tr>
@@ -74,10 +64,15 @@
       <% end %>
       <% if @custom_fields.any? %>
         <tr class="group open">
-          <td colspan="<%= @statuses.size + 1 %>">
+          <th>
             <span class="expander icon icon-expended" onclick="toggleRowGroup(this);">&nbsp;</span>
             <%= l(:label_custom_field_plural) %>
-          </td>
+          </th>
+          <% for status in @statuses %>
+          <th style="width:<%= 75 / @statuses.size %>%;">
+            <%= status.name %>
+          </th>
+          <% end %>
         </tr>
         <% @custom_fields.each do |field| %>
         <tr>
