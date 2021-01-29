@@ -282,7 +282,10 @@ class Query < ActiveRecord::Base
     "><t-"=> :label_in_the_past_days,
     "t-"  => :label_ago,
     "~"   => :label_contains,
+    "~~"  => :label_contains,
+    "~="  => :label_from,
     "!~"  => :label_not_contains,
+    "!~~" => :label_not_contains,
     "^"   => :label_starts_with,
     "$"   => :label_ends_with,
     "=p"  => :label_any_issues_in_project,
@@ -296,7 +299,7 @@ class Query < ActiveRecord::Base
   self.operators_by_filter_type = {
     :list => [ "=", "!" ],
     :list_status => [ "o", "=", "!", "c", "*" ],
-    :list_optional => [ "=", "!", "!*", "*" ],
+    :list_optional => [ "=", "!", "~~", "!~~", "!*", "*" ],
     :list_subprojects => [ "*", "!*", "=", "!" ],
     :date => [ "=", ">=", "<=", "><", "<t+", ">t+", "><t+", "t+", "nd", "t", "ld", "nw", "w", "lw", "l2w", "nm", "m", "lm", "y", ">t-", "<t-", "><t-", "t-", "!*", "*" ],
     :date_past => [ "=", ">=", "<=", "><", ">t-", "<t-", "><t-", "t-", "t", "ld", "w", "lw", "l2w", "m", "lm", "y", "!*", "*" ],
@@ -305,7 +308,7 @@ class Query < ActiveRecord::Base
     :integer => [ "=", ">=", "<=", "><", "!*", "*" ],
     :float => [ "=", ">=", "<=", "><", "!*", "*" ],
     :relation => ["=", "!", "=p", "=!p", "!p", "*o", "!o", "!*", "*"],
-    :tree => ["=", "~", "!*", "*"]
+    :tree => ["=", "~", "~=", "!*", "*"]
   }
 
   class_attribute :available_columns
@@ -1298,9 +1301,9 @@ class Query < ActiveRecord::Base
       # = this year
       date = User.current.today
       sql = date_clause(db_table, db_field, date.beginning_of_year, date.end_of_year, is_custom_filter)
-    when "~"
+    when "~", "~~"
       sql = sql_contains("#{db_table}.#{db_field}", value.first)
-    when "!~"
+    when "!~", "!~~"
       sql = sql_contains("#{db_table}.#{db_field}", value.first, :match => false)
     when "^"
       sql = sql_contains("#{db_table}.#{db_field}", value.first, :starts_with => true)
@@ -1365,7 +1368,7 @@ class Query < ActiveRecord::Base
 
   # Adds filters for the given custom fields scope
   def add_custom_fields_filters(scope, assoc=nil)
-    scope.visible.where(:is_filter => true).sorted.each do |field|
+    scope.visible.where(:is_filter => true).reorder("name").each do |field|
       add_custom_field_filter(field, assoc)
       if assoc.nil?
         add_chained_custom_field_filters(field)

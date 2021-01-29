@@ -787,6 +787,7 @@ en:
   label_more_than_ago: more than days ago
   label_ago: days ago
   label_contains: contains
+  label_from: from
   label_not_contains: doesn't contain
   label_starts_with: starts with
   label_ends_with: ends with

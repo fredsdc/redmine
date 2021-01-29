@@ -566,6 +566,8 @@ class IssueQuery < Query
       else
         "1=0"
       end
+    when "~="
+      sql_for_issue_id_field(id, "=", value) + " OR " + sql_for_parent_id_field(field, "~", value)
     when "!*"
       "#{Issue.table_name}.parent_id IS NULL"
     when "*"
@@ -591,6 +593,8 @@ class IssueQuery < Query
       else
         "1=0"
       end
+    when "~="
+      sql_for_issue_id_field(id, "=", value) + " OR " + sql_for_child_id_field(field, "~", value)
     when "!*"
       "#{Issue.table_name}.rgt - #{Issue.table_name}.lft = 1"
     when "*"
@@ -606,6 +610,20 @@ class IssueQuery < Query
       "#{Issue.table_name}.updated_on > #{Issue.table_name}.created_on"
     else
       sql_for_field("updated_on", operator, value, Issue.table_name, "updated_on")
+    end
+  end
+
+  def sql_for_issue_id_field(field, operator, value)
+    if operator == "="
+      # accepts a comma separated list of ids
+      ids = value.first.to_s.scan(/\d+/).map(&:to_i)
+      if ids.present?
+        "#{Issue.table_name}.id IN (#{ids.join(",")})"
+      else
+        "1=0"
+      end
+    else
+      sql_for_field("id", operator, value, Issue.table_name, "id")
     end
   end
 

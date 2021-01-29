@@ -108,7 +108,7 @@ module QueriesHelper
   end
 
   def query_available_inline_columns_options(query)
-    (query.available_inline_columns - query.columns).reject(&:frozen?).collect {|column| [column.caption, column.name]}
+    (query.available_inline_columns - query.columns).reject(&:frozen?).collect {|column| [column.caption, column.name]}.sort
   end
 
   def query_selected_inline_columns_options(query)
