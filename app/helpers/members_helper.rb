@@ -45,6 +45,16 @@ module MembersHelper
     s + content_tag('span', links, :class => 'pagination')
   end
 
+  def role_color_and_hide(role, project = nil)
+    color_and_hide = ""
+    if ! role.assignable
+      color_and_hide += " style=color:darkblue"
+    elsif ! project.nil? && ! role.workflow_rules.where(:workspace_id => project.workspace_id).any?
+      color_and_hide += " class=unused style=color:darkred"
+    end
+    color_and_hide
+  end
+
   # Returns inheritance information for an inherited member role
   def render_role_inheritance(member, role)
     content = member.role_inheritance(role).map do |h|
