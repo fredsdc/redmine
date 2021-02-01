@@ -374,6 +374,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :workspaces, :except => :show
+
   resources :workflows, only: [:index] do
     collection do
       get 'edit'

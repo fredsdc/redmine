@@ -1,0 +1,31 @@
+<div class="contextual">
+<%= link_to l(:label_workspace_new), new_workspace_path, :class => 'icon icon-add' %>
+</div>
+
+<h2><%=l(:label_workspace_plural)%></h2>
+
+<table class="list workspaces">
+  <thead><tr>
+  <th><%=l(:field_name)%></th>
+  <th><%=l(:field_description)%></th>
+  <th></th>
+  </tr></thead>
+  <tbody>
+<% for workspace in @workspaces %>
+  <tr class="<%= workspace.id == 1 ? "builtin" : "givable" %>">
+  <td class="name"><%= link_to workspace.name, edit_workspace_path(workspace) %></td>
+  <td class="description"><%= link_to workspace.description, edit_workspace_path(workspace) %></td>
+  <td class="buttons">
+    <%= reorder_handle(workspace) unless workspace.id == 1 %>
+    <%= delete_link workspace_path(workspace) unless workspace.id == 1 %>
+  </td>
+  </tr>
+<% end %>
+  </tbody>
+</table>
+
+<% html_title(l(:label_workspace_plural)) -%>
+
+<%= javascript_tag do %>
+  $(function() { $("table.workspaces tbody").positionedItems({items: ".givable"}); });
+<% end %>

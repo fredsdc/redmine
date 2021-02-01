@@ -114,6 +114,15 @@ module ProjectsHelper
     principals_options_for_select(assignable_users, project.default_assigned_to)
   end
 
+  def project_workspace_options(project)
+    grouped = Hash.new {|h,k| h[k] = []}
+    Workspace.all.sorted.each do |workspace|
+      grouped[workspace.name] = workspace.id
+    end
+    options_for_select(grouped, project.workspace_id)
+  end
+
+
   def project_default_issue_query_options(project)
     public_queries = IssueQuery.only_public
     grouped = {

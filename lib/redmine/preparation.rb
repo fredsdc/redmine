@@ -256,6 +256,9 @@ module Redmine
         menu.push :issue_statuses, {:controller => 'issue_statuses'},
                   :caption => :label_issue_status_plural,
                   :html => {:class => 'icon icon-issue-edit'}
+        menu.push :workspaces, {:controller => 'workspaces'},
+                  :caption => :label_workspace_plural,
+                  :html => {:class => 'icon icon-multiple'}
         menu.push :workflows, {:controller => 'workflows', :action => 'edit'},
                   :caption => :label_workflow,
                   :html => {:class => 'icon icon-workflows'}
