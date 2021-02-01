@@ -28,7 +28,15 @@ module JournalsHelper
   # Returns the action links for an issue journal
   def render_journal_actions(issue, journal, options={})
     links = []
-    if journal.notes.present?
+    if journal.last_valid_journal?(issue.journals) & journal.can_rollback?
+      links << link_to(l(:button_cancel),
+                       rollback_journal_path(journal),
+                       :method => 'post', :data => {:confirm => l(:text_are_you_sure)},
+                       :title => l(:button_journal_rollback),
+                       :class => 'icon-only icon-cancel'
+                      )
+    end
+    if journal.notes.present? & !journal.rolled_back?
       if options[:reply_links]
         indice = journal.indice || @journal.issue.visible_journals_with_index.find{|j| j.id == @journal.id}.indice
         links << link_to(l(:button_quote),

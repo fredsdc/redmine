@@ -149,6 +149,36 @@ class Issue < ActiveRecord::Base
     end
   end
 
+  # Rollback the changes in a journal, the journal is destroyed on success
+  def rollback(journal)
+    # Only allow rollback of journal details for the last journal
+    (errors.add :base, l(:notice_locking_conflict); return) if !journal.last_valid_journal?(journals)
+
+    # Avoid the creation of journals during rollback (see 'attachment removed')
+    @rolling_back = true
+
+    # Roll back each change detailed by the journal
+    journal.details.each do |d|
+      case d.property
+        # Issue attribute change
+        when 'attr'; send "#{d.prop_key}=", d.old_value
+        # Rollback custom field change
+        when 'cf'; custom_field_values.each {|v| v.value = d.old_value if v.custom_field_id == d.prop_key.to_i}
+        # Remove any added attachments (we can't recover removed attachments)
+        when 'attachment'; attachments.each {|v| attachments.delete(v) if v.id == d.prop_key.to_i}
+      end
+    end
+
+    # Allow the creation of journals again
+    remove_instance_variable(:@rolling_back)
+
+    # Destroy the journal once we save the issue changes
+    if save(:validate => false)
+      journal.rolled_back = true
+      journal.save
+    end
+  end
+
   # Returns true if usr or current user is allowed to view the issue
   def visible?(usr=nil)
     (usr || User.current).allowed_to?(:view_issues, self.project) do |role, user|

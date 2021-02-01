@@ -374,6 +374,7 @@ en:
   field_inherit_members: Inherit members
   field_generate_password: Generate password
   field_must_change_passwd: Must change password at next logon
+  field_hide_rolled_back_issue_notes: Hide rolled-back issue notes
   field_default_status: Default status
   field_users_visibility: Users visibility
   field_time_entries_visibility: Time logs visibility
@@ -551,6 +552,7 @@ en:
   permission_export_wiki_pages: Export wiki pages
   permission_manage_subtasks: Manage subtasks
   permission_manage_related_issues: Manage related issues
+  permission_rollback_issue_notes: Rollback issue notes
   permission_import_issues: Import issues
   permission_log_time_for_other_users: Log spent time for other users
 
@@ -1109,6 +1111,7 @@ en:
   button_sort: Sort
   button_log_time: Log time
   button_rollback: Rollback to this version
+  button_journal_rollback: Rollback this update
   button_watch: Watch
   button_unwatch: Unwatch
   button_reply: Reply
@@ -1130,6 +1133,7 @@ en:
   button_delete_my_account: Delete my account
   button_close: Close
   button_reopen: Reopen
+  button_rollback: Rollback
   button_import: Import
   button_project_bookmark: Add bookmark
   button_project_bookmark_delete: Remove bookmark
