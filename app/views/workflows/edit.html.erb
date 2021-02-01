@@ -4,11 +4,13 @@
 
 <div class="tabs">
   <ul>
-    <li><%= link_to l(:label_status_transitions), workflows_edit_path(:role_id => @roles, :tracker_id => @trackers,
+    <li><%= link_to l(:label_status_transitions), workflows_edit_path(:role_id => @roles,
+                      :tracker_id => @trackers, :workspace_id => @workspaces,
                       :used_role_statuses_only => @used_role_statuses_only ? 1 : 0,
                       :used_statuses_only => @used_statuses_only ? 1 : 0), :class => 'selected' %></li>
     <li><%= link_to l(:label_fields_permissions), workflows_permissions_path(:role_id => @roles,
-                      :tracker_id => @trackers, :used_role_statuses_only => @used_role_statuses_only ? 1 : 0,
+                      :tracker_id => @trackers, :workspace_id => @workspaces,
+                      :used_role_statuses_only => @used_role_statuses_only ? 1 : 0,
                       :used_statuses_only => @used_statuses_only ? 1 : 0) %></li>
   </ul>
 </div>
@@ -32,6 +34,12 @@
           </label>
           <a href="#" data-expands="#tracker_id"><span class="toggle-multiselect icon-only icon-toggle-plus"></span></a>
         </td>
+        <td>
+          <label><%=l(:label_workspace)%>:
+          <%= options_for_workflow_select 'workspace_id[]', Workspace.sorted, @workspaces, :id => 'workspace_id', :class => 'expandable' %>
+          </label>
+          <a href="#" data-expands="#workspace_id"><span class="toggle-multiselect icon-only icon-toggle-plus"></span></a>
+        </td>
       </tr>
       <tr>
         <td>
@@ -42,11 +50,13 @@
           <%= hidden_field_tag 'used_statuses_only', '0', :id => nil %>
           <label><%= check_box_tag 'used_statuses_only', '1', @used_statuses_only %> <%= l(:label_display_used_statuses_only) %></label>
         </td>
+        <td/>
       </tr>
       <tr>
         <td>
           <%= submit_tag l(:button_edit), :name => nil %>
         </td>
+        <td/>
         <td/>
       </tr>
     </tbody>
@@ -54,10 +64,11 @@
 </p>
 <% end %>
 
-<% if @trackers && @roles && @statuses.any? %>
+<% if @trackers && @roles && @workspaces && @statuses.any? %>
   <%= form_tag({}, :id => 'workflow_form' ) do %>
     <%= @trackers.map {|tracker| hidden_field_tag 'tracker_id[]', tracker.id, :id => nil}.join.html_safe %>
     <%= @roles.map {|role| hidden_field_tag 'role_id[]', role.id, :id => nil}.join.html_safe %>
+    <%= @workspaces.map {|workspace| hidden_field_tag 'workspace_id[]', workspace.id, :id => nil}.join.html_safe %>
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
     <%= hidden_field_tag 'used_role_statuses_only', params[:used_role_statuses_only], :id => nil %>
     <div class="autoscroll">

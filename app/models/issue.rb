@@ -690,7 +690,7 @@ class Issue < ActiveRecord::Base
     return {} if roles.empty?
 
     result = {}
-    workflow_permissions = WorkflowPermission.where(:tracker_id => tracker_id, :old_status_id => status_id, :role_id => roles.map(&:id)).to_a
+    workflow_permissions = WorkflowPermission.where(:tracker_id => tracker_id, :old_status_id => status_id, :role_id => roles.map(&:id), :workspace_id => project.workspace_id).to_a
     if workflow_permissions.any?
       workflow_rules = workflow_permissions.inject({}) do |h, wp|
         h[wp.field_name] ||= {}
@@ -1033,6 +1033,7 @@ class Issue < ActiveRecord::Base
       initial_status,
       user.admin ? Role.all.to_a : user.roles_for_project(project),
       tracker,
+      project.workspace_id,
       author == user,
       assignee_transitions_allowed
     )

@@ -264,7 +264,7 @@ class Role < ActiveRecord::Base
   end
 
   def copy_workflow_rules(source_role)
-    WorkflowRule.copy(nil, source_role, nil, self)
+    WorkflowRule.copy(nil, source_role, nil, nil, self, nil)
   end
 
   # Find all the roles that can be given to a project member

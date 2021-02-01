@@ -609,6 +609,11 @@ en:
   label_tracker_plural: Trackers
   label_tracker_all: All trackers
   label_tracker_new: New tracker
+  label_workspace: Workspace
+  label_workspace_plural: Workspaces
+  label_workspace_new: New workspace
+  error_unable_delete_workspace: Unable to delete workspace
+  field_workspace: Workspace
   label_workflow: Workflow
   label_issue_status: Issue status
   label_issue_status_plural: Issue statuses

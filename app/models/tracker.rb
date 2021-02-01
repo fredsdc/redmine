@@ -120,7 +120,7 @@ class Tracker < ActiveRecord::Base
   end
 
   def copy_workflow_rules(source_tracker)
-    WorkflowRule.copy(source_tracker, nil, self, nil)
+    WorkflowRule.copy(source_tracker, nil, nil, self, nil, nil)
   end
 
   # Returns the fields that are disabled for all the given trackers

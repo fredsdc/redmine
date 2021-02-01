@@ -348,6 +348,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :workspaces, :except => :show
+
   match 'workflows', :controller => 'workflows', :action => 'index', :via => :get
   match 'workflows/edit', :controller => 'workflows', :action => 'edit', :via => [:get, :post]
   match 'workflows/permissions', :controller => 'workflows', :action => 'permissions', :via => [:get, :post]
