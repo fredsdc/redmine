@@ -3,16 +3,20 @@
                       :remote => request.xhr?,
                       :method => :put) do |f| %>
   <p>
-    <% @roles.each do |role| %>
-    <label class="block">
+    <strong>
+      <%= l(:label_role_plural) %>
+      (<a onclick="$(this).closest('form').children('div.unused').toggle();"><%= l(:label_all) %></a>):
+    </strong>
+  </p>
+  <% @roles.each do |role| %>
+    <div<%= role_color_and_hide(role, @project) %>>
       <%= check_box_tag('membership[role_ids][]',
                         role.id, @member.roles.to_a.include?(role),
                         :id => nil,
                         :disabled => !@member.role_editable?(role)) %> <%= role %>
       <%= render_role_inheritance(@member, role) %>
-    </label>
-    <% end %>
-  </p>
+    </div>
+  <% end %>
   <%= hidden_field_tag 'membership[role_ids][]', '', :id => nil %>
   <p>
     <%= submit_tag l(:button_save) %>
