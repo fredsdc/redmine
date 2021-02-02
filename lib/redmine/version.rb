@@ -26,6 +26,15 @@ module Redmine
         rescue
           # Could not find the current revision
         end
+      elsif File.directory?(File.join(Rails.root, '.git'))
+        begin
+          path = Redmine::Scm::Adapters::AbstractAdapter.shell_quote(Rails.root.to_s)
+          if `git --git-dir #{path}/.git log -1 --format=%ci|sed 's/ .*//;s/-//g'` =~ /(\d+)/
+            return $1.to_i
+          end
+        rescue
+          # Could not find the current revision
+        end
       end
       nil
     end
