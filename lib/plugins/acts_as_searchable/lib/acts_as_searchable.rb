@@ -136,6 +136,7 @@ module Redmine
               r |= fetch_ranks_and_ids(
                 search_scope(user, projects, options).
                 joins(:attachments).
+                where("#{Project.allowed_to_condition(user, :view_attachments)}", false).
                 where(search_tokens_condition(["#{Attachment.table_name}.filename", "#{Attachment.table_name}.description"], tokens, options[:all_words])),
                 options[:limit]
               )

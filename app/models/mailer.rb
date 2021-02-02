@@ -99,7 +99,7 @@ class Mailer < ActionMailer::Base
   end
 
   # Builds a mail for notifying user about an issue update
-  def issue_edit(user, journal)
+  def issue_edit(user, journal, att=false)
     issue = journal.journalized
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Tracker' => issue.tracker.name,
@@ -117,6 +117,7 @@ class Mailer < ActionMailer::Base
     @journal = journal
     @journal_details = journal.visible_details
     @issue_url = url_for(:controller => 'issues', :action => 'show', :id => issue, :anchor => "change-#{journal.id}")
+    @att = att
 
     mail :to => user,
       :subject => s
@@ -132,7 +133,7 @@ class Mailer < ActionMailer::Base
       journal.notes? || journal.visible_details(user).any?
     end
     users.each do |user|
-      issue_edit(user, journal).deliver_later
+      issue_edit(user, journal, journal.issue.attachments_visible?(user)).deliver_later
     end
   end
 

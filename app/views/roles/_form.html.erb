@@ -68,7 +68,7 @@
 
 <div id="role-permissions-trackers" class="view_issues_shown">
 <h3><%= l(:label_issue_tracking) %></h3>
-<% permissions = [:view_issues, :add_issues, :edit_issues, :add_issue_notes, :delete_issues] & setable_permissions.collect(&:name) %>
+<% permissions = [:view_issues, :add_issues, :edit_issues, :add_issue_notes, :delete_issues, :view_attachments, :add_attachments, :edit_attachments, :delete_attachments] & setable_permissions.collect(&:name) %>
 
 <div class="autoscroll">
 <table class="list">

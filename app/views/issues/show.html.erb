@@ -84,11 +84,11 @@ end %>
 
   <p><strong><%=l(:field_description)%></strong></p>
   <div class="wiki">
-  <%= textilizable @issue, :description, :attachments => @issue.attachments %>
+  <%= textilizable @issue, :description, :attachments => @attachments %>
   </div>
 </div>
 <% end %>
-<% if @issue.attachments.any? %>
+<% if @attachments.any? %>
   <hr />
   <p><strong><%=l(:label_attachment_plural)%></strong></p>
   <%= link_to_attachments @issue, :thumbnails => true %>

@@ -92,6 +92,8 @@ class Journal < ActiveRecord::Base
         detail.custom_field && detail.custom_field.visible_by?(project, user)
       elsif detail.property == 'relation'
         Issue.find_by_id(detail.value || detail.old_value).try(:visible?, user)
+      elsif detail.property == 'attachment'
+        self.issue.attachments_visible?(User.current)
       else
         true
       end

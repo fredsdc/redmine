@@ -5,3 +5,9 @@ replaceIssueFormWith('<%= escape_javascript(render :partial => 'form') %>');
 <% else %>
   $('#log_time').hide();
 <% end %>
+
+<% if @issue.attachments_addable?(User.current) %>
+  $('#attachments_form').show();
+<% else %>
+  $('#attachments_form').hide();
+<% end %>
