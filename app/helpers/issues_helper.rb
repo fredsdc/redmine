@@ -94,6 +94,14 @@ module IssuesHelper
   def render_descendants_tree(issue)
     manage_relations = User.current.allowed_to?(:manage_subtasks, issue.project)
     s = +'<table class="list issues odd-even">'
+    s << content_tag('tr',
+      content_tag('td', l(:field_issue), :class => 'subject summary') +
+      content_tag('td', l(:field_status), :class => 'summary') +
+      content_tag('td', l(:field_assigned_to), :class => 'summary') +
+      content_tag('td', l(:field_start_date), :class => 'summary') +
+      content_tag('td', l(:field_due_date), :class => 'summary') +
+      content_tag('td', l(:field_done_ratio), :class => 'summary') +
+      content_tag('td', ''))
     issue_list(
       issue.descendants.visible.
         preload(:status, :priority, :tracker,
@@ -147,6 +155,14 @@ module IssuesHelper
   def render_issue_relations(issue, relations)
     manage_relations = User.current.allowed_to?(:manage_issue_relations, issue.project)
     s = ''.html_safe
+    s << content_tag('tr',
+      content_tag('td', l(:field_issue), :class => 'subject summary') +
+      content_tag('td', l(:field_status), :class => 'summary') +
+      content_tag('td', l(:field_assigned_to), :class => 'summary') +
+      content_tag('td', l(:field_start_date), :class => 'summary') +
+      content_tag('td', l(:field_due_date), :class => 'summary') +
+      content_tag('td', l(:field_done_ratio), :class => 'summary') +
+      content_tag('td', ''))
     relations.each do |relation|
       other_issue = relation.other_issue(issue)
       css = "issue hascontextmenu #{other_issue.css_classes}"
