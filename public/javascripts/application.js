@@ -995,9 +995,9 @@ function setFilecontentContainerHeight() {
 }
 
 function cycleVisibility(element, statuses) {
-  $(element).closest('fieldset').find('div').hide();
+  $(element).closest('fieldset').find('ul div').hide();
   $(element).attr('class', statuses[1][(statuses[1].indexOf($(element).attr('class')) + 1) % statuses[1].length]);
-  $(element).closest('fieldset').find('div.' + $(element).attr('class')).show();
+  $(element).closest('fieldset').find('ul div.' + $(element).attr('class')).show();
   $(element).find('span').text(statuses[0][(statuses[1].indexOf($(element).attr('class')))]);
 }
 
