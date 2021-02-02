@@ -30,7 +30,7 @@ class IssueQuery < Query
     QueryAssociationColumn.new(:parent, :subject, :caption => :field_parent_issue_subject),
     QueryColumn.new(:status, :sortable => "#{IssueStatus.table_name}.position", :groupable => true),
     QueryColumn.new(:priority, :sortable => "#{IssuePriority.table_name}.position", :default_order => 'desc', :groupable => true),
-    QueryColumn.new(:subject, :sortable => "#{Issue.table_name}.subject"),
+    QueryColumn.new(:subject, :sortable => "#{Issue.table_name}.subject", :groupable => true),
     QueryColumn.new(:author, :sortable => lambda {User.fields_for_order_statement("authors")}, :groupable => true),
     QueryColumn.new(:assigned_to, :sortable => lambda {User.fields_for_order_statement}, :groupable => true),
     TimestampQueryColumn.new(:updated_on, :sortable => "#{Issue.table_name}.updated_on", :default_order => 'desc', :groupable => true),
