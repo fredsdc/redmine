@@ -131,6 +131,12 @@ class Issue < ActiveRecord::Base
           when 'own'
             user_ids = [user.id] + user.groups.pluck(:id).compact
             "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}))"
+          when 'own_watch'
+            user_ids = [user.id] + user.groups.pluck(:id).compact
+            "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}) OR #{table_name}.id IN (#{Watcher.where(user_id: user.id, watchable_type: 'Issue').pluck(:watchable_id).compact.join(',')}))"
+          when 'own_watch_contributed'
+            user_ids = [user.id] + user.groups.pluck(:id).compact
+            "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}) OR #{table_name}.id IN (#{Watcher.where(user_id: user.id, watchable_type: 'Issue').pluck(:watchable_id).compact.join(',')}) OR #{table_name}.id IN (#{Journal.where(user_id: user.id, journalized_type: 'Issue').group(:journalized_id).pluck(:journalized_id).compact.join(',')}))"
           else
               '1=0'
           end
@@ -191,6 +197,10 @@ class Issue < ActiveRecord::Base
             !self.is_private? || (self.author == user || user.is_or_belongs_to?(assigned_to))
           when 'own'
             self.author == user || user.is_or_belongs_to?(assigned_to)
+          when 'own_watch'
+            self.author == user || user.is_or_belongs_to?(assigned_to) || self.watched_by?(user)
+          when 'own_watch_contributed'
+            self.author == user || user.is_or_belongs_to?(assigned_to) || self.watched_by?(user) || self.journals.where(user_id: user, rolled_back: false).any?
           else
             false
           end
