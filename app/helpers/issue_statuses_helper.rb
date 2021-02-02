@@ -18,4 +18,9 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 module IssueStatusesHelper
+  def issue_status_transition_map(id = nil)
+    (id.nil? ? IssueStatus.all : IssueStatus.where(id: id)).map{|x| [x.id,
+      (x.workflows.pluck(:role_id, :tracker_id, :workspace_id) +
+       x.workflow_transitions_as_new_status.pluck(:role_id, :tracker_id, :workspace_id)).uniq]}.to_h
+  end
 end

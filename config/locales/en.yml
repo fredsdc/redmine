@@ -285,6 +285,7 @@ en:
   field_status: Status
   field_notes: Notes
   field_is_closed: Issue closed
+  field_in_workflows: In workflows
   field_is_default: Default value
   field_tracker: Tracker
   field_subject: Subject
