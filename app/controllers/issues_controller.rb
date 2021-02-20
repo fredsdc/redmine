@@ -509,7 +509,14 @@ class IssuesController < ApplicationController
         return false
       end
     end
-    @issue.safe_attributes = issue_attributes
+
+    # Do status_id first as it could change permissions
+    if issue_attributes.is_a?(Array)
+      @issue.safe_attributes = issue_attributes.slice("status_id")
+      @issue.safe_attributes = issue_attributes.except("status_id")
+    else
+      @issue.safe_attributes = issue_attributes
+    end
     @priorities = IssuePriority.active
     @allowed_statuses = @issue.new_statuses_allowed_to(User.current)
     true
