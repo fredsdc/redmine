@@ -42,6 +42,17 @@
   </ul>
   <% end %>
 
+  <% if @subprojects.any? %>
+  <div class="projects box">
+    <h3 class="icon icon-projects"><%=l(:label_subproject_plural)%></h3>
+	<ul class="subprojects">
+	  <% @subprojects.each do |project| %>
+	  <li><%= link_to(project.name, project_path(project), :class => project.css_classes).html_safe %></li>
+	  <% end %> 
+    </ul>
+  </div>
+  <% end %>
+
   <% if User.current.allowed_to?(:view_issues, @project) %>
   <div class="issues box">
     <h3 class="icon icon-issue">
@@ -127,17 +138,6 @@
   <% end %>
 
   <%= render :partial => 'members_box' %>
-
-  <% if @subprojects.any? %>
-  <div class="projects box">
-    <h3 class="icon icon-projects"><%=l(:label_subproject_plural)%></h3>
-	<ul class="subprojects">
-	  <% @subprojects.each do |project| %>
-	  <li><%= link_to(project.name, project_path(project), :class => project.css_classes).html_safe %></li>
-	  <% end %> 
-    </ul>
-  </div>
-  <% end %>
 
   <%= call_hook(:view_projects_show_right, :project => @project) %>
 </div>
