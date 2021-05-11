@@ -2165,22 +2165,48 @@ class IssueTest < ActiveSupport::TestCase
     assert !closed_statuses.empty?
   end
 
-  def test_parent_issues_with_open_subtask_dont_allow_closed_statuses
+  def test_parent_issues_with_open_subtask_dont_allow_closed_statuses_if_closed_issues_hierarchy_is_true
     parent = Issue.generate!
     child = Issue.generate!(:parent_issue_id => parent.id)
 
-    allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
-    assert allowed_statuses.any?
-    assert_equal [], allowed_statuses.select(&:is_closed?)
+    with_settings :closed_issues_hierarchy => 1 do
+      allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
+      assert allowed_statuses.any?
+      assert_equal [], allowed_statuses.select(&:is_closed?)
+    end
   end
 
-  def test_parent_issues_with_closed_subtask_allow_closed_statuses
+  def test_parent_issues_with_open_subtask_allow_closed_statuses_if_closed_issues_hierarchy_is_false
+    parent = Issue.generate!
+    child = Issue.generate!(:parent_issue_id => parent.id)
+
+    with_settings :closed_issues_hierarchy => 0 do
+      allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
+      assert allowed_statuses.any?
+      assert allowed_statuses.select(&:is_closed?).any?
+    end
+  end
+
+  def test_parent_issues_with_closed_subtask_allow_closed_statuses_if_closed_issues_hierarchy_is_true
     parent = Issue.generate!
     child = Issue.generate!(:parent_issue_id => parent.id, :status_id => 5)
 
-    allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
-    assert allowed_statuses.any?
-    assert allowed_statuses.select(&:is_closed?).any?
+    with_settings :closed_issues_hierarchy => 1 do
+      allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
+      assert allowed_statuses.any?
+      assert allowed_statuses.select(&:is_closed?).any?
+    end
+  end
+
+  def test_parent_issues_with_closed_subtask_allow_closed_statuses_if_closed_issues_hierarchy_is_false
+    parent = Issue.generate!
+    child = Issue.generate!(:parent_issue_id => parent.id, :status_id => 5)
+
+    with_settings :closed_issues_hierarchy => 0 do
+      allowed_statuses = parent.reload.new_statuses_allowed_to(users(:users_002))
+      assert allowed_statuses.any?
+      assert_equal [], allowed_statuses.select(&:is_closed?)
+    end
   end
 
   def test_reschedule_an_issue_without_dates

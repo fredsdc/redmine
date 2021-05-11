@@ -177,6 +177,8 @@ parent_issue_done_ratio:
   default: 'derived'
 link_copied_issue:
   default: 'ask'
+closed_issues_hierarchy:
+  default: 1
 close_duplicate_issues:
   default: 1
 issue_group_assignment:

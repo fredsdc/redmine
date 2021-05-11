@@ -1074,13 +1074,15 @@ class Issue < ActiveRecord::Base
     statuses << default_status if include_default || (new_record? && statuses.empty?)
 
     statuses = statuses.compact.uniq.sort
-    if blocked? || descendants.open.any?
-      # cannot close a blocked issue or a parent with open subtasks
-      statuses.reject!(&:is_closed?)
-    end
-    if ancestors.open(false).any?
-      # cannot reopen a subtask of a closed parent
-      statuses.select!(&:is_closed?)
+    if Setting.closed_issues_hierarchy?
+      if blocked? || descendants.open.any?
+        # cannot close a blocked issue or a parent with open subtasks
+        statuses.reject!(&:is_closed?)
+      end
+      if ancestors.open(false).any?
+        # cannot reopen a subtask of a closed parent
+        statuses.select!(&:is_closed?)
+      end
     end
     statuses
   end

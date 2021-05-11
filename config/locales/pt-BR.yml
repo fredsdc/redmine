@@ -325,6 +325,7 @@ pt-BR:
   setting_date_format: Formato da data
   setting_time_format: Formato de hora
   setting_cross_project_issue_relations: Permitir relacionar tarefas entre projetos
+  setting_closed_issues_hierarchy: Forçar fechamento de tarefas na hierarquia pai/filha
   setting_issue_list_default_columns: Colunas na lista de tarefas por padrão
   setting_emails_footer: Rodapé do e-mail
   setting_protocol: Protocolo
