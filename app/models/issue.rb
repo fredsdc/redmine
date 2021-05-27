@@ -1070,7 +1070,7 @@ class Issue < ActiveRecord::Base
       project.workspace_id,
       author == user,
       assignee_transitions_allowed
-    )
+    ) if project.present?
     statuses << initial_status unless statuses.empty?
     statuses << default_status if include_default || (new_record? && statuses.empty?)
 
