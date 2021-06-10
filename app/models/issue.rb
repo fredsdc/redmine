@@ -817,9 +817,9 @@ class Issue < ActiveRecord::Base
           @parent_issue.self_and_ancestors.any? {|a| a.relations_from.any? {|r| r.relation_type == IssueRelation::TYPE_PRECEDES && r.issue_to.would_reschedule?(self)}}
         )
         errors.add :parent_issue_id, :invalid
-      elsif !closed? && @parent_issue.closed?
-        # cannot attach an open issue to a closed parent
-        errors.add :base, :open_issue_with_closed_parent
+      # elsif !closed? && @parent_issue.closed?
+      #   # cannot attach an open issue to a closed parent
+      #   errors.add :base, :open_issue_with_closed_parent
       elsif !new_record?
         # moving an existing issue
         if move_possible?(@parent_issue)
