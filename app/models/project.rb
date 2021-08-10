@@ -331,6 +331,7 @@ class Project < ActiveRecord::Base
     @rolled_up_versions = nil
     @rolled_up_trackers = nil
     @rolled_up_statuses = nil
+    @rolled_up_workspaces = nil
     @rolled_up_custom_fields = nil
     @all_issue_custom_fields = nil
     @all_time_entry_custom_fields = nil
@@ -447,9 +448,29 @@ class Project < ActiveRecord::Base
       sorted
   end
 
+  def rolled_up_workspaces(include_subprojects=true)
+    if include_subprojects
+      @rolled_up_workspaces ||= rolled_up_workspaces_base_scope.
+      where("#{Project.table_name}.lft >= ? AND #{Project.table_name}.rgt <= ?", lft, rgt)
+    else
+      rolled_up_workspaces_base_scope.
+      where(:projects => {:id => id})
+    end
+  end
+
+  def rolled_up_workspaces_base_scope
+    Workspace.
+    joins(projects: :enabled_modules).
+    where("#{Project.table_name}.status <> ?", STATUS_ARCHIVED).
+    where(:enabled_modules => {:name => 'issue_tracking'}).
+    distinct.
+    sorted
+  end
+
   def rolled_up_statuses
     issue_status_ids = WorkflowTransition.
       where(:tracker_id => rolled_up_trackers.map(&:id)).
+      where(:workspace_id => rolled_up_workspaces.map(&:id)).
       distinct.
       pluck(:old_status_id, :new_status_id).
       flatten.
