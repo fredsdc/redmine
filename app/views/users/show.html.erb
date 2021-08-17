@@ -7,7 +7,9 @@
 <div class="splitcontent">
 <div class="splitcontentleft">
 <ul>
-  <li><%=l(:field_login)%>: <%= @user.login %></li>
+  <% if User.current.admin? || (User.current == @user) %>
+    <li><%=l(:field_login)%>: <%= @user.login %></li>
+  <% end %>
   <% unless @user.pref.hide_mail %>
     <li><%=l(:field_mail)%>: <%= mail_to(@user.mail, nil, :encode => 'javascript') %></li>
   <% end %>
