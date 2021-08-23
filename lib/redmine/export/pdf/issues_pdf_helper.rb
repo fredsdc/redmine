@@ -116,11 +116,20 @@ module Redmine
               while values.present?
                 if values[0].custom_field.full_width_layout?
                   while values.present? && values[0].custom_field.full_width_layout?
+                    heights = []
                     value = values.shift
                     pdf.SetFontStyle('B',9)
-                    pdf.RDMCell(35, 5, "#{value.custom_field.name}:", 'L', 0)
+                    heights << pdf.get_string_height(35, "#{value.custom_field.name}:")
                     pdf.SetFontStyle('',9)
-                    pdf.RDMCell(155, 5, show_value(value, false).to_s, 'R', 1)
+                    heights << pdf.get_string_height(155, show_value(value, false))
+                    height = heights.max
+
+                    pdf.SetFontStyle('B',9)
+                    pdf.RDMMultiCell(35, height, "#{value.custom_field.name}:", border_first, '', 0, 0)
+                    pdf.SetFontStyle('',9)
+                    pdf.RDMMultiCell(155, height, show_value(value, false), border_last, '', 0, 2)
+                    
+                    pdf.set_x(base_x)
                   end
                 else
                   lr_values = []
