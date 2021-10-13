@@ -1824,7 +1824,7 @@ img {
 .not_a_group {
   padding: 5px 27px;
 }
-.ui-sortable-handle:before {
+#custom_fields_form .ui-sortable-handle:before {
   content:url('/images/reorder.png');
   margin-right: 5px;
 }
