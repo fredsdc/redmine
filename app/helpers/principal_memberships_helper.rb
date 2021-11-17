@@ -61,4 +61,10 @@ module PrincipalMembershipsHelper
       user_membership_path(principal, membership, *args)
     end
   end
+
+  def workspaces_json()
+    h={0=>Role.where(assignable: false).map{|x| ".ro_" + x.id.to_s}}
+    WorkflowTransition.all.pluck(:workspace_id, :role_id).uniq.
+      each{|a| h[a[0]]=h[a[0]].to_a + [".ro_" + a[1].to_s]};h.each{|i,v| h[i]=v.join(", ")}.to_json
+  end
 end
