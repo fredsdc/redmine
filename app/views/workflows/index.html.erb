@@ -4,83 +4,47 @@
   <p class="nodata"><%= l(:label_no_data) %></p>
 <% else %>
   <p><label><%=l(:label_workspace)%>:<%= options_for_workflow_select 'workspace_id[]', Workspace.sorted, @workspaces, :id => 'workspace_id', :class => 'expandable', :onchange=>'refresh_table(this.value);' %></label></p>
-  <div class="autoscroll">
-    <table class="list">
-      <thead>
-        <tr>
-          <th class="collapsed" onclick="expand_grid(this);">
-            <i><span class='tip_exp_off'><%= l(:button_expand_all) %></span><span class='tip_exp_on'><%= l(:button_collapse_all) %></span></i>
-          </th>
-          <% @roles.each do |role| %>
-            <th>
-              <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
-            </th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @trackers.each do |tracker| -%>
+  <% @workspaces.each do |workspace| %>
+    <div class="autoscroll ws ws<%= workspace.id%>" style="display: none;">
+      <table class="list">
+        <thead>
           <tr>
-            <td class="name"><%= tracker.name %></td>
-            <% @roles.each do |role| -%>
-              <td>
-                <% countall = 0 %>
-                <% @workspaces.each do |workspace| %>
-                  <% count = @workflow_counts[[tracker.id, role.id, workspace.id]] || 0 %>
-                  <% countall += count %>
-                  <span class="ws ws<%= workspace.id%>" style="display: none;">
-                    <%= link_to((count > 0 ? count : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
-                      {:action => 'edit', :role_id => role, :tracker_id => tracker, :workspace_id => workspace},
-                      :title => l(:button_edit)) %>
-                  </span>
-                <% end %>
-                <span class="ws wsall" style="display: none;">
-                  <%= link_to((countall > 0 ? countall : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
-                    {:action => 'edit', :role_id => role, :tracker_id => tracker, :workspace_id => 'all'},
-                    :title => l(:button_edit)) %>
-                </span>
-              </td>
-            <% end -%>
+            <th>
+            </th>
+            <% @roles.each do |role| %>
+              <% next unless @workflow_counts.select{|i,v| i[1]==role.id && i[2]==workspace.id}.present? %>
+              <th>
+                <%= content_tag(role.builtin? ? 'em' : 'span', role.name) %>
+              </th>
+            <% end %>
           </tr>
-        <% end -%>
-      </tbody>
-    </table>
-  </div>
+        </thead>
+        <tbody>
+          <% @trackers.each do |tracker| -%>
+          <% next unless @workflow_counts.select{|i,v| i[0]==tracker.id && i[2]==workspace.id}.present? %>
+            <tr>
+              <td class="name"><%= tracker.name %></td>
+              <% @roles.each do |role| -%>
+              <% next unless @workflow_counts.select{|i,v| i[1]==role.id && i[2]==workspace.id}.present? %>
+                <td>
+                  <% count = @workflow_counts[[tracker.id, role.id, workspace.id]] || 0 %>
+                  <%= link_to((count > 0 ? count : content_tag(:span, nil, :class => 'icon-only icon-not-ok')),
+                    {:action => 'edit', :role_id => role, :tracker_id => tracker, :workspace_id => workspace},
+                    :title => l(:button_edit)) %>
+                </td>
+              <% end -%>
+            </tr>
+          <% end -%>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
   <script>
     function refresh_table(value) {
       $('.ws').css("display","none");
-      $('.ws' + value).css("display","inline");
-      collapse_grid();
+      $('.ws' + value).toggle("display");
     }
 
-    function expand_grid(cell) {
-      $(cell).toggleClass("collapsed");
-      collapse_grid();
-    }
-
-    function collapse_grid() {
-      i = document.getElementById('workspace_id').value;
-      var x = !$('.autoscroll th:first-child').hasClass("collapsed");
-      if (x) {
-        $('.tip_exp_on').css("display", "");
-        $('.tip_exp_off').css("display", "none");
-      } else {
-        $('.tip_exp_on').css("display", "none");
-        $('.tip_exp_off').css("display", "");
-      }
-      $('.autoscroll th, td').toggle(true);
-      for (var j = 2; j <= $('.autoscroll th').length; j++) {
-        if ($('.autoscroll tbody td:nth-child(' + j + ') span:visible a:not(:has(span))').length == 0) {
-          $('.autoscroll tr th:nth-child(' + j + '), td:nth-child(' + j + ')').toggle(x);
-        }
-      }
-      for (var j = 1; j <= $('.autoscroll tr').length; j++) {
-        if ($('.autoscroll tbody tr:nth-child(' + j + ') span:visible a:not(:has(span))').length == 0) {
-          $('.autoscroll tbody tr:nth-child(' + j + ') td').toggle(x);
-        }
-      }
-    }
-
-    refresh_table(document.getElementById('workspace_id').value);
+    refresh_table(document.getElementById('workspace_id').value)
   </script>
 <% end %>
