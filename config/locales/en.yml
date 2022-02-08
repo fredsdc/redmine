@@ -591,6 +591,7 @@ en:
   label_issue: Issue
   label_issue_new: New issue
   label_issue_delete: Delete issue
+  label_issues_delete: Delete issues
   label_issue_plural: Issues
   label_issue_view_all: View all issues
   label_issues_by: "Issues by %{value}"

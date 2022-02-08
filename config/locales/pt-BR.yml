@@ -362,6 +362,7 @@ pt-BR:
   label_issue: Tarefa
   label_issue_new: Nova tarefa
   label_issue_delete: Excluir tarefa
+  label_issues_delete: Excluir tarefas
   label_issue_plural: Tarefas
   label_issue_view_all: Ver todas as tarefas
   label_issues_by: "Tarefas por %{value}"
