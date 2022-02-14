@@ -697,7 +697,7 @@ pt-BR:
   text_select_mail_notifications: Ações a serem notificadas por e-mail
   text_regexp_info: ex. ^[A-Z0-9]+$
   text_min_max_length_info: 0 = sem restrição
-  text_project_destroy_confirmation: Você tem certeza que deseja excluir este projeto e todos os dados relacionados?
+  text_project_destroy_confirmation: Excluir este projeto e todos os dados relacionados. Você tem certeza?
   text_subprojects_destroy_warning: "Seu(s) subprojeto(s): %{value} também serão excluídos."
   text_workflow_edit: Selecione um papel e um tipo de tarefa para editar o fluxo de trabalho
   text_are_you_sure: Você tem certeza?
@@ -713,7 +713,7 @@ pt-BR:
   text_issues_ref_in_commit_messages: Referenciando tarefas nas mensagens de commit
   text_issue_added: "Tarefa %{id} incluída (por %{author})."
   text_issue_updated: "Tarefa %{id} alterada (por %{author})."
-  text_wiki_destroy_confirmation: Você tem certeza que deseja excluir este wiki e TODO o seu conteúdo?
+  text_wiki_destroy_confirmation: Excluir este wiki e TODO o seu conteúdo. Você tem certeza?
   text_issue_category_destroy_question: "Algumas tarefas (%{count}) estão atribuídas a esta categoria. O que você deseja fazer?"
   text_issue_category_destroy_assignments: Remover atribuições da categoria
   text_issue_category_reassign_to: Redefinir tarefas para esta categoria
@@ -721,7 +721,7 @@ pt-BR:
   text_no_configuration_data: "Os Papéis, tipos de tarefas, situação de tarefas e fluxos de trabalho não foram configurados ainda.\nÉ altamente recomendado carregar as configurações padrão. Você poderá modificar estas configurações assim que carregadas."
   text_load_default_configuration: Carregar a configuração padrão
   text_status_changed_by_changeset: "Aplicado no conjunto de alterações %{value}."
-  text_issues_destroy_confirmation: 'Você tem certeza que deseja excluir a(s) tarefa(s) selecionada(s)?'
+  text_issues_destroy_confirmation: 'Excluir a(s) tarefa(s) selecionada(s). Você tem certeza?'
   text_select_project_modules: 'Selecione módulos para habilitar para este projeto:'
   text_default_administrator_account_changed: Conta padrão do administrador alterada
   text_file_repository_writable: Repositório com permissão de escrita
@@ -969,7 +969,7 @@ pt-BR:
   label_additional_workflow_transitions_for_author: Transições adicionais permitidas quando o usuário é o autor
 
   label_bulk_edit_selected_time_entries: Alteração em massa do registro de horas
-  text_time_entries_destroy_confirmation: Tem certeza que quer excluir o(s) registro(s) de horas selecionado(s)?
+  text_time_entries_destroy_confirmation: Excluir o(s) registro(s) de horas selecionado(s). Você tem certeza?
   label_role_anonymous: Anônimo
   label_role_non_member: Não Membro
   label_issues_visibility_own: Tarefas criadas ou atribuídas ao usuário
@@ -1048,8 +1048,8 @@ pt-BR:
   setting_unsubscribe: Permitir aos usuários excluir sua própria conta
   button_delete_my_account: Excluir minha conta
   text_account_destroy_confirmation: |-
-    Tem certeza que quer continuar?
     Sua conta será excluída permanentemente, sem qualquer forma de reativá-la.
+    Tem certeza que quer continuar?
   error_session_expired: A sua sessão expirou. Por favor, faça login novamente.
   text_session_expiration_settings: "Aviso: a alteração dessas configurações pode expirar as sessões atuais, incluindo a sua."
   setting_session_lifetime: Duração máxima da sessão
