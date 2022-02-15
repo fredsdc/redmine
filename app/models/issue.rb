@@ -718,7 +718,7 @@ class Issue < ActiveRecord::Base
     return @workflow_rule_by_attribute if @workflow_rule_by_attribute && user.nil?
 
     user_real = user || User.current
-    roles = user_real.admin ? Role.all.to_a : user_real.roles_for_project(project)
+    roles = user_real.admin ? project.members.map(&:roles).flatten.uniq : user_real.roles_for_project(project)
     roles = roles.select(&:consider_workflow?)
     return {} if roles.empty?
 
