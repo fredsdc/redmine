@@ -17,6 +17,8 @@
 
 <p><%= setting_check_box :display_subprojects_issues %></p>
 
+<p><%= setting_check_box :subtasks_follow_project_change_of_parent %></p>
+
 <p><%= setting_select :issue_done_ratio, Issue::DONE_RATIO_OPTIONS.collect {|i| [l("setting_issue_done_ratio_#{i}"), i]} %></p>
 
 <p><%= setting_multiselect :non_working_week_days, (1..7).map {|d| [day_name(d), d.to_s]}, :inline => true %></p>

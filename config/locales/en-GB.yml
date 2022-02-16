@@ -352,6 +352,7 @@ en-GB:
   setting_user_format: Users display format
   setting_activity_days_default: Days displayed on project activity
   setting_display_subprojects_issues: Display subprojects issues on main projects by default
+  setting_subtasks_follow_project_change_of_parent: Subtasks follow project change of parent
   setting_enabled_scm: Enabled SCM
   setting_mail_handler_body_delimiters: "Truncate emails after one of these lines"
   setting_mail_handler_api_enabled: Enable WS for incoming emails

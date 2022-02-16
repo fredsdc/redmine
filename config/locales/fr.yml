@@ -428,6 +428,7 @@ fr:
   setting_user_format: Format d'affichage des utilisateurs
   setting_activity_days_default: Nombre de jours affichés sur l'activité des projets
   setting_display_subprojects_issues: Afficher par défaut les demandes des sous-projets sur les projets principaux
+  setting_subtasks_follow_project_change_of_parent: Changer les sous-tâches de projet si le parent change de projet
   setting_enabled_scm: SCM activés
   setting_mail_handler_body_delimiters: "Tronquer les emails après l'une de ces lignes"
   setting_mail_handler_enable_regex: "Utiliser les expressions regulières"

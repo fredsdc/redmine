@@ -220,6 +220,8 @@ issue_list_default_totals:
   default: []
 display_subprojects_issues:
   default: 1
+subtasks_follow_project_change_of_parent:
+  default: 1
 time_entry_list_defaults:
   serialized: true
   default:

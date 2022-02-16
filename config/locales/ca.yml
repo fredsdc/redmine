@@ -343,6 +343,7 @@ ca:
   setting_user_format: "Format de com mostrar l'usuari"
   setting_activity_days_default: "Dies a mostrar l'activitat del projecte"
   setting_display_subprojects_issues: "Mostra els assumptes d'un subprojecte en el projecte pare per defecte"
+  setting_subtasks_follow_project_change_of_parent: Subtasks follow project change of parent
   setting_enabled_scm: "Activar SCM"
   setting_mail_handler_body_delimiters: "Trunca els correus electrònics després d'una d'aquestes línies"
   setting_mail_handler_api_enabled: "Activar WS per correus electrònics d'entrada"

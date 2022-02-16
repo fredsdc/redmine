@@ -1659,13 +1659,17 @@ class Issue < ActiveRecord::Base
     end
 
     # Move subtasks that were in the same project
-    children.each do |child|
-      next unless child.project_id == project_id_before_last_save
-      # Change project and keep project
-      child.send :project=, project, true
-      unless child.save
-        errors.add :base, l(:error_move_of_child_not_possible, :child => "##{child.id}", :errors => child.errors.full_messages.join(", "))
-        raise ActiveRecord::Rollback
+    if Setting.subtasks_follow_project_change_of_parent?
+      children.each do |child|
+        next unless child.project_id == project_id_before_last_save
+        # Change project and keep project
+        # Added journal
+        child.init_journal(User.current)
+        child.send :project=, project, true
+        unless child.save
+          errors.add :base, l(:error_move_of_child_not_possible, :child => "##{child.id}", :errors => child.errors.full_messages.join(", "))
+          raise ActiveRecord::Rollback
+        end
       end
     end
   end

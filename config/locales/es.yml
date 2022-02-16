@@ -753,6 +753,7 @@ es:
   setting_default_projects_public: Los proyectos nuevos son públicos por defecto
   setting_diff_max_lines_displayed: Número máximo de diferencias mostradas
   setting_display_subprojects_issues: Mostrar por defecto peticiones de proy. secundarios en el principal
+  setting_subtasks_follow_project_change_of_parent: Subtasks follow project change of parent
   setting_emails_footer: Pie de mensajes
   setting_enabled_scm: Activar SCM
   setting_feeds_limit: Límite de contenido para sindicación

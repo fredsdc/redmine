@@ -715,6 +715,7 @@ uk:
   label_reverse_chronological_order: В зворотньому порядку
   label_preferences: Переваги
   setting_display_subprojects_issues: Відображення підпроектів по замовчуванню
+  setting_subtasks_follow_project_change_of_parent: Subtasks follow project change of parent
   label_overall_activity: Зведений звіт дій
   setting_default_projects_public: Нові проекти є загальнодоступними
   error_scm_annotate: "Коментар неможливий через перевищення максимального розміру текстового файлу."
