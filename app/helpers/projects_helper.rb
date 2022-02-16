@@ -120,8 +120,8 @@ module ProjectsHelper
     options_for_select(grouped, project.workspace_id)
   end
 
-  def used_workspaces_by_tracker(tracker)
-    tracker.workflow_rules.map(&:workspace_id).uniq
+  def used_workspaces_by_tracker
+    WorkflowRule.pluck(:tracker_id, :workspace_id).uniq.group_by(&:first).map{|k,a| [k,a.map{|x| "ws-" + x.last.to_s}.join(" ")]}.to_h
   end
 
   def format_version_sharing(sharing)
