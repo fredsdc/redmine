@@ -24,8 +24,9 @@
 
 <% unless @query.type == 'ProjectQuery' %>
   <p><label for="project"><%=l(:field_project)%></label>
-  <%= select_tag "query[project_id]", options_for_select(Project.where(Project.allowed_to_condition(User.current, :save_queries)).pluck(:name, :id), @query.project_id) %></p>
-  <p><label for="query_is_for_all"><%=l(:field_is_for_all)%></label>
+  <%= select_tag "query[project_id]", options_for_select(project_tree_options_for_select(Project.where(Project.allowed_to_condition(
+    User.current, :save_queries) + " OR projects.id = " + @query.project.id.to_s), :selected => @query.project)) %></p>
+  <p><label for="query_is_for_all"><%= l(:field_is_for_all) %></label>
   <%= check_box_tag 'query_is_for_all', 1, @query.project.nil?, :class => (User.current.admin? ? '' : 'disable-unless-private') %></p>
 <% end %>
 
