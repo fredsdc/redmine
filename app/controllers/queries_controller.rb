@@ -121,7 +121,8 @@ class QueriesController < ApplicationController
   end
 
   def update_query_from_params
-    @query.project = params[:query_is_for_all] ? nil : @project
+    @project = params[:query_is_for_all] ? nil : (params[:query] && Project.find_by_id(params[:query][:project_id]))
+    @query.project = @project
     @query.build_from_params(params)
     @query.column_names = nil if params[:default_columns]
     @query.sort_criteria = (params[:query] && params[:query][:sort_criteria]) || @query.sort_criteria
