@@ -1068,7 +1068,7 @@ pt-BR:
   project_status_archived_plural: arquivados
   text_project_closed: Este projeto está fechado e somente leitura.
   notice_user_successful_create: Usuário %{id} criado.
-  field_core_fields: campos padrão
+  field_core_fields: Campos padrão
   field_timeout: Tempo de espera (em segundos)
   setting_thumbnails_enabled: Exibir miniaturas de anexos
   setting_thumbnails_size: Tamanho das miniaturas (em pixels)
