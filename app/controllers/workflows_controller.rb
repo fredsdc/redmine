@@ -24,10 +24,10 @@ class WorkflowsController < ApplicationController
   before_action :require_admin
 
   def index
-    @roles = Role.sorted.select(&:consider_workflow?)
-    @trackers = Tracker.sorted
     @workspaces = Workspace.sorted
     @workspace = Workspace.find_by_id(params[:workspace_id]) || Workspace.first
+    @roles = Role.where(id: WorkflowTransition.where(workspace_id: @workspace.id).pluck(:role_id)).sorted.select(&:consider_workflow?)
+    @trackers = Tracker.where(id: WorkflowTransition.where(workspace_id: @workspace.id).pluck(:tracker_id)).sorted
     @workflow_counts = WorkflowTransition.group(:tracker_id, :role_id, :workspace_id).count
   end
 
