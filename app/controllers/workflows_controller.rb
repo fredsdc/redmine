@@ -28,6 +28,7 @@ class WorkflowsController < ApplicationController
     @roles = Role.sorted.select(&:consider_workflow?)
     @trackers = Tracker.sorted
     @workspaces = Workspace.sorted
+    @workspace = Workspace.find_by_id(params[:workspace_id]) || Workspace.first
     @workflow_counts = WorkflowTransition.group(:tracker_id, :role_id, :workspace_id).count
   end
 
