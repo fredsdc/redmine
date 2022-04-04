@@ -1,4 +1,4 @@
-<p><%= select_tag "tracker_id", options_from_collection_for_select(@project.trackers.collect, "id", "name"), {:required => true, :onchange => "refresh_trackers(this);"} %><p>
+<p><%= select_tag "tracker_id", options_from_collection_for_select(@project.trackers.collect, "id", "name"), {:required => true, :onchange => "refresh_gicf_trackers(this);"} %><p>
 
 <div id='custom_fields_form'>
   <% @project.trackers.each do |t| %>
@@ -71,7 +71,7 @@ function init_sortables(labelclass) {
     axis: 'y'
   }).disableSelection();
 }
-function refresh_trackers(tracker) {
+function refresh_gicf_trackers(tracker) {
   $('.tracker').hide();
   $('#tracker_' + tracker.value).show();
 }
