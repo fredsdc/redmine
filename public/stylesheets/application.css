@@ -717,7 +717,7 @@ ul.properties li span {font-style:italic;}
   padding-left: 0px;
   z-index: 2;
 }
-.autoscroll tbody td:first-child {
+.autoscroll td:first-child {
   background-color: inherit;
   position: -webkit-sticky; /* for Safari */
   position: sticky;
