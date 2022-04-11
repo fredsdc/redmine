@@ -1,0 +1,39 @@
+<% unless @tracker.new_record? %>
+  <% flows = WorkflowRule.where(tracker_id: @tracker.id).map{|w| [w.role_id, w.tracker_id, w.workspace_id]}.uniq %>
+  <% if flows.count > 0 %>
+    <% workspaces = Workspace.pluck(:id, :name).to_h %>
+    <% roles = Role.pluck(:id, :name).to_h %>
+    <% trackers = Tracker.pluck(:id, :name).to_h %>
+    <div id="workflows_dialog" style="display:none;">
+      <h3><%= l(:label_workflow_plural) %></h3>
+      <i><span style="width: 160px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_workspace) %></span></i><br>
+      <% flows.sort.each do |x| %>
+      <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{roles[x[0]]}"'</span><span style="width: 160px; display: inline-block;">'"#{workspaces[x[2]]}"'</span>'), workflows_edit_path(:role_id => x[0], :tracker_id => x[1], :workspace_id => x[2]) %>
+      <br>
+      <% end %>
+    </div>
+  <% end %>
+  <% projects = Project.select{|p| p.trackers.include?(@tracker)} %>
+  <% if projects.present? %>
+    <div id="projects_dialog" style="display:none;">
+      <h3><%= l(:label_project_plural) %>:</h3>
+      <% projects.each do |project| %>
+      <%= link_to(project.name, project_path(project), :class => project.css_classes).html_safe %>
+      <br>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<div class="contextual">
+  <%= content_tag "a", l(:label_project_plural), {
+      :onclick => "showModal('projects_dialog', '600px', '#{l(:label_tracker_plural)} » #{@tracker.name}')",
+      :style => "cursor: pointer;",
+      :class => "icon icon-projects"
+    } if projects.present? %>
+  <%= content_tag "a", l(:label_workflow_plural), {
+      :onclick => "showModal('workflows_dialog', '600px', '#{l(:label_tracker_plural)} » #{@tracker.name}')",
+      :style => "cursor: pointer;",
+      :class => "icon icon-workflows"
+    } if flows.present? %>
+</div>

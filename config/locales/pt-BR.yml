@@ -392,6 +392,7 @@ pt-BR:
   error_unable_delete_workspace: Não foi possível excluir espaço de trabalho
   field_workspace: Espaço de trabalho
   label_workflow: Fluxo de trabalho
+  label_workflow_plural: Fluxos de trabalho
   label_issue_status: Situação da tarefa
   label_issue_status_plural: Situação das tarefas
   label_issue_status_new: Nova situação
