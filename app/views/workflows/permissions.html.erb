@@ -7,11 +7,13 @@
     <li><%= link_to l(:label_status_transitions), workflows_edit_path(:role_id => @roles,
                       :tracker_id => @trackers, :workspace_id => @workspaces,
                       :used_role_statuses_only => @used_role_statuses_only ? 1 : 0,
-                      :used_statuses_only => @used_statuses_only ? 1 : 0) %></li>
+                      :used_statuses_only => @used_statuses_only ? 1 : 0,
+                      :used_workspaces_only => @used_workspaces_only ? 1 : 0) %></li>
     <li><%= link_to l(:label_fields_permissions), workflows_permissions_path(:role_id => @roles,
                       :tracker_id => @trackers, :workspace_id => @workspaces,
                       :used_role_statuses_only => @used_role_statuses_only ? 1 : 0,
-                      :used_statuses_only => @used_statuses_only ? 1 : 0), :class => 'selected' %></li>
+                      :used_statuses_only => @used_statuses_only ? 1 : 0,
+                      :used_workspaces_only => @used_workspaces_only ? 1 : 0), :class => 'selected' %></li>
 
 
   </ul>
@@ -52,6 +54,10 @@
           <%= hidden_field_tag 'used_statuses_only', '0', :id => nil %>
           <label><%= check_box_tag 'used_statuses_only', '1', @used_statuses_only %> <%= l(:label_display_used_statuses_only) %></label>
         </td>
+        <td>
+          <%= hidden_field_tag 'used_workspaces_only', '0', :id => nil %>
+          <label><%= check_box_tag 'used_workspaces_only', '1', @used_workspaces_only %> <%= l(:label_display_used_workspaces_only) %></label>
+        </td>
         <td/>
       </tr>
       <tr>
@@ -73,6 +79,7 @@
     <%= @workspaces.map {|workspace| hidden_field_tag 'workspace_id[]', workspace.id, :id => nil}.join.html_safe %>
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
     <%= hidden_field_tag 'used_role_statuses_only', params[:used_role_statuses_only], :id => nil %>
+    <%= hidden_field_tag 'used_workspaces_only', params[:used_workspaces_only], :id => nil %>
     <div class="autoscroll">
     <table class="list workflows fields_permissions">
     <tbody>
