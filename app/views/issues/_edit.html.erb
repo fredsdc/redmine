@@ -72,6 +72,10 @@
 
     <%= f.hidden_field :lock_version %>
     <%= hidden_field_tag 'last_journal_id', params[:last_journal_id] || @issue.last_journal_id %>
+    <p class="inline" for="supress_email" id="issue_supress_email" <%= 'style="display: none;"'.html_safe unless User.current.allowed_to?(:supress_email, @issue.project) %>>
+      <%= check_box_tag 'supress_email', true, false %>
+      <%= l(:label_supress_email) %>
+    </p>
     <%= submit_tag l(:button_submit) %>
     <%= link_to l(:button_cancel), issue_path(id: @issue.id), :onclick => params[:action] == 'show' ? "$('#update').hide(); return false;" : '' %>
 

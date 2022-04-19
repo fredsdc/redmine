@@ -976,6 +976,7 @@ en:
   label_copy_same_as_target: Same as target
   label_display_used_statuses_only: Only display statuses that are used by this tracker
   label_display_used_role_statuses_only: Only display statuses that are used by this role
+  label_display_used_workspaces_only: Only display statuses that are used by this workspace
   label_api_access_key: API access key
   label_missing_api_access_key: Missing an API access key
   label_api_access_key_created_on: "API access key created %{value} ago"
@@ -1315,3 +1316,5 @@ en:
   text_project_is_public_non_member: Public projects and their contents are available to all logged-in users.
   text_project_is_public_anonymous: Public projects and their contents are openly available on the network.
   label_import_time_entries: Import time entries
+  label_supress_email: Do not send emails
+  permission_supress_email: Choose to not send emails

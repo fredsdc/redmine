@@ -218,6 +218,12 @@
 </div>
 <% end %>
 
+<% if @issues.map{|i| i.project}.uniq.map{|p| User.current.allowed_to?(:supress_email, p)}.any? %>
+  <p class="inline" for="supress_email" id="issue_supress_email">
+    <%= check_box_tag 'supress_email', true, false %>
+    <%= l(:label_supress_email) %>
+  </p>
+<% end %>
 <p>
   <% if @copy %>
     <%= hidden_field_tag 'copy', '1' %>

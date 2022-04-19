@@ -127,6 +127,7 @@ Redmine::AccessControl.map do |map|
     map.permission :add_issue_watchers, {:watchers => [:new, :create, :append, :autocomplete_for_user]}
     map.permission :delete_issue_watchers, {:watchers => :destroy}
     map.permission :import_issues, {}
+    map.permission :supress_email, {}
     # Issue categories
     map.permission :manage_categories, {:projects => :settings, :issue_categories => [:index, :show, :new, :create, :edit, :update, :destroy]}, :require => :member
   end

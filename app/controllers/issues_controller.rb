@@ -130,6 +130,7 @@ class IssuesController < ApplicationController
       raise ::Unauthorized
     end
     call_hook(:controller_issues_new_before_save, { :params => params, :issue => @issue })
+    @issue.notify = false if supress_email?(@issue)
     if @issue.attachments_addable?(User.current)
       @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     end
@@ -171,6 +172,10 @@ class IssuesController < ApplicationController
 
   def update
     return unless update_issue_from_params
+    if supress_email?(@issue)
+      @issue.notify = false
+      @issue.current_journal.notify = false
+    end
     if @issue.attachments_addable?(User.current)
       @issue.save_attachments(params[:attachments] || (params[:issue] && params[:issue][:uploads]))
     end
@@ -358,6 +363,10 @@ class IssuesController < ApplicationController
       end
       journal = issue.init_journal(User.current, params[:notes])
       issue.safe_attributes = attributes
+      if supress_email?(issue)
+        issue.notify = false
+        issue.current_journal.notify = false
+      end
       issue.attachments = [] unless issue.attachments_addable?(User.current) if @copy
       call_hook(:controller_issues_bulk_edit_before_save, { :params => params, :issue => issue })
       if issue.save
@@ -641,5 +650,9 @@ class IssuesController < ApplicationController
     else
       redirect_back_or_default issue_path(@issue)
     end
+  end
+
+  def supress_email?(issue)
+    params[:supress_email].present? && User.current.allowed_to?(:supress_email, issue.project)
   end
 end

@@ -37,6 +37,10 @@
     </div>
   </div>
 
+  <p class="inline" for="supress_email" id="issue_supress_email">
+    <%= check_box_tag 'supress_email', true, false %>
+    <%= l(:label_supress_email) %>
+  </p>
   <%= submit_tag l(:button_create) %>
   <%= submit_tag l(:button_create_and_continue), :name => 'continue' %>
 <% end %>

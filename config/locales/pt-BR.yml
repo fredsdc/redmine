@@ -902,6 +902,7 @@ pt-BR:
   permission_view_issues: Ver tarefas
   label_display_used_statuses_only: Somente situações deste tipo de tarefa
   label_display_used_role_statuses_only: Somente situações deste papel
+  label_display_used_workspaces_only: Somente situações deste espaço de trabalho
   label_revision_id: Revisão %{value}
   label_api_access_key: Chave de acesso à API
   button_show: Exibir
@@ -1349,3 +1350,5 @@ pt-BR:
   label_display_type_board: Quadro
   label_my_bookmarks: Meus marcaroes
   label_import_time_entries: Importar tempo gasto
+  label_supress_email: Não enviar emails
+  permission_supress_email: Escolher não enviar emails

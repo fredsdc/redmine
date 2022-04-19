@@ -59,5 +59,10 @@ $(document).ready(function(){
   $("#issue_tracker_id, #issue_status_id").each(function(){
     $(this).val($(this).find("option[selected=selected]").val());
   });
+  if (<%= User.current.allowed_to?(:supress_email, @issue.project) %>) {
+    $("#issue_supress_email").show();
+  } else {
+    $("#issue_supress_email").hide();
+  }
 });
 <% end %>
