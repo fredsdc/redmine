@@ -52,6 +52,7 @@
 <% perms_by_module.keys.sort.each do |mod| %>
     <% module_name = mod.blank? ? 'module_project' : "module_#{mod}" %>
     <fieldset id="<%= module_name %>"><legend><%= toggle_checkboxes_link("##{module_name}\ input") %><%= mod.blank? ? l(:label_project) : l_or_humanize(mod, :prefix => 'project_module_') %></legend>
+    <div style="column-count: 4; column-width: 150px;">
     <% perms_by_module[mod].each do |permission| %>
         <label class="floating">
         <%= check_box_tag 'role[permissions][]', permission.name, (@role.permissions.include? permission.name),
@@ -60,6 +61,7 @@
         <%= l_or_humanize(permission.name, :prefix => 'permission_') %>
         </label>
     <% end %>
+    </div>
     </fieldset>
 <% end %>
 <br /><%= check_all_links 'permissions' %>

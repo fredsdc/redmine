@@ -92,7 +92,7 @@ module QueriesHelper
   def available_block_columns_tags(query)
     tags = ''.html_safe
     query.available_block_columns.each do |column|
-      tags << content_tag('label', check_box_tag('c[]', column.name.to_s, query.has_column?(column), :id => nil) + " #{column.caption}", :class => 'inline')
+      tags << content_tag('label', check_box_tag('c[]', column.name.to_s, query.has_column?(column), :id => nil) + " #{column.caption}", :class => 'floating')
     end
     tags
   end
@@ -101,7 +101,7 @@ module QueriesHelper
     tag_name = (options[:name] || 't') + '[]'
     tags = ''.html_safe
     query.available_totalable_columns.each do |column|
-      tags << content_tag('label', check_box_tag(tag_name, column.name.to_s, query.totalable_columns.include?(column), :id => nil) + " #{column.caption}", :class => 'inline')
+      tags << content_tag('label', check_box_tag(tag_name, column.name.to_s, query.totalable_columns.include?(column), :id => nil) + " #{column.caption}", :class => 'floating')
     end
     tags << hidden_field_tag(tag_name, '')
     tags

@@ -2,17 +2,19 @@
   <%= hidden_field_tag 'tab', 'issues' %>
 
   <% unless @trackers.empty? %>
-  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]:enabled:visible') %><%= l(:label_tracker_plural)%> (<a onclick="ws='.ws-' + $('#project_workspace_id').val(); $('#project_trackers > label' + ws).show(); $('#project_trackers > label:not(' + ws + ')').toggle();"><%= l(:label_all) %></a>)</legend>
+  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]:enabled:visible') %><%= l(:label_tracker_plural)%> (<a onclick="ws='.ws-' + $('#project_workspace_id').val(); $('#project_trackers label' + ws).show(); $('#project_trackers label:not(' + ws + ')').toggle();"><%= l(:label_all) %></a>)</legend>
   <% if User.current.admin? %>
     <div class="contextual"><%= link_to l(:label_administration), trackers_path, :class => "icon icon-settings" %></div>
   <% end %>
+  <div style="column-count: 4; column-width: 150px;">
   <% uwbt=used_workspaces_by_tracker %>
   <% @trackers.each do |tracker| %>
-    <label class="floating <%= uwbt[tracker.id].to_s %>"<% unless uwbt[tracker.id].to_s.match(/\b#{@project.workspace_id}\b/) %>style="display: none;"<% end %>>
+    <label class="floating <%= uwbt[tracker.id].to_s %>"<% unless uwbt[tracker.id].to_s.match(/\b#{@project.workspace_id}\b/) %>style="display: none"<% else %>style="color: blue;"<% end %>>
       <%= check_box_tag 'project[tracker_ids][]', tracker.id, @project.trackers.to_a.include?(tracker), :id => nil, :onchange => 'displaycfs();' %>
       <%= tracker_name_tag tracker %>
     </label>
   <% end %>
+  </div>
   <%= hidden_field_tag 'project[tracker_ids][]', '' %>
   </fieldset>
   <% end %>
@@ -22,6 +24,7 @@
   <% if User.current.admin? %>
     <div class="contextual"><%= link_to l(:label_administration), custom_fields_path, :class => "icon icon-settings" %></div>
   <% end %>
+  <div style="column-count: 4; column-width: 150px;">
   <% @issue_custom_fields.each do |custom_field| %>
     <label class="floating">
       <%= check_box_tag 'project[issue_custom_field_ids][]', custom_field.id, (@project.all_issue_custom_fields.include? custom_field),
@@ -30,6 +33,7 @@
       <%= custom_field_name_tag(custom_field) %>
     </label>
   <% end %>
+  </div>
   <%= hidden_field_tag 'project[issue_custom_field_ids][]', '' %>
   </fieldset>
   <%= javascript_tag do %>
