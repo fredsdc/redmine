@@ -14,7 +14,7 @@
   <label class="block"><%= radio_button 'query', 'visibility', Query::VISIBILITY_PUBLIC %> <%= l(:label_visibility_public) %></label>
   <% unless @query.type == 'ProjectQuery' %>
     <label class="block"><%= radio_button 'query', 'visibility', Query::VISIBILITY_ROLES %> <%= l(:label_visibility_roles) %>:</label>
-      </p><p style="column-count: 4; column-width: 150px;">
+      </p><p style="column-count: 4; column-width: 200px;">
       <% Role.givable.sorted.each do |role| %>
         <label class="block role-visibility"><%= check_box_tag 'query[role_ids][]', role.id, @query.roles.include?(role), :id => nil %> <%= role.name %></label>
       <% end %>

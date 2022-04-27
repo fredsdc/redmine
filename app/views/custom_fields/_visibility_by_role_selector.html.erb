@@ -10,7 +10,7 @@
     <%= l(:label_visibility_roles) %>:
   </label>
   <% role_ids = @custom_field.role_ids %>
-  <div style="column-count: 4; column-width: 150px;">
+  <div style="column-count: 4; column-width: 200px;">
   <% Role.givable.sorted.each do |role| %>
     <label class="floating custom_field_role" style="padding-left:2em;">
       <%= check_box_tag 'custom_field[role_ids][]', role.id, role_ids.include?(role.id), :id => nil %>

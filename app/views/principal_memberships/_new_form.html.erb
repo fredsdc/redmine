@@ -13,7 +13,7 @@
 
 <fieldset class="box">
   <legend><%= toggle_checkboxes_link('.roles-selection input') %><%= l(:label_role_plural) %> (<a onclick='if($(".roles-selection label").size()==$(".roles-selection label :visible").size()){filter_proj_ws()}else{ $(".roles-selection label").show()};'><%= l(:label_all) %></a>)</legend>
-  <div class="roles-selection">
+  <div class="roles-selection" style="column-count: 4;">
   <% @roles.each do |role| %>
     <label<%= role_color_and_hide(role) %><%= " class=ro_#{role.id}" %> >
       <%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %>

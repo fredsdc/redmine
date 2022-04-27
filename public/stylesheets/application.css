@@ -807,6 +807,8 @@ html>body .tabular p {overflow:hidden;}
 .tabular textarea {width:95%; resize:vertical;}
 
 .tabular label{
+  display: block ruby;
+  overflow: hidden;
   font-weight: bold;
   float: left;
   text-align: right;
@@ -973,17 +975,18 @@ input.autocomplete.ajax-loading {
 }
 
 .objects-selection label {
-  display: block;
+  display: block ruby;
+  overflow: hidden;
 }
 
 .objects-selection>div, #user_group_ids {
-  column-count: auto;
+  column-count: 4;
   column-width: 200px;
-  -webkit-column-count: auto;
+  -webkit-column-count: 4;
   -webkit-column-width: 200px;
   -webkit-column-gap : 0.5rem;
   -webkit-column-rule: 1px solid #ccc;
-  -moz-column-count: auto;
+  -moz-column-count: 4;
   -moz-column-width: 200px;
   -moz-column-gap : 0.5rem;
   -moz-column-rule: 1px solid #ccc;

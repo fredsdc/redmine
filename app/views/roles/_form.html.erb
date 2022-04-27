@@ -29,7 +29,7 @@
               :data => {:enables => '.role_managed_role input'} %>
         <%= l(:label_member_management_selected_roles_only) %>:
       </label>
-      <p style="column-count: 4; column-width: 150px;">
+      <p style="column-count: 4; column-width: 200px;">
       <% Role.givable.sorted.each do |role| %>
         <label class="block role_managed_role" style="padding-left:2em;">
           <%= check_box_tag 'role[managed_role_ids][]', role.id, @role.managed_roles.to_a.include?(role), :id => nil %>
@@ -54,7 +54,7 @@
 <% perms_by_module.keys.sort.each do |mod| %>
     <% module_name = mod.blank? ? 'module_project' : "module_#{mod}" %>
     <fieldset id="<%= module_name %>"><legend><%= toggle_checkboxes_link("##{module_name}\ input") %><%= mod.blank? ? l(:label_project) : l_or_humanize(mod, :prefix => 'project_module_') %></legend>
-    <div style="column-count: 4; column-width: 150px;">
+    <div style="column-count: 4; column-width: 200px;">
     <% perms_by_module[mod].each do |permission| %>
         <label class="floating">
         <%= check_box_tag 'role[permissions][]', permission.name, (@role.permissions.include? permission.name),

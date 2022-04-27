@@ -6,7 +6,7 @@
   <% if User.current.admin? %>
     <div class="contextual"><%= link_to l(:label_administration), trackers_path, :class => "icon icon-settings" %></div>
   <% end %>
-  <div style="column-count: 4; column-width: 150px;">
+  <div style="column-count: 4; column-width: 200px;">
   <% uwbt=used_workspaces_by_tracker %>
   <% @trackers.each do |tracker| %>
     <label class="floating <%= uwbt[tracker.id].to_s %>"<% unless uwbt[tracker.id].to_s.match(/\b#{@project.workspace_id}\b/) %>style="display: none"<% else %>style="color: blue;"<% end %>>
@@ -24,7 +24,7 @@
   <% if User.current.admin? %>
     <div class="contextual"><%= link_to l(:label_administration), custom_fields_path, :class => "icon icon-settings" %></div>
   <% end %>
-  <div style="column-count: 4; column-width: 150px;">
+  <div style="column-count: 4; column-width: 200px;">
   <% @issue_custom_fields.each do |custom_field| %>
     <label class="floating">
       <%= check_box_tag 'project[issue_custom_field_ids][]', custom_field.id, (@project.all_issue_custom_fields.include? custom_field),

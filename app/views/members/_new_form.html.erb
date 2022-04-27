@@ -8,7 +8,7 @@
 </fieldset>
 <fieldset class="box">
   <legend><%= toggle_checkboxes_link('.roles-selection input:visible') %><%= l(:label_role_plural) %> (<a onclick='$(".unused").toggleClass("show");'><%= l(:label_all) %></a>)</legend>
-  <div class="roles-selection">
+  <div class="roles-selection" style="column-count: 4;">
     <% User.current.managed_roles(@project).each do |role| %>
       <label<%= role_color_and_hide(role, @project) %>><%= check_box_tag 'membership[role_ids][]', role.id, false, :id => nil %><%= role %></label>
     <% end %>
