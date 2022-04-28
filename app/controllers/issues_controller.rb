@@ -544,7 +544,7 @@ class IssuesController < ApplicationController
         end
         @link_copy = link_copy?(params[:link_copy]) || request.get?
         @copy_attachments = params[:copy_attachments].present? || request.get?
-        @copy_subtasks = params[:copy_subtasks].present? || request.get?
+        @copy_subtasks = params[:copy_subtasks].present? || false
         @copy_watchers = User.current.allowed_to?(:add_issue_watchers, @project)
         @issue.copy_from(@copy_from, :attachments => @copy_attachments, :subtasks => @copy_subtasks, :watchers => @copy_watchers, :link => @link_copy)
         @issue.parent_issue_id = @copy_from.parent_id
