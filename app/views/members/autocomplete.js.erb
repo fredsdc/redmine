@@ -1,1 +1,3 @@
+tmp=$('#principals_for_new_member input:checked').parent();
 $('#principals_for_new_member').html('<%= escape_javascript(render_principals_for_new_members(@project)) %>');
+$('#principals_for_new_member #principals').append(tmp);

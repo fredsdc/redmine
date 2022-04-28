@@ -807,7 +807,7 @@ html>body .tabular p {overflow:hidden;}
 .tabular textarea {width:95%; resize:vertical;}
 
 .tabular label{
-  display: block ruby;
+  display: block;
   overflow: hidden;
   font-weight: bold;
   float: left;
@@ -975,7 +975,7 @@ input.autocomplete.ajax-loading {
 }
 
 .objects-selection label {
-  display: block ruby;
+  display: block;
   overflow: hidden;
 }
 
