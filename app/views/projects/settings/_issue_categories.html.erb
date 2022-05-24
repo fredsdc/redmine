@@ -4,6 +4,7 @@
 <table class="list">
   <thead><tr>
     <th><%= l(:label_issue_category) %></th>
+    <th><%= l(:field_active) %></th>
     <th><%= l(:field_assigned_to) %></th>
     <th></th>
   </tr></thead>
@@ -12,6 +13,7 @@
   <% unless category.new_record? %>
   <tr>
     <td class="name"><%= category.name  %></td>
+    <td class="tick"><%= checked_image category.active? %></td>
     <td><%= category.assigned_to.name if category.assigned_to %></td>
     <td class="buttons">
       <% if User.current.allowed_to?(:manage_categories, @project) %>

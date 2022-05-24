@@ -19,8 +19,8 @@
                 :include_blank => true, :required => @issue.required_attribute?('assigned_to_id') %></p>
 <% end %>
 
-<% if @issue.safe_attribute?('category_id') && @issue.project.issue_categories.any? %>
-<p><%= f.select :category_id, (@issue.project.issue_categories.collect {|c| [c.name, c.id]}),
+<% if @issue.safe_attribute?('category_id') && IssueCategory.find(@issue.project.issue_categories.active.ids | [@issue.category_id]).any? %>
+<p><%= f.select :category_id, (IssueCategory.find(@issue.project.issue_categories.active.ids | [@issue.category_id]).sort.collect {|c| [c.name, c.id]}),
                 {:include_blank => true, :required => @issue.required_attribute?('category_id')},
                  :onchange => ("updateIssueFrom('#{escape_javascript(update_issue_form_path(@project, @issue))}', this)" if @issue.new_record?) %>
 <%= link_to(l(:label_issue_category_new),

@@ -27,9 +27,10 @@ class IssueCategory < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => [:project_id]
   validates_length_of :name, :maximum => 60
 
-  safe_attributes 'name', 'assigned_to_id'
+  safe_attributes 'name', 'assigned_to_id', 'active'
 
   scope :named, lambda {|arg| where("LOWER(#{table_name}.name) = LOWER(?)", arg.to_s.strip)}
+  scope :active, lambda { where(:active => true) }
 
   alias :destroy_without_reassign :destroy
 
