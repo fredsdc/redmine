@@ -15,7 +15,7 @@
       </fieldset>
     </div>
   <% end %>
-  <% projects = Project.find(MemberRole.where(role_id: @role.id).compact.map{|m| m.member.project_id}) %>
+  <% projects = Project.find(MemberRole.where(role_id: @role.id).map{|m| m.member&.project_id}.compact) %>
   <% if projects.present? %>
     <div id="projects_dialog" style="display:none;">
       <fieldset class="box" id="tracker_project_ids">
