@@ -4,12 +4,18 @@
     <% workspaces = Workspace.pluck(:id, :name).to_h %>
     <% roles = Role.pluck(:id, :name).to_h %>
     <% trackers = Tracker.pluck(:id, :name).to_h %>
-    <div id="workflows_dialog" style="display:none;">
+    <% used = [] %>
+    <% @tracker.projects.map{|p| p.members.
+         map{|m| m.roles.pluck(:name)}.flatten.uniq.
+         map{|r| used |= [[r, p.workspace.name]]}}
+    %>
+  <div id="workflows_dialog" style="display:none;">
       <fieldset class="box">
         <legend><%= l(:label_workflow_plural) %></legend>
-        <i><span style="width: 160px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 160px; display: inline-block;"><%= l(:label_workspace) %></span></i><br>
+        <i><span style="width: 220px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 220px; display: inline-block;"><%= l(:label_workspace) %></span></i><br>
         <% flows.sort.each do |x| %>
-        <%= link_to raw('<span style="width: 160px; display: inline-block;">'"#{roles[x[0]]}"'</span><span style="width: 160px; display: inline-block;">'"#{workspaces[x[2]]}"'</span>'),
+        <% color = used.include?([roles[x[0]],workspaces[x[2]]]) ? "" : " color: darkred;" %>
+        <%= link_to raw('<span style="width: 220px; display: inline-block;' + color + '">'"#{roles[x[0]]}"'</span><span style="width: 220px; display: inline-block;' + color + '">'"#{workspaces[x[2]]}"'</span>'),
               workflows_edit_path(:role_id => x[0], :tracker_id => x[1], :workspace_id => x[2], :used_role_statuses_only => true, :used_statuses_only => true, :used_workspaces_only => true) %><br>
         <% end %>
       </fieldset>
