@@ -4,10 +4,9 @@
     <% workspaces = Workspace.pluck(:id, :name).to_h %>
     <% roles = Role.pluck(:id, :name).to_h %>
     <% trackers = Tracker.pluck(:id, :name).to_h %>
-    <% used = [] %>
-    <% Project.select{|p| p.members.
+    <% used = Project.select{|p| p.members.
          map{|m| m.roles.pluck(:name)}.flatten.uniq.include?(@role.name)}.
-         map{|p| p.trackers.map{|t| used |= [[t.name, p.workspace.name]]}}
+         map{|p| p.trackers.map{|t| [t.name, p.workspace.name]}}.flatten(1).uniq
     %>
     <div id="workflows_dialog" style="display:none;">
       <fieldset class="box">
