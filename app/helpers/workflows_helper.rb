@@ -77,7 +77,7 @@ module WorkflowsHelper
   def transition_tag(transition_count, old_status, new_status, name)
     w = transition_count
     tag_name = "transitions[#{ old_status.try(:id) || 0 }][#{new_status.id}][#{name}]"
-    if old_status == new_status
+    if false && old_status == new_status
       check_box_tag(tag_name, "1", true,
                     {:disabled => true, :class => "old-status-#{old_status.try(:id) || 0} new-status-#{new_status.id}"})
     elsif w == 0 || w == @roles.size * @trackers.size * @workspaces.size
