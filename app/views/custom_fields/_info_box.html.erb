@@ -1,26 +1,27 @@
-<% unless @workspace.new_record? %>
-  <% flows = WorkflowRule.where(workspace_id: @workspace.id).distinct.pluck(:role_id, :tracker_id, :workspace_id) %>
+<% unless @custom_field.new_record? %>
+  <% flows = WorkflowRule.where(field_name: @custom_field.id).distinct.pluck(:role_id, :tracker_id, :workspace_id) %>
   <% if flows.count > 0 %>
     <% workspaces = Workspace.pluck(:id, :name).to_h %>
     <% roles = Role.pluck(:id, :name).to_h %>
     <% trackers = Tracker.pluck(:id, :name).to_h %>
     <% used = Project.joins(projects_trackers: :tracker, memberships: [member_roles: :role]).
-                where(workspace_id: @workspace.id).
-                distinct.pluck('roles.name, trackers.name')
+                where(projects_trackers: {tracker_id: @custom_field.tracker_ids}, id: @custom_field.project_ids)
+       used = used.where!(member_roles: {role_id: @custom_field.role_ids}) unless @custom_field.visible
+       used = used.includes(:workspace).distinct.pluck('roles.name', 'trackers.name', 'workspaces.name')
     %>
     <div id="workflows_dialog" style="display:none;">
       <fieldset class="box">
         <legend><%= l(:label_workflow_plural) %></legend>
-        <i><span style="width: 220px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 220px; display: inline-block;"><%= l(:label_tracker) %></span></i><br>
+        <i><span style="width: 220px; display: inline-block;"><%= l(:label_role) %></span><span style="width: 220px; display: inline-block;"><%= l(:label_tracker) %></span><span style="width: 220px; display: inline-block;"><%= l(:label_workspace) %></span></i><br>
         <% flows.sort.each do |x| %>
-        <% color = used.include?([roles[x[0]],trackers[x[1]]]) ? "" : " color: darkred;" %>
-        <%= link_to raw('<span style="width: 220px; display: inline-block;' + color + '">'"#{roles[x[0]]}"'</span><span style="width: 220px; display: inline-block;' + color + '">'"#{trackers[x[1]]}"'</span>'),
+        <% color = used.include?([roles[x[0]],trackers[x[1]],workspaces[x[2]]]) ? "" : " color: darkred;" %>
+        <%= link_to raw('<span style="width: 220px; display: inline-block;' + color + '">'"#{roles[x[0]]}"'</span><span style="width: 220px; display: inline-block;' + color + '">'"#{trackers[x[1]]}"'</span><span style="width: 220px; display: inline-block;' + color + '">'"#{workspaces[x[2]]}"'</span>'),
               workflows_edit_path(:role_id => x[0], :tracker_id => x[1], :workspace_id => x[2], :used_role_statuses_only => true, :used_statuses_only => true, :used_workspaces_only => true) %><br>
         <% end %>
       </fieldset>
     </div>
   <% end %>
-  <% projects = Project.where(workspace_id: @workspace.id) %>
+  <% projects = @custom_field.projects %>
   <% if projects.present? %>
     <div id="projects_dialog" style="display:none;">
       <fieldset class="box" id="tracker_project_ids">
@@ -35,12 +36,12 @@
 
 <div class="contextual">
   <%= content_tag "a", l(:label_project_plural), {
-      :onclick => "showModal('projects_dialog', '600px', '#{l(:label_workspace_plural)} » #{@workspace.name}')",
+      :onclick => "showModal('projects_dialog', '600px', '#{l(:label_custom_field_plural)} » #{@custom_field.name}')",
       :style => "cursor: pointer;",
       :class => "icon icon-projects"
     } if projects.present? %>
   <%= content_tag "a", l(:label_workflow_plural), {
-      :onclick => "showModal('workflows_dialog', '600px', '#{l(:label_workspace_plural)} » #{@workspace.name}')",
+      :onclick => "showModal('workflows_dialog', '740px', '#{l(:label_custom_field_plural)} » #{@custom_field.name}')",
       :style => "cursor: pointer;",
       :class => "icon icon-workflows"
     } if flows.present? %>

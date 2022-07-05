@@ -1,12 +1,12 @@
 <% unless @role.new_record? %>
-  <% flows = WorkflowRule.where(role_id: @role.id).map{|w| [w.role_id, w.tracker_id, w.workspace_id]}.uniq %>
+  <% flows = WorkflowRule.where(role_id: @role.id).distinct.pluck(:role_id, :tracker_id, :workspace_id) %>
   <% if flows.count > 0 %>
     <% workspaces = Workspace.pluck(:id, :name).to_h %>
     <% roles = Role.pluck(:id, :name).to_h %>
     <% trackers = Tracker.pluck(:id, :name).to_h %>
-    <% used = Project.select{|p| p.members.
-         map{|m| m.roles.pluck(:name)}.flatten.uniq.include?(@role.name)}.
-         map{|p| p.trackers.map{|t| [t.name, p.workspace.name]}}.flatten(1).uniq
+    <% used = Project.joins(projects_trackers: :tracker, memberships: :member_roles).
+                where(member_roles: {role_id: @role.id}).includes(:workspace).
+                distinct.pluck('trackers.name, workspaces.name')
     %>
     <div id="workflows_dialog" style="display:none;">
       <fieldset class="box">
@@ -20,7 +20,7 @@
       </fieldset>
     </div>
   <% end %>
-  <% projects = Project.find(MemberRole.where(role_id: @role.id).map{|m| m.member&.project_id}.compact) %>
+  <% projects = Project.joins(memberships: :member_roles).where(member_roles: {role_id: @role.id}).distinct %>
   <% if projects.present? %>
     <div id="projects_dialog" style="display:none;">
       <fieldset class="box" id="tracker_project_ids">
