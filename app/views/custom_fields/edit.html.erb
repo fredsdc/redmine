@@ -1,4 +1,4 @@
-<%= render :partial => 'info_box' %>
+<%= render :partial => 'info_box' if @custom_field.type == "IssueCustomField" %>
 
 <%= custom_field_title @custom_field %>
 
