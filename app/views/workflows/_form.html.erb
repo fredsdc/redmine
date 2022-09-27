@@ -19,7 +19,7 @@
 </thead>
 <% transition_counts = workflows.each_with_object(Hash.new(0)) {|w,memo| memo[[w.old_status, w.new_status]] += 1} %>
 <tbody>
-  <% for old_status in [nil] + @statuses %>
+  <% for old_status in [nil] + @statuses.order(:name) %>
   <% next if old_status.nil? && name != 'always' %>
   <tr>
     <td class="name">
@@ -34,7 +34,7 @@
         <%= content_tag('em', old_status_name) %>
       <% end %>
     </td>
-    <% for new_status in @statuses -%>
+    <% for new_status in @statuses.order(:name) -%>
     <% checked = (old_status == new_status) || (transition_counts[[old_status, new_status]] > 0) %>
     <td class="no-tooltip <%= checked ? 'enabled' : '' %>" title="<%= old_status_name %> &#187; <%= new_status.name %>">
       <%= transition_tag transition_counts[[old_status, new_status]], old_status, new_status, name %>
