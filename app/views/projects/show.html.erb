@@ -39,6 +39,9 @@
   <% render_custom_field_values(@project) do |custom_field, formatted| %>
     <li class="<%= custom_field.css_classes %>"><span class="label"><%= custom_field.name %>:</span> <%= formatted %></li>
   <% end %>
+  <% if User.current.admin? %>
+    <li><span class="label"><%=l(:field_workspace)%>:</span> <%= @project.workspace.name %></li>
+  <% end %>
   </ul>
   <% end %>
 
@@ -48,7 +51,7 @@
 	<ul class="subprojects">
 	  <% @subprojects.each do |project| %>
 	  <li><%= link_to(project.name, project_path(project), :class => project.css_classes).html_safe %></li>
-	  <% end %> 
+	  <% end %>
     </ul>
   </div>
   <% end %>
