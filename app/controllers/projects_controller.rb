@@ -207,7 +207,7 @@ class ProjectsController < ApplicationController
     @project.safe_attributes = params[:project]
     identifier_was = Project.find(params[:id]).identifier
     if @project.save
-      @project.keep_old_identifier(identifier_was, @project.identifier)
+      @project.keep_old_identifier(identifier_was)
       respond_to do |format|
         format.html {
           flash[:notice] = l(:notice_successful_update)
