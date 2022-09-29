@@ -30,6 +30,7 @@ class Project < ActiveRecord::Base
   IDENTIFIER_MAX_LENGTH = 100
 
   # Specific overridden Activities
+  has_many :project_identifiers, :dependent => :delete_all
   has_many :time_entry_activities
   has_many :memberships, :class_name => 'Member', :inverse_of => :project
   # Memberships of active users only
@@ -139,7 +140,7 @@ class Project < ActiveRecord::Base
   end
 
   def identifier_frozen?
-    errors[:identifier].blank? && !(new_record? || identifier.blank?)
+    errors[:identifier].blank? && !(new_record? || identifier.blank? || User.current.admin?)
   end
 
   # returns latest created projects
@@ -312,6 +313,7 @@ class Project < ActiveRecord::Base
   def self.find(*args)
     if args.first && args.first.is_a?(String) && !/^\d*$/.match?(args.first)
       project = find_by_identifier(*args)
+      project = ProjectIdentifier.find_by_identifier(*args)&.project if project.nil?
       raise ActiveRecord::RecordNotFound, "Couldn't find Project with identifier=#{args.first}" if project.nil?
       project
     else
@@ -918,6 +920,12 @@ class Project < ActiveRecord::Base
     custom_field_values.select do |value|
       value.custom_field.visible_by?(project, user)
     end
+  end
+
+  def keep_old_identifier(identifier_was, identifier)
+    ProjectIdentifier.find_by_identifier(identifier)&.delete
+    ProjectIdentifier.find_by_identifier(identifier_was)&.delete
+    ProjectIdentifier.new(project_id: id, identifier: identifier_was).save
   end
 
   private

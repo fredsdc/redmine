@@ -205,7 +205,9 @@ class ProjectsController < ApplicationController
 
   def update
     @project.safe_attributes = params[:project]
+    identifier_was = Project.find(params[:id]).identifier
     if @project.save
+      @project.keep_old_identifier(identifier_was, @project.identifier)
       respond_to do |format|
         format.html {
           flash[:notice] = l(:notice_successful_update)
@@ -214,6 +216,8 @@ class ProjectsController < ApplicationController
         format.api  { render_api_ok }
       end
     else
+      @identifier_was = @project.identifier
+      @project.identifier = identifier_was
       respond_to do |format|
         format.html {
           settings
