@@ -86,6 +86,7 @@ class Project < ActiveRecord::Base
 
   after_save :update_inherited_members, :if => Proc.new {|project| project.saved_change_to_inherit_members?}
   after_save :remove_inherited_member_roles, :add_inherited_member_roles, :if => Proc.new {|project| project.saved_change_to_parent_id?}
+  after_save :remove_identifier
   after_update :update_versions_from_hierarchy_change, :if => Proc.new {|project| project.saved_change_to_parent_id?}
   before_destroy :delete_all_members
 
@@ -922,13 +923,17 @@ class Project < ActiveRecord::Base
     end
   end
 
-  def keep_old_identifier(identifier_was, identifier)
-    ProjectIdentifier.find_by_identifier(identifier)&.delete
-    ProjectIdentifier.find_by_identifier(identifier_was)&.delete
-    ProjectIdentifier.new(project_id: id, identifier: identifier_was).save
+  def keep_old_identifier(identifier_was, identifier = nil)
+    remove_identifier
+    remove_identifier(identifier_was)
+    ProjectIdentifier.new(project_id: id, identifier: identifier_was).save if identifier != identifier_was
   end
 
   private
+
+  def remove_identifier(identifier = self.identifier)
+    ProjectIdentifier.find_by_identifier(identifier)&.delete
+  end
 
   def update_inherited_members
     if parent
