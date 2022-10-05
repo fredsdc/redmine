@@ -174,9 +174,9 @@ class WorkflowsController < ApplicationController
       status_ids = status_ids.where(:tracker_id => @trackers.map(&:id)) if @trackers && @used_statuses_only
       status_ids = status_ids.where(:workspace_id => @workspaces.map(&:id)) if @workspaces && @used_workspaces_only
       status_ids = status_ids.distinct.pluck(:old_status_id, :new_status_id).flatten.uniq
-      @statuses = IssueStatus.where(:id => status_ids).sorted.to_a
+      @statuses = IssueStatus.where(:id => status_ids).sort_by{|e| e[:name]}.to_a
     else
-      @statuses = IssueStatus.sorted.to_a
+      @statuses = IssueStatus.sort_by{|e| e[:name]}.to_a
     end
   end
 end
