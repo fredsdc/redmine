@@ -1065,7 +1065,7 @@ class Issue < ActiveRecord::Base
     statuses = []
     statuses += IssueStatus.new_statuses_allowed(
       initial_status,
-      user.admin ? Role.all.to_a : user.roles_for_project(project),
+      user.admin ? (project.present? ? project.members.map(&:roles).flatten.uniq : Role.all.to_a) : user.roles_for_project(project),
       tracker,
       project.workspace_id,
       author == user,
