@@ -687,7 +687,7 @@ class Issue < ActiveRecord::Base
       WorkflowPermission.where(
         :tracker_id => tracker_id, :old_status_id => status_id,
         :role_id => roles.map(&:id),
-        :workspace_id => project.workspace_id
+        :workspace_id => project&.workspace_id
       ).to_a
     if workflow_permissions.any?
       workflow_rules = workflow_permissions.inject({}) do |h, wp|
