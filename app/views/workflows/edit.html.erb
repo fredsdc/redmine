@@ -33,6 +33,8 @@
   <%= hidden_field_tag 'used_statuses_only', '0', :id => nil %>
   <label><%= check_box_tag 'used_statuses_only', '1', @used_statuses_only %> <%= l(:label_display_used_statuses_only) %></label>
 
+  <%= hidden_field_tag 'used_workspaces_only', '0', :id => nil %>
+  <label><%= check_box_tag 'used_workspaces_only', '1', @used_workspaces_only %> <%= l(:label_display_used_workspaces_only) %></label>
 </p>
 <% end %>
 
@@ -42,6 +44,7 @@
     <%= @roles.map {|role| hidden_field_tag 'role_id[]', role.id, :id => nil}.join.html_safe %>
     <%= @workspaces.map {|workspace| hidden_field_tag 'workspace_id[]', workspace.id, :id => nil}.join.html_safe %>
     <%= hidden_field_tag 'used_statuses_only', params[:used_statuses_only], :id => nil %>
+    <%= hidden_field_tag 'used_workspaces_only', params[:used_workspaces_only], :id => nil %>
     <div class="autoscroll">
       <%= render :partial => 'form', :locals => {:name => 'always', :workflows => @workflows['always']} %>
 
