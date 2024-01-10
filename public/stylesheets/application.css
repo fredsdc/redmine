@@ -1836,3 +1836,9 @@ img {
   border: 1px solid #888;
   visibility: visible;
 }
+.floating .hidden-child{
+  visibility: hidden;
+}
+.floating:hover .hidden-child{
+    visibility: visible;
+}
