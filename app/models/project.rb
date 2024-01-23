@@ -871,6 +871,13 @@ class Project < ActiveRecord::Base
           attachment.copy(:container => self)
         end
 
+        project.attribute_groups.map{|x| {tracker_id: x.tracker_id, name: x.name, cfs: x.attribute_group_fields.pluck(:custom_field_id)}}.each_with_index do |x, xi|
+          xid = AttributeGroup.create(project_id: self.id, tracker_id: x[:tracker_id], name: x[:name], position: xi).id
+          x[:cfs].each_with_index do |c, ci|
+            AttributeGroupField.create(attribute_group_id: xid, custom_field_id: c, position: ci)
+          end
+        end
+
         to_be_copied.each do |name|
           send "copy_#{name}", project
         end
