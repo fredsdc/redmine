@@ -2,7 +2,7 @@
   <%= hidden_field_tag 'tab', 'issues' %>
 
   <% unless @trackers.empty? %>
-  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]:enabled:visible') %><%= l(:label_tracker_plural)%> (<a onclick="ws='.ws-' + $('#project_workspace_id').val(); $('#project_trackers label' + ws).show(); $('#project_trackers label:not(' + ws + ')').toggle();"><%= l(:label_all) %></a>)</legend>
+  <fieldset class="box tabular" id="project_trackers"><legend><%= toggle_checkboxes_link('#project_trackers input[type=checkbox]:enabled:visible') %><%= l(:label_tracker_plural)%> (<a onclick="ws='.ws-' + $('#project_workspace_id').val(); $('#project_trackers label' + ws).show(); $('#project_trackers label:not(' + ws + ')').toggle();$('#project_trackers input:checked').parent().show();"><%= l(:label_all) %></a>)</legend>
   <% if User.current.admin? %>
     <div class="contextual"><%= link_to l(:label_administration), trackers_path, :class => "icon icon-settings" %></div>
   <% end %>
