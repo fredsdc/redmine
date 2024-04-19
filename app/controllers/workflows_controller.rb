@@ -176,7 +176,7 @@ class WorkflowsController < ApplicationController
       status_ids = status_ids.distinct.pluck(:old_status_id, :new_status_id).flatten.uniq
       @statuses = IssueStatus.where(:id => status_ids).sort_by{|e| e[:name]}.to_a
     else
-      @statuses = IssueStatus.sort_by{|e| e[:name]}.to_a
+      @statuses = IssueStatus.all.sort_by{|e| e[:name]}.to_a
     end
   end
 end
