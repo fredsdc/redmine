@@ -45,8 +45,8 @@ api.array :issues, api_meta(:total_count => @issue_count, :offset => @offset, :l
 
       api.array :journals do
         issue.journals.each do |journal|
+          next if journal.rolled_back?
           api.journal :id => journal.id do
-            next if journal.rolled_back?
             api.user(:id => journal.user_id, :name => journal.user.name) unless journal.user.nil?
             api.notes journal.notes
             api.created_on journal.created_on
