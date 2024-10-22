@@ -21,8 +21,8 @@ class IssuesController < ApplicationController
   default_search_scope :issues
 
   before_action :find_issue, :only => [:show, :edit, :update, :issue_tab]
-  before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy]
-  before_action :authorize, :except => [:index, :new, :create]
+  before_action :find_issues, :only => [:bulk_edit, :bulk_update, :destroy, :delete_relations]
+  before_action :authorize, :except => [:index, :new, :create, :delete_relations]
   before_action :find_optional_project, :only => [:index, :new, :create]
   before_action :build_new_issue_from_params, :only => [:new, :create]
   accept_rss_auth :index, :show
@@ -451,6 +451,28 @@ class IssuesController < ApplicationController
       :new_issue
     else
       super
+    end
+  end
+
+  def delete_relations
+    if params[:relation].present?
+      relation = params[:relation].to_i
+      unsaved_issues = []
+      saved_issues = []
+
+      @issues.each do |issue|
+        if issue.parent_id == relation && User.current.allowed_to?(:manage_subtasks, issue.project)
+          issue.init_journal(User.current)
+          issue.parent_id = nil
+          issue.save
+        elsif User.current.allowed_to?(:manage_issue_relations, issue.project)
+          issue.relations.select{|r| r.issue_from_id == relation || r.issue_to_id == relation}.each do |rel|
+            rel.init_journals(User.current)
+            rel.destroy
+          end
+        end
+      end
+      redirect_back_or_default _project_issues_path(@project)
     end
   end
 

@@ -47,6 +47,7 @@ class ContextMenusController < ApplicationController
 
     @columns = params[:c]
 
+    @relation = params[:relation]
     @options_by_custom_field = {}
     if @can[:edit]
       custom_fields = @issues.map(&:editable_custom_fields).reduce(:&).reject(&:multiple?).select {|field| field.format.bulk_edit_supported}

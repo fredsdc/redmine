@@ -123,6 +123,12 @@ module IssuesHelper
           "".html_safe
         end
       buttons << link_to_context_menu
+      sr =
+        if manage_relations
+          hidden_field_tag("relation", issue.id)
+        else
+          "".html_safe
+        end
       s <<
         content_tag(
           'tr',
@@ -144,7 +150,7 @@ module IssuesHelper
                              progress_bar(child.done_ratio)
                           end),
                          :class=> 'done_ratio') +
-             content_tag('td', buttons, :class => 'buttons'),
+             content_tag('td', buttons, :class => 'buttons') + sr,
           :class => css)
     end
     s << '</table>'
@@ -181,6 +187,12 @@ module IssuesHelper
           "".html_safe
         end
       buttons << link_to_context_menu
+      sr =
+        if manage_relations
+          hidden_field_tag("relation", issue.id)
+        else
+          "".html_safe
+        end
       s <<
         content_tag(
           'tr',
@@ -207,7 +219,7 @@ module IssuesHelper
                             progress_bar(other_issue.done_ratio)
                           end),
                          :class=> 'done_ratio') +
-             content_tag('td', buttons, :class => 'buttons'),
+             content_tag('td', buttons, :class => 'buttons') + sr,
           :id => "relation-#{relation.id}",
           :class => css)
     end
