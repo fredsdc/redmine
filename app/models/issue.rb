@@ -68,6 +68,7 @@ class Issue < ActiveRecord::Base
   validates_presence_of :author, :if => Proc.new {|issue| issue.new_record? || issue.author_id_changed?}
 
   validates_length_of :subject, :maximum => 255
+  validates_length_of :notes, :maximum => 16384
   validates_inclusion_of :done_ratio, :in => 0..100
   validates :estimated_hours, :numericality => {:greater_than_or_equal_to => 0, :allow_nil => true, :message => :invalid}
   validates :start_date, :date => true
