@@ -125,7 +125,11 @@ module CustomFieldsHelper
     if ids.size == 1
       tag_id = ids.first.first
     end
-    custom_field_label_tag(name, custom_value, options.merge(:for_tag_id => tag_id)) + tag
+    if custom_value.custom_field.field_format == "bool" && custom_value.custom_field.format_store["edit_tag_style"] == "checklist"
+      tag + content_tag('strong', custom_field_name_tag(custom_value.custom_field))
+    else
+      custom_field_label_tag(name, custom_value, options.merge(:for_tag_id => tag_id)) + tag
+    end
   end
 
   # Returns the custom field tag for when bulk editing objects
@@ -202,6 +206,9 @@ module CustomFieldsHelper
     select_options = [[l(:label_drop_down_list), ''], [l(:label_checkboxes), 'check_box']]
     if options[:include_radio]
       select_options << [l(:label_radio_buttons), 'radio']
+    end
+    if options[:include_checklist]
+      select_options << [l(:label_checklist), 'checklist']
     end
     form.select :edit_tag_style, select_options, :label => :label_display
   end

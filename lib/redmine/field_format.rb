@@ -704,7 +704,7 @@ module Redmine
 
       def edit_tag(view, tag_id, tag_name, custom_value, options={})
         case custom_value.custom_field.edit_tag_style
-        when 'check_box'
+        when 'check_box', 'checklist'
           single_check_box_edit_tag(view, tag_id, tag_name, custom_value, options)
         when 'radio'
           check_box_edit_tag(view, tag_id, tag_name, custom_value, options)

@@ -1145,6 +1145,7 @@ pt-BR:
   label_latest_compatible_version: Última versão compatível
   label_unknown_plugin: Plugin desconhecido
   label_radio_buttons: botões radio
+  label_checklist: checklist
   label_group_anonymous: Usuários anônimos
   label_group_non_member: Usuários não membros
   label_add_projects: Adicionar projetos

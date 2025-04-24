@@ -361,9 +361,14 @@ module IssuesHelper
           else
             while values.present? && values[0].custom_field.full_width_layout?
               value=values.shift
-              content = content_tag('div', custom_field_name_tag(value.custom_field) + ":", :class => 'label') +
-                        content_tag('div', custom_field_value_tag(value), :class => 'value')
-              content = content_tag('div', content, :class => "#{value.custom_field.css_classes} attribute")
+              if value.custom_field.field_format == "bool" && value.custom_field.format_store["edit_tag_style"] == "checklist"
+                content = content_tag('div', check_box_tag('', '', value.value == "1", disabled: true) +
+                          content_tag('strong', label_tag('', custom_field_name_tag(value.custom_field))))
+              else
+                content = content_tag('div', custom_field_name_tag(value.custom_field) + ":", :class => 'label') +
+                          content_tag('div', custom_field_value_tag(value), :class => 'value')
+                content = content_tag('div', content, :class => "#{value.custom_field.css_classes} attribute")
+              end
               s << content_tag('div', content, :class => 'splitcontent')
             end
           end
