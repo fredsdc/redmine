@@ -142,7 +142,7 @@ class Issue < ActiveRecord::Base
             "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}) #{text_other_ids})"
           when 'own_watch_contributed'
             user_ids = [user.id] + user.groups.pluck(:id).compact
-            text_other_ids = (Watcher.where(user_id: user.id, watchable_type: 'Issue').pluck(:watchable_id) + Journal.where(user_id: user.id, journalized_type: 'Issue').group(:journalized_id).pluck(:journalized_id)).compact.join(',')
+            text_other_ids = (Watcher.where(user_id: user.id, watchable_type: 'Issue').pluck(:watchable_id) + Journal.where(user_id: user.id, journalized_type: 'Issue').group(:journalized_id).reorder(nil).pluck(:journalized_id)).compact.join(',')
             text_other_ids = "OR #{table_name}.id IN (#{text_other_ids})" if text_other_ids.present?
             "(#{table_name}.author_id = #{user.id} OR #{table_name}.assigned_to_id IN (#{user_ids.join(',')}) #{text_other_ids})"
           else
